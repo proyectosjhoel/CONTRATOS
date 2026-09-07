@@ -3,392 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📋 Contratos jh</title>
+    <title>📋 Contratos jh </title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; font-size: 15px; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; font-size: 15px; }
         input, textarea, select { font-size: 16px !important; }
 
         .header {
             background: linear-gradient(135deg, #1a1a3e, #2d2d6b);
             padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; gap: 10px;
+            position: sticky; top: 0; z-index: 100; gap: 8px; flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,.3);
         }
-        .header h1 { font-size: 1.1em; color: #7b9ff5; }
+        .header h1 { font-size: 1.05em; color: #7b9ff5; }
+        .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
         .status-badge {
             display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
             border-radius: 20px; font-size: 11px; font-weight: 700;
         }
-        .status-online { background: rgba(16,185,129,0.2); color: #34d399; }
-        .status-offline { background: rgba(239,68,68,0.2); color: #f87171; }
+        .status-online { background: rgba(16,185,129,.2); color: #34d399; }
+        .status-offline { background: rgba(239,68,68,.2); color: #f87171; }
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
         .btn {
-            padding: 12px 18px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px;
-            font-weight: 600; display: inline-flex; align-items: center; justify-content: center;
-            gap: 6px; min-height: 44px; white-space: nowrap; transition: all 0.2s;
+            padding: 12px 16px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 14px; font-weight: 600; display: inline-flex; align-items: center;
+            justify-content: center; gap: 6px; min-height: 44px; transition: .15s;
         }
-        .btn:active { transform: scale(0.96); }
-        .btn-primary { background: linear-gradient(135deg, #4a6cf7, #6366f1); color: white; }
-        .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-        .btn-info { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; }
-        .btn-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
-        .btn-small { padding: 10px 14px; font-size: 13px; min-height: 40px; }
+        .btn:active { transform: scale(.97); }
+        .btn-primary { background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff; }
+        .btn-success { background: linear-gradient(135deg,#10b981,#059669); color: #fff; }
+        .btn-danger { background: linear-gradient(135deg,#ef4444,#dc2626); color: #fff; }
+        .btn-warning { background: linear-gradient(135deg,#f59e0b,#d97706); color: #fff; }
+        .btn-info { background: linear-gradient(135deg,#06b6d4,#0891b2); color: #fff; }
+        .btn-purple { background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: #fff; }
+        .btn-small { padding: 10px 12px; font-size: 13px; min-height: 40px; }
+        .btn-block { width: 100%; }
+        .btn-xl { padding: 18px; font-size: 16px; min-height: 56px; }
+
+        #loginScreen {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 20px; background: radial-gradient(circle at top, #1a1a3e, #0f0f23);
+        }
+        .login-card {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 16px;
+            padding: 28px 22px; width: 100%; max-width: 400px;
+        }
+        .login-card h1 { color: #7b9ff5; text-align: center; margin-bottom: 6px; }
+        .login-card .sub { color: #9ca3af; text-align: center; margin-bottom: 20px; font-size: 13px; }
+        #appScreen { display: none; }
 
         .tabs {
             display: flex; background: #1a1a35; border-bottom: 2px solid #2d2d5b;
-            position: sticky; top: 55px; z-index: 90;
+            position: sticky; top: 52px; z-index: 90; overflow-x: auto;
         }
         .tab {
-            padding: 14px 10px; cursor: pointer; color: #888; font-weight: 600;
-            border-bottom: 3px solid transparent; flex: 1; text-align: center; font-size: 13px;
+            padding: 13px 10px; cursor: pointer; color: #888; font-weight: 600;
+            border-bottom: 3px solid transparent; flex: 1; text-align: center;
+            font-size: 12px; white-space: nowrap; min-width: 90px;
         }
         .tab.active { color: #7b9ff5; border-bottom-color: #7b9ff5; background: #1e1e45; }
+        .tab .badge-count {
+            background: #ef4444; color: #fff; border-radius: 10px; padding: 1px 7px;
+            font-size: 11px; margin-left: 4px;
+        }
 
         .tab-content { display: none; padding: 15px; max-width: 1400px; margin: 0 auto; }
         .tab-content.active { display: block; }
 
-        .capture-area, .form-card {
+        .card {
             background: #1a1a35; border-radius: 12px; padding: 15px;
             margin-bottom: 15px; border: 1px solid #2d2d5b;
         }
-        h3 { color: #7b9ff5; margin-bottom: 12px; font-size: 1em; text-transform: uppercase; }
+        h3 { color: #7b9ff5; margin-bottom: 12px; font-size: .95em; text-transform: uppercase; }
 
-        .file-input-wrapper { display: flex; gap: 10px; margin-bottom: 12px; }
-        .file-input-wrapper input[type="file"] { display: none; }
+        .file-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .file-row input[type=file] { display: none; }
         .file-label {
-            padding: 14px; background: linear-gradient(135deg, #4a6cf7, #6366f1); color: white;
-            border-radius: 10px; cursor: pointer; font-weight: 600; display: flex;
-            align-items: center; justify-content: center; gap: 8px; flex: 1; min-height: 48px; font-size: 14px;
+            flex: 1; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px;
+            background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff;
         }
 
         .camera-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 2000; flex-direction: column; justify-content: space-between; align-items: center;
+            display: none; position: fixed; inset: 0; background: #000; z-index: 2000;
+            flex-direction: column; justify-content: space-between;
         }
         .camera-modal.show { display: flex; }
         .camera-video { width: 100%; height: 80%; object-fit: cover; }
         .camera-controls {
-            width: 100%; height: 20%; background: rgba(0,0,0,0.8); display: flex;
-            justify-content: space-around; align-items: center; padding: 10px 20px;
+            height: 20%; background: rgba(0,0,0,.85); display: flex;
+            justify-content: space-around; align-items: center; padding: 10px;
         }
         .btn-snap {
-            width: 75px; height: 75px; border-radius: 50%; background: #ef4444; border: 4px solid white;
-            box-shadow: 0 0 15px rgba(239,68,68,0.5); cursor: pointer; font-size: 24px;
-            display: flex; align-items: center; justify-content: center;
+            width: 74px; height: 74px; border-radius: 50%; background: #ef4444;
+            border: 4px solid #fff; font-size: 24px; cursor: pointer;
         }
 
-        .image-container {
-            position: relative; display: none; margin-top: 12px; background: #12122a;
-            border-radius: 10px; overflow: hidden; border: 2px solid #2d2d5b;
+        .image-box {
+            display: none; margin-top: 10px; background: #12122a; border-radius: 10px;
+            overflow: hidden; border: 2px solid #2d2d5b;
         }
-        .image-wrapper { position: relative; width: 100%; overflow: auto; }
-        .image-wrapper img { max-width: 100%; display: block; margin: 0 auto; }
-        .image-wrapper canvas {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            cursor: crosshair; touch-action: none;
-        }
-        .rotation-controls {
+        .rot-bar {
             display: flex; gap: 6px; padding: 10px; justify-content: center;
             background: #22224a; flex-wrap: wrap;
         }
-        .selection-info {
-            background: #22224a; padding: 12px; border-radius: 8px; margin-top: 10px;
-            color: #10b981; font-size: 13px; display: none; text-align: center; font-weight: bold;
+        .img-wrap { position: relative; width: 100%; }
+        .img-wrap img { max-width: 100%; display: block; margin: 0 auto; }
+        .img-wrap canvas {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            cursor: crosshair; touch-action: none;
         }
 
-        .ocr-controls { display: flex; gap: 10px; margin-top: 12px; flex-direction: column; }
-        .field-selector {
-            padding: 14px; background: #22224a; color: #e0e0e0; border: 1px solid #3d3d7b;
-            border-radius: 10px; font-size: 16px; width: 100%;
+        .form-group { margin-bottom: 14px; }
+        .form-group label {
+            display: block; color: #9ca3af; margin-bottom: 6px;
+            font-size: 12px; font-weight: 600; text-transform: uppercase;
         }
-        .ocr-buttons { display: flex; gap: 8px; }
-        .ocr-buttons .btn { flex: 1; }
-
-        .extracted-text {
-            background: #12122a; border: 1px solid #2d2d5b; border-radius: 10px;
-            padding: 15px; margin-top: 12px; display: none;
-        }
-        .extracted-text pre {
-            color: #10b981; white-space: pre-wrap; word-wrap: break-word;
-            font-family: 'Courier New', monospace; font-size: 14px; max-height: 150px;
-            overflow-y: auto; padding: 8px; background: #0a0a1a; border-radius: 6px;
-        }
-        .extracted-actions { margin-top: 10px; display: flex; gap: 6px; }
-        .extracted-actions .btn { flex: 1; }
-
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; color: #9ca3af; margin-bottom: 6px; font-size: 12px; font-weight: 600; }
         .form-group input, .form-group textarea {
             width: 100%; padding: 12px 14px; background: #12122a; border: 1px solid #2d2d5b;
-            border-radius: 10px; color: #e0e0e0; font-size: 16px; text-transform: uppercase;
+            border-radius: 10px; color: #e0e0e0;
         }
         .form-group input:focus, .form-group textarea:focus { border-color: #7b9ff5; outline: none; }
         .form-group textarea { resize: vertical; min-height: 70px; }
-        .form-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .form-actions .btn { flex: 1; }
+        .upper { text-transform: uppercase; }
 
         .workspace { display: flex; flex-direction: column; gap: 15px; }
         @media (min-width: 900px) {
             .workspace { flex-direction: row; align-items: flex-start; }
-            .workspace-left { flex: 1.2; min-width: 0; }
-            .workspace-right { flex: 1; min-width: 0; position: sticky; top: 120px; }
+            .workspace-left { flex: 1.1; min-width: 0; }
+            .workspace-right { flex: 1; min-width: 0; position: sticky; top: 110px; }
+            .scanner-hint { display: none; }
+        }
+        @media (max-width: 899px) {
+            .desktop-only-hint { display: none; }
         }
 
-        .records-container { display: flex; flex-direction: column; gap: 12px; }
-        .record-card {
-            background: #1a1a35; border-radius: 12px; padding: 15px;
-            border: 1px solid #2d2d5b; position: relative;
+        .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .stat {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 10px;
+            padding: 12px 8px; text-align: center;
         }
-        .record-card .record-num {
-            position: absolute; top: 10px; right: 12px; background: #4a6cf7; color: white;
+        .stat .v { font-size: 1.35em; font-weight: 700; color: #7b9ff5; }
+        .stat .l { font-size: 10px; color: #888; margin-top: 4px; text-transform: uppercase; }
+
+        .draft-card {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 12px;
+            padding: 14px; margin-bottom: 12px; border-left: 4px solid #f59e0b;
+        }
+        .draft-card.used { border-left-color: #6b7280; opacity: .75; }
+        .draft-meta { color: #9ca3af; font-size: 12px; margin-bottom: 8px; }
+        .draft-preview {
+            background: #12122a; border-radius: 8px; padding: 10px; font-size: 12px;
+            color: #10b981; max-height: 100px; overflow: hidden; white-space: pre-wrap;
+            font-family: ui-monospace, monospace; margin-bottom: 10px;
+        }
+        .draft-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .draft-actions .btn { flex: 1; min-width: 110px; }
+
+        .record-card {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 12px;
+            padding: 15px; margin-bottom: 12px; position: relative;
+        }
+        .record-num {
+            position: absolute; top: 10px; right: 12px; background: #4a6cf7; color: #fff;
             padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
         }
-        .record-field { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #2d2d5b; }
-        .record-field:last-of-type { border-bottom: none; }
-        .field-label { color: #9ca3af; font-size: 11px; font-weight: 600; margin-bottom: 3px; }
-        .field-value { color: #e0e0e0; font-size: 14px; word-wrap: break-word; }
-        .monto-value { color: #10b981; font-weight: 700; font-size: 16px; }
-        .record-actions { display: flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #2d2d5b; }
-        .record-actions .btn { flex: 1; }
+        .rf { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #2d2d5b; }
+        .rf:last-of-type { border-bottom: 0; }
+        .fl { color: #9ca3af; font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+        .fv { font-size: 14px; word-break: break-word; }
+        .monto { color: #10b981; font-weight: 700; }
+        .ra { display: flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #2d2d5b; }
+        .ra .btn { flex: 1; }
 
-        .stats-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; width: 100%; }
-        .stat-card {
-            background: #1a1a35; border-radius: 10px; padding: 12px 8px;
-            border: 1px solid #2d2d5b; text-align: center;
-        }
-        .stat-card .stat-value { font-size: 1.4em; font-weight: 700; color: #7b9ff5; }
-        .stat-card .stat-label { color: #888; font-size: 10px; margin-top: 4px; text-transform: uppercase; }
-
-        .thumbnails { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-        .thumbnail {
-            width: 60px; height: 60px; border-radius: 8px; object-fit: cover;
-            cursor: pointer; border: 2px solid #2d2d5b;
-        }
-        .thumbnail.active { border-color: #7b9ff5; }
-
-        .progress-bar { width: 100%; height: 6px; background: #2d2d5b; border-radius: 3px; margin-top: 10px; display: none; }
-        .progress-bar .progress {
-            height: 100%; background: linear-gradient(90deg, #4a6cf7, #10b981);
-            border-radius: 3px; transition: width 0.3s; width: 0%;
-        }
-
-        .search-bar { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .search-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
         .search-bar input {
-            flex: 1; min-width: 100%; padding: 12px 14px; background: #12122a;
+            flex: 1; min-width: 100%; padding: 12px; background: #12122a;
             border: 1px solid #2d2d5b; border-radius: 10px; color: #e0e0e0;
         }
-        .search-bar-buttons { display: flex; gap: 8px; width: 100%; }
-        .search-bar-buttons .btn { flex: 1; }
-
-        .loading-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 3000; justify-content: center;
-            align-items: center; flex-direction: column;
+        .search-btns { display: flex; gap: 8px; width: 100%; }
+        .search-btns .btn { flex: 1; }
+        @media (min-width: 900px) {
+            .search-bar input { min-width: 240px; }
+            .search-btns { width: auto; }
         }
-        .loading-overlay.show { display: flex; }
+
+        .ocr-box {
+            display: none; margin-top: 12px; background: #12122a; border: 1px solid #2d2d5b;
+            border-radius: 10px; padding: 12px;
+        }
+        .ocr-box pre {
+            color: #10b981; white-space: pre-wrap; font-size: 13px; max-height: 180px;
+            overflow-y: auto; font-family: ui-monospace, monospace;
+        }
+
+        .progress { width: 100%; height: 6px; background: #2d2d5b; border-radius: 3px; margin-top: 10px; display: none; }
+        .progress > div {
+            height: 100%; width: 0; background: linear-gradient(90deg,#4a6cf7,#10b981);
+            border-radius: 3px; transition: width .3s;
+        }
+
+        .loading {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+            z-index: 3000; justify-content: center; align-items: center; flex-direction: column;
+        }
+        .loading.show { display: flex; }
         .spinner {
             width: 50px; height: 50px; border: 4px solid #2d2d5b; border-top-color: #7b9ff5;
             border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: #7b9ff5; margin-top: 15px; font-weight: 600; }
+        .loading-text { color: #7b9ff5; margin-top: 14px; font-weight: 600; }
 
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%);
-            padding: 14px 24px; border-radius: 10px; color: white; font-weight: 600;
-            z-index: 4000; transition: transform 0.4s ease; max-width: 90%; text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            padding: 14px 22px; border-radius: 10px; color: #fff; font-weight: 600;
+            z-index: 4000; transition: transform .35s; max-width: 92%; text-align: center;
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
-        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .toast-info { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .toast-success { background: linear-gradient(135deg,#10b981,#059669); }
+        .toast-error { background: linear-gradient(135deg,#ef4444,#dc2626); }
+        .toast-info { background: linear-gradient(135deg,#06b6d4,#0891b2); }
 
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 2500; justify-content: center;
-            align-items: flex-start; padding: 15px; overflow-y: auto;
+        .modal-bg {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+            z-index: 2500; padding: 15px; overflow-y: auto;
         }
-        .modal-overlay.show { display: flex; }
+        .modal-bg.show { display: block; }
         .modal {
             background: #1a1a35; border-radius: 15px; padding: 20px; max-width: 600px;
-            width: 100%; margin: 20px auto; border: 1px solid #2d2d5b;
+            margin: 20px auto; border: 1px solid #2d2d5b;
         }
         .badge {
             display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px;
-            font-weight: 600; background: rgba(79,70,229,0.2); color: #818cf8;
+            font-weight: 600; background: rgba(79,70,229,.2); color: #818cf8;
         }
-
-        @media (min-width: 900px) {
-            .search-bar input { min-width: 250px; }
-            .search-bar-buttons { width: auto; }
-            .stat-card .stat-value { font-size: 1.8em; }
+        .hint {
+            background: linear-gradient(135deg,#1e1e45,#2a2a5a); border: 1px solid #4a6cf7;
+            border-radius: 10px; padding: 12px; margin-bottom: 12px; color: #c4b5fd; font-size: 13px; line-height: 1.5;
+        }
+        .field-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .field-row select {
+            flex: 1; min-width: 160px; padding: 12px; background: #22224a; color: #e0e0e0;
+            border: 1px solid #3d3d7b; border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loadingText">Procesando...</div>
-    </div>
-    <div class="toast" id="toast"></div>
-
-    <div class="camera-modal" id="cameraModal">
-        <video id="videoFeed" class="camera-video" autoplay playsinline></video>
-        <div class="camera-controls">
-            <button class="btn btn-danger" onclick="stopCamera()">❌ CERRAR</button>
-            <button class="btn-snap" onclick="snapPhoto()">📸</button>
-            <button class="btn btn-purple" onclick="switchCamera()">🔄</button>
+    <!-- LOGIN -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <h1>📋 CONTRATOS GAMEA</h1>
+            <p class="sub">Inicia sesión para sincronizar celular y laptop</p>
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <button class="btn btn-success btn-block" onclick="doLogin()">🔐 ENTRAR</button>
+            <p id="loginError" style="display:none;color:#f87171;margin-top:12px;text-align:center;font-size:13px;"></p>
+            <p style="margin-top:14px;font-size:11px;color:#6b7280;text-align:center;">
+                Si aún no activaste login en Firebase, avísame y lo dejamos sin clave temporalmente.
+            </p>
         </div>
     </div>
 
-    <div class="header">
-        <h1>📋 CONTRATOS GAMEA</h1>
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <span class="status-badge status-offline" id="connStatus">
-                <span class="status-dot"></span>
-                <span id="connText">CONECTANDO...</span>
-            </span>
-        </div>
-    </div>
+    <div id="appScreen">
+        <div class="loading" id="loading"><div class="spinner"></div><div class="loading-text" id="loadingText">...</div></div>
+        <div class="toast" id="toast"></div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab(event, 'workspace')">📷 ÁREA DE TRABAJO</div>
-        <div class="tab" onclick="switchTab(event, 'records')">📋 REGISTROS</div>
-    </div>
-
-    <!-- WORKSPACE -->
-    <div class="tab-content active" id="tab-workspace">
-        <div class="stats-bar">
-            <div class="stat-card"><div class="stat-value" id="totalContracts">0</div><div class="stat-label">Total</div></div>
-            <div class="stat-card"><div class="stat-value" id="todayContracts">0</div><div class="stat-label">Hoy</div></div>
-            <div class="stat-card"><div class="stat-value" id="totalMonto">0</div><div class="stat-label">Total Bs.</div></div>
+        <div class="camera-modal" id="cameraModal">
+            <video id="videoFeed" class="camera-video" autoplay playsinline></video>
+            <div class="camera-controls">
+                <button class="btn btn-danger" onclick="stopCamera()">❌</button>
+                <button class="btn-snap" onclick="snapPhoto()">📸</button>
+                <button class="btn btn-purple" onclick="switchCamera()">🔄</button>
+            </div>
         </div>
 
-        <div class="workspace">
-            <div class="workspace-left">
-                <div class="capture-area">
-                    <h3>📸 1. CAPTURA</h3>
-                    <div class="file-input-wrapper">
-                        <button class="file-label" onclick="startCamera()">📷 CÁMARA</button>
-                        <label class="file-label" for="fileInput" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁 GALERÍA</label>
-                        <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)" multiple>
-                    </div>
-                    <div class="thumbnails" id="thumbnails"></div>
-                    <div class="image-container" id="imageContainer">
-                        <div class="rotation-controls">
-                            <button class="btn btn-purple btn-small" onclick="rotateImage(-90)">↺ IZQ</button>
-                            <button class="btn btn-purple btn-small" onclick="rotateImage(90)">↻ DER</button>
-                            <button class="btn btn-purple btn-small" onclick="rotateImage(180)">🔄 180°</button>
-                            <button class="btn btn-danger btn-small" onclick="deleteCurrentImage()">🗑️ QUITAR</button>
-                        </div>
-                        <div class="image-wrapper">
-                            <img id="previewImage" src="" alt="Preview">
-                            <canvas id="selectionCanvas"></canvas>
-                        </div>
-                    </div>
-                    <div class="selection-info" id="selectionInfo">✅ ÁREA SELECCIONADA</div>
+        <div class="header">
+            <h1>📋 CONTRATOS GAMEA</h1>
+            <div class="header-right">
+                <span class="status-badge status-offline" id="connStatus">
+                    <span class="status-dot"></span><span id="connText">...</span>
+                </span>
+                <button class="btn btn-danger btn-small" onclick="doLogout()">SALIR</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event,'scan')">📱 ESCANEAR</div>
+            <div class="tab" onclick="switchTab(event,'work')">💻 TRABAJO</div>
+            <div class="tab" onclick="switchTab(event,'drafts')">📥 BORRADORES <span class="badge-count" id="draftCount" style="display:none">0</span></div>
+            <div class="tab" onclick="switchTab(event,'records')">📋 REGISTROS</div>
+        </div>
+
+        <!-- ===== ESCANEAR (CELULAR) ===== -->
+        <div class="tab-content active" id="tab-scan">
+            <div class="hint scanner-hint">
+                <strong>Modo celular:</strong> saca foto → OCR de todo → envía a la laptop.
+                En la laptop abre la pestaña <strong>📥 BORRADORES</strong> y completa el formulario.
+            </div>
+
+            <div class="card">
+                <h3>1. Foto del contrato</h3>
+                <div class="file-row">
+                    <button class="file-label" onclick="startCamera()">📷 CÁMARA</button>
+                    <label class="file-label" for="scanFile" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁 GALERÍA</label>
+                    <input type="file" id="scanFile" accept="image/*" capture="environment" onchange="handleScanFile(event)">
                 </div>
 
-                <div class="capture-area">
-                    <h3>🔍 2. EXTRAER TEXTO</h3>
-                    <div class="ocr-controls">
-                        <select class="field-selector" id="targetField">
-                            <option value="">-- CAMPO DESTINO --</option>
-                            <option value="numContrato">N° DE CONTRATO</option>
-                            <option value="codigoId">CÓDIGO DE IDENTIFICACIÓN</option>
-                            <option value="proyecto">PROYECTO</option>
-                            <option value="monto">MONTO (BS.)</option>
-                            <option value="empresa">EMPRESA</option>
-                        </select>
-                        <div class="ocr-buttons">
-                            <button class="btn btn-warning" onclick="extractFromSelection()">✂️ EXTRAER</button>
-                            <button class="btn btn-primary" onclick="extractFullImage()">📄 OCR COMPLETO</button>
-                        </div>
+                <div class="image-box" id="scanImageBox">
+                    <div class="rot-bar">
+                        <button class="btn btn-purple btn-small" onclick="rotateScan(-90)">↺</button>
+                        <button class="btn btn-purple btn-small" onclick="rotateScan(90)">↻</button>
+                        <button class="btn btn-purple btn-small" onclick="rotateScan(180)">180°</button>
+                        <button class="btn btn-danger btn-small" onclick="clearScanImage()">🗑️</button>
                     </div>
-                    <div class="progress-bar" id="ocrProgress"><div class="progress" id="ocrProgressFill"></div></div>
-                    <div class="extracted-text" id="extractedTextBox">
-                        <h4 style="color:#f59e0b;margin-bottom:8px;">📝 TEXTO:</h4>
-                        <pre id="extractedText"></pre>
-                        <div class="extracted-actions">
-                            <button class="btn btn-success btn-small" onclick="sendToField()">➡️ AL CAMPO</button>
-                            <button class="btn btn-info btn-small" onclick="copyExtractedText()">📋 COPIAR</button>
-                            <button class="btn btn-primary btn-small" onclick="autoDetectFields()">🤖 AUTO</button>
-                        </div>
+                    <div class="img-wrap">
+                        <img id="scanPreview" alt="scan">
                     </div>
                 </div>
             </div>
 
-            <div class="workspace-right">
-                <div class="form-card">
-                    <h3>📝 DATOS DEL CONTRATO</h3>
-                    <div class="form-group">
-                        <label>N° DE CONTRATO *</label>
-                        <input type="text" id="field_numContrato" placeholder="EJ: 202/26" oninput="toUpperCase(this)">
+            <div class="card">
+                <h3>2. Extraer y enviar</h3>
+                <button class="btn btn-warning btn-block btn-xl" onclick="scanFullOCR()">🔍 EXTRAER TODO EL TEXTO</button>
+                <div class="progress" id="scanProgress"><div id="scanProgressFill"></div></div>
+                <div class="ocr-box" id="scanOcrBox">
+                    <div style="color:#f59e0b;font-size:12px;font-weight:700;margin-bottom:8px;">TEXTO EXTRAÍDO</div>
+                    <pre id="scanOcrText"></pre>
+                    <button class="btn btn-success btn-block btn-xl" style="margin-top:12px" onclick="sendDraftToLaptop()">
+                        🚀 ENVIAR A LAPTOP
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TRABAJO (LAPTOP) ===== -->
+        <div class="tab-content" id="tab-work">
+            <div class="stats">
+                <div class="stat"><div class="v" id="totalContracts">0</div><div class="l">Guardados</div></div>
+                <div class="stat"><div class="v" id="todayContracts">0</div><div class="l">Hoy</div></div>
+                <div class="stat"><div class="v" id="pendingDraftsStat">0</div><div class="l">Borradores</div></div>
+            </div>
+
+            <div class="workspace">
+                <div class="workspace-left">
+                    <div class="card">
+                        <h3>OCR manual (opcional)</h3>
+                        <p class="desktop-only-hint" style="color:#9ca3af;font-size:13px;margin-bottom:10px;">
+                            También puedes sacar foto aquí, o usar un borrador de la pestaña 📥.
+                        </p>
+                        <div class="file-row">
+                            <button class="file-label" onclick="startCamera('work')">📷 CÁMARA</button>
+                            <label class="file-label" for="workFile" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁</label>
+                            <input type="file" id="workFile" accept="image/*" onchange="handleWorkFile(event)">
+                        </div>
+                        <div class="image-box" id="workImageBox">
+                            <div class="rot-bar">
+                                <button class="btn btn-purple btn-small" onclick="rotateWork(-90)">↺</button>
+                                <button class="btn btn-purple btn-small" onclick="rotateWork(90)">↻</button>
+                                <button class="btn btn-danger btn-small" onclick="clearWorkImage()">🗑️</button>
+                            </div>
+                            <div class="img-wrap">
+                                <img id="workPreview" alt="work">
+                                <canvas id="workCanvas"></canvas>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <select id="targetField">
+                                <option value="">Campo destino</option>
+                                <option value="numContrato">N° CONTRATO</option>
+                                <option value="codigoId">CÓDIGO ID</option>
+                                <option value="proyecto">PROYECTO</option>
+                                <option value="monto">MONTO</option>
+                                <option value="empresa">EMPRESA</option>
+                            </select>
+                            <button class="btn btn-warning btn-small" onclick="extractSelection()">✂️ SELECCIÓN</button>
+                            <button class="btn btn-primary btn-small" onclick="extractWorkFull()">📄 TODO</button>
+                        </div>
+                        <div class="ocr-box" id="workOcrBox">
+                            <pre id="workOcrText"></pre>
+                            <div class="field-row">
+                                <button class="btn btn-success btn-small" onclick="sendToField()">➡️ AL CAMPO</button>
+                                <button class="btn btn-primary btn-small" onclick="autoDetectFields(currentWorkText)">🤖 AUTO</button>
+                            </div>
+                        </div>
+                        <div class="progress" id="workProgress"><div id="workProgressFill"></div></div>
                     </div>
-                    <div class="form-group">
-                        <label>CÓDIGO DE IDENTIFICACIÓN *</label>
-                        <input type="text" id="field_codigoId" placeholder="EJ: ANPE/SADM-5/O/018/26" oninput="toUpperCase(this)">
+
+                    <div class="card" id="draftTextCard" style="display:none">
+                        <h3>📄 Texto del borrador</h3>
+                        <pre id="activeDraftText" style="color:#10b981;white-space:pre-wrap;font-size:13px;max-height:220px;overflow:auto;background:#12122a;padding:10px;border-radius:8px;"></pre>
+                        <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="autoDetectFields(activeDraftTexto)">🤖 AUTO-LLENAR FORMULARIO</button>
                     </div>
-                    <div class="form-group">
-                        <label>PROYECTO *</label>
-                        <textarea id="field_proyecto" placeholder="EJ: CONST. PAVIMENTO..." oninput="toUpperCase(this)"></textarea>
+                </div>
+
+                <div class="workspace-right">
+                    <div class="card">
+                        <h3>📝 Formulario</h3>
+                        <div class="form-group">
+                            <label>N° de contrato *</label>
+                            <input class="upper" type="text" id="field_numContrato" oninput="toUpper(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Código de identificación *</label>
+                            <input class="upper" type="text" id="field_codigoId" oninput="toUpper(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Proyecto *</label>
+                            <textarea class="upper" id="field_proyecto" oninput="toUpper(this)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Monto (Bs.) *</label>
+                            <input type="text" id="field_monto">
+                        </div>
+                        <div class="form-group">
+                            <label>Empresa *</label>
+                            <textarea class="upper" id="field_empresa" oninput="toUpper(this)"></textarea>
+                        </div>
+                        <div style="display:flex;gap:8px;">
+                            <button class="btn btn-danger" style="flex:1" onclick="clearForm()">🗑️</button>
+                            <button class="btn btn-success" style="flex:2" onclick="saveContract()">💾 GUARDAR</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>MONTO (BS.) *</label>
-                        <input type="text" id="field_monto" placeholder="EJ: 314.772,67">
-                    </div>
-                    <div class="form-group">
-                        <label>EMPRESA *</label>
-                        <textarea id="field_empresa" placeholder="EJ: EMPRESA / REPRESENTANTE..." oninput="toUpperCase(this)"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button class="btn btn-danger" onclick="clearForm()">🗑️ LIMPIAR</button>
-                        <button class="btn btn-success" onclick="saveContract()">💾 GUARDAR</button>
-                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== BORRADORES ===== -->
+        <div class="tab-content" id="tab-drafts">
+            <div class="hint">
+                Aquí llegan los textos enviados desde el <strong>celular</strong>.
+                Pulsa <strong>USAR EN FORMULARIO</strong> para trabajarlos en la laptop.
+            </div>
+            <div id="draftsList"></div>
+        </div>
+
+        <!-- ===== REGISTROS ===== -->
+        <div class="tab-content" id="tab-records">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar..." oninput="filterRecords()">
+                <div class="search-btns">
+                    <button class="btn btn-success btn-small" onclick="copyAll()">📋 COPIAR TODO</button>
+                    <button class="btn btn-danger btn-small" onclick="clearAllContracts()">🗑️</button>
+                </div>
+            </div>
+            <div id="recordsList"></div>
+        </div>
+
+        <div class="modal-bg" id="editModal">
+            <div class="modal">
+                <h3 style="color:#7b9ff5;margin-bottom:12px;">✏️ Editar</h3>
+                <div class="form-group"><label>N° Contrato</label><input class="upper" id="edit_numContrato" oninput="toUpper(this)"></div>
+                <div class="form-group"><label>Código</label><input class="upper" id="edit_codigoId" oninput="toUpper(this)"></div>
+                <div class="form-group"><label>Proyecto</label><textarea class="upper" id="edit_proyecto" oninput="toUpper(this)"></textarea></div>
+                <div class="form-group"><label>Monto</label><input id="edit_monto"></div>
+                <div class="form-group"><label>Empresa</label><textarea class="upper" id="edit_empresa" oninput="toUpper(this)"></textarea></div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-danger" style="flex:1" onclick="closeEdit()">Cancelar</button>
+                    <button class="btn btn-success" style="flex:1" onclick="updateContract()">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RECORDS -->
-    <div class="tab-content" id="tab-records">
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 BUSCAR..." oninput="filterRecords()">
-            <div class="search-bar-buttons">
-                <button class="btn btn-success btn-small" onclick="copyAllToClipboard()">📋 COPIAR TODO</button>
-                <button class="btn btn-danger btn-small" onclick="clearAllRecords()">🗑️ BORRAR TODO</button>
-            </div>
-        </div>
-        <div class="records-container" id="recordsContainer"></div>
-    </div>
-
-    <!-- EDIT MODAL -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <h3 style="color:#7b9ff5;margin-bottom:15px;">✏️ EDITAR</h3>
-            <div class="form-group"><label>N° CONTRATO</label><input type="text" id="edit_numContrato" oninput="toUpperCase(this)"></div>
-            <div class="form-group"><label>CÓDIGO ID</label><input type="text" id="edit_codigoId" oninput="toUpperCase(this)"></div>
-            <div class="form-group"><label>PROYECTO</label><textarea id="edit_proyecto" oninput="toUpperCase(this)"></textarea></div>
-            <div class="form-group"><label>MONTO</label><input type="text" id="edit_monto"></div>
-            <div class="form-group"><label>EMPRESA</label><textarea id="edit_empresa" oninput="toUpperCase(this)"></textarea></div>
-            <div class="form-actions">
-                <button class="btn btn-danger" onclick="closeModal()">❌ CANCELAR</button>
-                <button class="btn btn-success" onclick="updateContract()">💾 ACTUALIZAR</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase + Tesseract -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
     <script>
-        // ==================== FIREBASE ====================
         const firebaseConfig = {
             apiKey: "AIzaSyAnVDOK8f7qLZXIWYUN9IJNKuxlBVXTy2I",
             authDomain: "contratos-3e093.firebaseapp.com",
@@ -397,311 +487,424 @@
             messagingSenderId: "417073831372",
             appId: "1:417073831372:web:69fecb8e0e020513e71169"
         };
-
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
         const contractsRef = db.collection('contratos');
+        const draftsRef = db.collection('borradores');
 
-        // ==================== STATE ====================
-        let contracts = []; // { id: firestoreId, ...data }
-        let currentImages = [];
-        let rotatedImages = [];
-        let currentImageIndex = -1;
-        let selectionStart = null, selectionEnd = null, isSelecting = false;
-        let currentExtractedText = '';
+        let contracts = [], drafts = [];
+        let unsubC = null, unsubD = null;
+        let scanSrc = null, scanRot = 0, scanTexto = '';
+        let workSrc = null, workRot = 0, workRotSrc = null;
+        let currentWorkText = '', activeDraftTexto = '', activeDraftId = null;
         let editingId = null;
-        let currentRotation = 0;
-        let currentStream = null;
-        let facingMode = 'environment';
-        let isOnline = false;
+        let selA = null, selB = null, selecting = false;
+        let stream = null, facing = 'environment', cameraTarget = 'scan';
 
-        // ==================== REALTIME LISTENER ====================
-        function startRealtimeSync() {
-            contractsRef.orderBy('fechaRegistro', 'desc').onSnapshot(
-                (snapshot) => {
-                    contracts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    isOnline = true;
-                    updateConnStatus(true);
-                    updateStats();
-                    if (document.getElementById('tab-records').classList.contains('active')) {
-                        renderRecords();
-                    }
-                },
-                (error) => {
-                    console.error('Firestore error:', error);
-                    isOnline = false;
-                    updateConnStatus(false);
-                    showToast('Error de conexión a la nube', 'error');
-                }
-            );
-        }
-
-        function updateConnStatus(online) {
-            const badge = document.getElementById('connStatus');
-            const text = document.getElementById('connText');
-            if (online) {
-                badge.className = 'status-badge status-online';
-                text.textContent = 'EN LÍNEA';
+        // ---------- AUTH ----------
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appScreen').style.display = 'block';
+                startSync();
             } else {
-                badge.className = 'status-badge status-offline';
-                text.textContent = 'SIN CONEXIÓN';
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('appScreen').style.display = 'none';
+                stopSync();
             }
-        }
+        });
 
-        // ==================== CAMERA ====================
-        async function startCamera() {
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            const err = document.getElementById('loginError');
+            err.style.display = 'none';
+            if (!email || !pass) { err.textContent = 'Completa correo y contraseña'; err.style.display = 'block'; return; }
             try {
-                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
-                document.getElementById('videoFeed').srcObject = currentStream;
-                document.getElementById('cameraModal').classList.add('show');
+                showLoading('Entrando...');
+                await auth.signInWithEmailAndPassword(email, pass);
+                hideLoading();
             } catch (e) {
-                showToast('No se pudo abrir la cámara. Usa GALERÍA.', 'error');
+                hideLoading();
+                err.textContent = 'Login falló. ¿Activaste Authentication y creaste usuario?';
+                err.style.display = 'block';
             }
         }
-        function stopCamera() {
-            if (currentStream) currentStream.getTracks().forEach(t => t.stop());
-            currentStream = null;
-            document.getElementById('cameraModal').classList.remove('show');
+        async function doLogout() { stopSync(); await auth.signOut(); }
+
+        function startSync() {
+            stopSync();
+            unsubC = contractsRef.orderBy('fechaRegistro', 'desc').onSnapshot(snap => {
+                contracts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                setOnline(true); updateStats();
+                if (tabActive('records')) renderRecords();
+            }, e => { console.error(e); setOnline(false); });
+
+            unsubD = draftsRef.orderBy('fecha', 'desc').onSnapshot(snap => {
+                drafts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                setOnline(true); updateStats(); updateDraftBadge();
+                if (tabActive('drafts')) renderDrafts();
+            }, e => { console.error(e); setOnline(false); });
         }
-        function snapPhoto() {
-            const video = document.getElementById('videoFeed');
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            currentImages.push(canvas.toDataURL('image/png'));
-            rotatedImages.push(null);
-            renderThumbnails();
-            selectImage(currentImages.length - 1);
-            stopCamera();
-            showToast('📸 Foto capturada', 'success');
+        function stopSync() {
+            if (unsubC) unsubC(); if (unsubD) unsubD();
+            unsubC = unsubD = null; contracts = []; drafts = [];
         }
-        function switchCamera() {
-            facingMode = facingMode === 'environment' ? 'user' : 'environment';
-            stopCamera(); startCamera();
+        function setOnline(ok) {
+            const b = document.getElementById('connStatus');
+            const t = document.getElementById('connText');
+            if (!b) return;
+            b.className = 'status-badge ' + (ok ? 'status-online' : 'status-offline');
+            t.textContent = ok ? 'EN LÍNEA' : 'SIN CONEXIÓN';
+        }
+        function tabActive(name) {
+            return document.getElementById('tab-' + name)?.classList.contains('active');
         }
 
-        // ==================== HELPERS ====================
-        function toUpperCase(el) {
-            const p = el.selectionStart;
-            el.value = el.value.toUpperCase();
-            if (el.setSelectionRange) el.setSelectionRange(p, p);
-        }
+        // ---------- TABS ----------
         function switchTab(evt, name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             evt.currentTarget.classList.add('active');
             document.getElementById('tab-' + name).classList.add('active');
+            if (name === 'drafts') renderDrafts();
             if (name === 'records') renderRecords();
             updateStats();
             window.scrollTo(0, 0);
-            if (currentImageIndex >= 0) setTimeout(setupCanvas, 100);
+            if (name === 'work' && workSrc) setTimeout(setupWorkCanvas, 100);
         }
 
-        // ==================== IMAGES ====================
-        function handleImageUpload(e) {
-            for (const file of e.target.files) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    currentImages.push(ev.target.result);
-                    rotatedImages.push(null);
-                    renderThumbnails();
-                    if (currentImageIndex < 0) selectImage(currentImages.length - 1);
-                };
-                reader.readAsDataURL(file);
+        // ---------- CAMERA ----------
+        async function startCamera(target = 'scan') {
+            cameraTarget = target;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing } });
+                document.getElementById('videoFeed').srcObject = stream;
+                document.getElementById('cameraModal').classList.add('show');
+            } catch (e) {
+                showToast('No se abrió la cámara. Usa Galería.', 'error');
             }
+        }
+        function stopCamera() {
+            if (stream) stream.getTracks().forEach(t => t.stop());
+            stream = null;
+            document.getElementById('cameraModal').classList.remove('show');
+        }
+        function switchCamera() {
+            facing = facing === 'environment' ? 'user' : 'environment';
+            stopCamera(); startCamera(cameraTarget);
+        }
+        function snapPhoto() {
+            const v = document.getElementById('videoFeed');
+            const c = document.createElement('canvas');
+            c.width = v.videoWidth; c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            const data = c.toDataURL('image/png');
+            stopCamera();
+            if (cameraTarget === 'work') setWorkImage(data);
+            else setScanImage(data);
+            showToast('📸 Foto lista', 'success');
+        }
+
+        // ---------- SCAN (MOBILE) ----------
+        function handleScanFile(e) {
+            const f = e.target.files?.[0]; if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => setScanImage(ev.target.result);
+            r.readAsDataURL(f);
             e.target.value = '';
         }
-        function renderThumbnails() {
-            const c = document.getElementById('thumbnails');
-            c.innerHTML = '';
-            currentImages.forEach((img, i) => {
-                const t = document.createElement('img');
-                t.src = rotatedImages[i] || img;
-                t.className = 'thumbnail' + (i === currentImageIndex ? ' active' : '');
-                t.onclick = () => selectImage(i);
-                c.appendChild(t);
+        function setScanImage(src) {
+            scanSrc = src; scanRot = 0; scanTexto = '';
+            document.getElementById('scanPreview').src = src;
+            document.getElementById('scanImageBox').style.display = 'block';
+            document.getElementById('scanOcrBox').style.display = 'none';
+        }
+        function clearScanImage() {
+            scanSrc = null; scanTexto = '';
+            document.getElementById('scanImageBox').style.display = 'none';
+            document.getElementById('scanOcrBox').style.display = 'none';
+        }
+        function rotateScan(deg) {
+            if (!scanSrc) return;
+            scanRot = (scanRot + deg + 360) % 360;
+            rotateDataURL(scanSrc, scanRot).then(url => {
+                document.getElementById('scanPreview').src = url;
             });
         }
-        function selectImage(i) {
-            currentImageIndex = i;
-            currentRotation = 0;
-            const img = document.getElementById('previewImage');
-            img.src = rotatedImages[i] || currentImages[i];
-            document.getElementById('imageContainer').style.display = 'block';
-            img.onload = () => setupCanvas();
-            renderThumbnails();
-        }
-        function deleteCurrentImage() {
-            if (currentImageIndex < 0) return;
-            if (!confirm('¿Quitar esta imagen?')) return;
-            currentImages.splice(currentImageIndex, 1);
-            rotatedImages.splice(currentImageIndex, 1);
-            if (currentImages.length) selectImage(Math.max(0, currentImageIndex - 1));
-            else {
-                currentImageIndex = -1;
-                document.getElementById('imageContainer').style.display = 'none';
-                renderThumbnails();
-            }
-            showToast('🗑️ Imagen quitada', 'info');
-        }
-        function rotateImage(deg) {
-            if (currentImageIndex < 0) return showToast('Sube imagen primero', 'error');
-            currentRotation = (currentRotation + deg + 360) % 360;
-            applyRotation();
-        }
-        function applyRotation() {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                const rad = currentRotation * Math.PI / 180;
-                const s = Math.abs(Math.sin(rad)), c = Math.abs(Math.cos(rad));
-                canvas.width = img.width * c + img.height * s;
-                canvas.height = img.width * s + img.height * c;
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate(rad);
-                ctx.drawImage(img, -img.width / 2, -img.height / 2);
-                rotatedImages[currentImageIndex] = canvas.toDataURL('image/png');
-                selectImage(currentImageIndex);
-            };
-            img.src = currentImages[currentImageIndex];
+        function getScanImageForOCR() {
+            return document.getElementById('scanPreview').src;
         }
 
-        // ==================== CANVAS ====================
-        function setupCanvas() {
-            const img = document.getElementById('previewImage');
-            const canvas = document.getElementById('selectionCanvas');
+        async function scanFullOCR() {
+            if (!scanSrc) return showToast('Primero saca o sube una foto', 'error');
+            showLoading('Extrayendo texto...');
+            const bar = document.getElementById('scanProgress');
+            const fill = document.getElementById('scanProgressFill');
+            bar.style.display = 'block';
+            try {
+                const result = await Tesseract.recognize(getScanImageForOCR(), 'spa', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') fill.style.width = Math.round(m.progress * 100) + '%';
+                    }
+                });
+                scanTexto = (result.data.text || '').trim().toUpperCase();
+                document.getElementById('scanOcrText').textContent = scanTexto || '(sin texto)';
+                document.getElementById('scanOcrBox').style.display = 'block';
+                hideLoading();
+                showToast('✅ Texto listo. Envíalo a la laptop', 'success');
+                document.getElementById('scanOcrBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (e) {
+                hideLoading(); showToast('Error en OCR', 'error');
+            }
+            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 600);
+        }
+
+        async function sendDraftToLaptop() {
+            if (!scanTexto) return showToast('Primero extrae el texto', 'error');
+            try {
+                showLoading('Enviando a la laptop...');
+                await draftsRef.add({
+                    texto: scanTexto,
+                    fecha: new Date().toISOString(),
+                    estado: 'pendiente',
+                    preview: scanTexto.slice(0, 180)
+                });
+                hideLoading();
+                showToast('🚀 ¡Enviado! Revisa BORRADORES en la laptop', 'success');
+                // dejar listo para siguiente foto
+                clearScanImage();
+            } catch (e) {
+                hideLoading();
+                console.error(e);
+                showToast('No se pudo enviar. ¿Login y reglas OK?', 'error');
+            }
+        }
+
+        // ---------- DRAFTS ----------
+        function updateDraftBadge() {
+            const pending = drafts.filter(d => d.estado !== 'usado').length;
+            const el = document.getElementById('draftCount');
+            const st = document.getElementById('pendingDraftsStat');
+            if (st) st.textContent = pending;
+            if (!el) return;
+            if (pending > 0) { el.style.display = 'inline'; el.textContent = pending; }
+            else el.style.display = 'none';
+        }
+
+        function renderDrafts() {
+            const box = document.getElementById('draftsList');
+            if (!drafts.length) {
+                box.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:40px;">No hay borradores.<br>Envía uno desde el celular 📱</div>';
+                return;
+            }
+            box.innerHTML = drafts.map(d => {
+                const fecha = d.fecha ? new Date(d.fecha).toLocaleString('es-BO') : '';
+                const used = d.estado === 'usado';
+                return `
+                <div class="draft-card ${used ? 'used' : ''}">
+                    <div class="draft-meta">${fecha} ${used ? '· USADO' : '· PENDIENTE'}</div>
+                    <div class="draft-preview">${escapeHtml(d.preview || d.texto || '')}</div>
+                    <div class="draft-actions">
+                        <button class="btn btn-success btn-small" onclick="useDraft('${d.id}')">📝 USAR EN FORMULARIO</button>
+                        <button class="btn btn-info btn-small" onclick="copyClip(${JSON.stringify(d.texto || '')}, 'Texto copiado')">📋 COPIAR TEXTO</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteDraft('${d.id}')">🗑️</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function useDraft(id) {
+            const d = drafts.find(x => x.id === id);
+            if (!d) return;
+            activeDraftId = id;
+            activeDraftTexto = (d.texto || '').toUpperCase();
+            document.getElementById('activeDraftText').textContent = activeDraftTexto;
+            document.getElementById('draftTextCard').style.display = 'block';
+            autoDetectFields(activeDraftTexto);
+            // ir a trabajo
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('tab-work').classList.add('active');
+            showToast('Borrador cargado en el formulario', 'success');
+            window.scrollTo(0, 0);
+        }
+
+        async function deleteDraft(id) {
+            if (!confirm('¿Eliminar borrador?')) return;
+            try { await draftsRef.doc(id).delete(); showToast('Borrador eliminado', 'info'); }
+            catch (e) { showToast('Error al eliminar', 'error'); }
+        }
+
+        async function markDraftUsed() {
+            if (!activeDraftId) return;
+            try {
+                await draftsRef.doc(activeDraftId).update({ estado: 'usado' });
+            } catch (e) {}
+            activeDraftId = null;
+            document.getElementById('draftTextCard').style.display = 'none';
+        }
+
+        // ---------- WORK OCR ----------
+        function handleWorkFile(e) {
+            const f = e.target.files?.[0]; if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => setWorkImage(ev.target.result);
+            r.readAsDataURL(f);
+            e.target.value = '';
+        }
+        function setWorkImage(src) {
+            workSrc = src; workRot = 0; workRotSrc = null;
+            document.getElementById('workPreview').src = src;
+            document.getElementById('workImageBox').style.display = 'block';
+            document.getElementById('workPreview').onload = () => setupWorkCanvas();
+        }
+        function clearWorkImage() {
+            workSrc = null; workRotSrc = null;
+            document.getElementById('workImageBox').style.display = 'none';
+        }
+        function rotateWork(deg) {
+            if (!workSrc) return;
+            workRot = (workRot + deg + 360) % 360;
+            rotateDataURL(workSrc, workRot).then(url => {
+                workRotSrc = url;
+                document.getElementById('workPreview').src = url;
+                document.getElementById('workPreview').onload = () => setupWorkCanvas();
+            });
+        }
+
+        function setupWorkCanvas() {
+            const img = document.getElementById('workPreview');
+            const canvas = document.getElementById('workCanvas');
             if (!img.clientWidth) return;
             canvas.width = img.clientWidth; canvas.height = img.clientHeight;
             canvas.style.width = img.clientWidth + 'px'; canvas.style.height = img.clientHeight + 'px';
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-            canvas.onmousedown = startSel; canvas.onmousemove = moveSel; canvas.onmouseup = endSel;
-            canvas.ontouchstart = e => { e.preventDefault(); startSel(touchPos(e)); };
-            canvas.ontouchmove = e => { e.preventDefault(); moveSel(touchPos(e)); };
-            canvas.ontouchend = e => { e.preventDefault(); endSel(touchPos(e)); };
+            canvas.onmousedown = e => startSel(e);
+            canvas.onmousemove = e => moveSel(e);
+            canvas.onmouseup = () => endSel();
+            canvas.ontouchstart = e => { e.preventDefault(); startSel(touch(e)); };
+            canvas.ontouchmove = e => { e.preventDefault(); moveSel(touch(e)); };
+            canvas.ontouchend = e => { e.preventDefault(); endSel(); };
         }
-        function touchPos(e) {
-            const r = document.getElementById('selectionCanvas').getBoundingClientRect();
+        function touch(e) {
+            const r = document.getElementById('workCanvas').getBoundingClientRect();
             const t = e.touches[0] || e.changedTouches[0];
             return { offsetX: t.clientX - r.left, offsetY: t.clientY - r.top };
         }
-        function startSel(e) {
-            isSelecting = true; selectionStart = { x: e.offsetX, y: e.offsetY }; selectionEnd = null;
-            document.getElementById('selectionInfo').style.display = 'none';
-        }
-        function moveSel(e) { if (!isSelecting) return; selectionEnd = { x: e.offsetX, y: e.offsetY }; drawSel(); }
-        function endSel() {
-            if (!isSelecting) return; isSelecting = false;
-            if (selectionEnd) document.getElementById('selectionInfo').style.display = 'block';
-        }
-        function drawSel() {
-            const canvas = document.getElementById('selectionCanvas');
+        function startSel(e) { selecting = true; selA = { x: e.offsetX, y: e.offsetY }; selB = null; }
+        function moveSel(e) {
+            if (!selecting) return; selB = { x: e.offsetX, y: e.offsetY };
+            const canvas = document.getElementById('workCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (!selectionStart || !selectionEnd) return;
-            const x = Math.min(selectionStart.x, selectionEnd.x), y = Math.min(selectionStart.y, selectionEnd.y);
-            const w = Math.abs(selectionEnd.x - selectionStart.x), h = Math.abs(selectionEnd.y - selectionStart.y);
-            ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const x = Math.min(selA.x, selB.x), y = Math.min(selA.y, selB.y);
+            const w = Math.abs(selB.x - selA.x), h = Math.abs(selB.y - selA.y);
+            ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.clearRect(x, y, w, h);
-            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.setLineDash([6, 4]); ctx.strokeRect(x, y, w, h);
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.strokeRect(x, y, w, h);
         }
+        function endSel() { selecting = false; }
 
-        // ==================== OCR ====================
-        function getCropped() {
-            if (!selectionStart || !selectionEnd) return null;
-            const img = document.getElementById('previewImage');
+        function cropWork() {
+            if (!selA || !selB) return null;
+            const img = document.getElementById('workPreview');
             const sx = img.naturalWidth / img.clientWidth, sy = img.naturalHeight / img.clientHeight;
-            const x = Math.min(selectionStart.x, selectionEnd.x) * sx;
-            const y = Math.min(selectionStart.y, selectionEnd.y) * sy;
-            const w = Math.abs(selectionEnd.x - selectionStart.x) * sx;
-            const h = Math.abs(selectionEnd.y - selectionStart.y) * sy;
+            const x = Math.min(selA.x, selB.x) * sx, y = Math.min(selA.y, selB.y) * sy;
+            const w = Math.abs(selB.x - selA.x) * sx, h = Math.abs(selB.y - selA.y) * sy;
             const c = document.createElement('canvas'); c.width = w; c.height = h;
             c.getContext('2d').drawImage(img, x, y, w, h, 0, 0, w, h);
             return c.toDataURL('image/png');
         }
-        async function extractFromSelection() {
-            if (!selectionStart || !selectionEnd) return showToast('Selecciona un área', 'error');
-            const crop = getCropped(); if (!crop) return;
-            await runOCR(crop);
+
+        async function extractSelection() {
+            const crop = cropWork();
+            if (!crop) return showToast('Selecciona un área en la imagen', 'error');
+            await runWorkOCR(crop);
         }
-        async function extractFullImage() {
-            if (currentImageIndex < 0) return showToast('Sube imagen primero', 'error');
-            await runOCR(rotatedImages[currentImageIndex] || currentImages[currentImageIndex]);
+        async function extractWorkFull() {
+            if (!workSrc) return showToast('Sube una imagen', 'error');
+            await runWorkOCR(workRotSrc || workSrc);
         }
-        async function runOCR(src) {
-            showLoading('Procesando OCR...');
-            const bar = document.getElementById('ocrProgress');
-            const fill = document.getElementById('ocrProgressFill');
+        async function runWorkOCR(src) {
+            showLoading('OCR...');
+            const bar = document.getElementById('workProgress');
+            const fill = document.getElementById('workProgressFill');
             bar.style.display = 'block';
             try {
                 const result = await Tesseract.recognize(src, 'spa', {
                     logger: m => { if (m.status === 'recognizing text') fill.style.width = Math.round(m.progress * 100) + '%'; }
                 });
-                currentExtractedText = result.data.text.trim().toUpperCase();
-                document.getElementById('extractedText').textContent = currentExtractedText;
-                document.getElementById('extractedTextBox').style.display = 'block';
+                currentWorkText = (result.data.text || '').trim().toUpperCase();
+                document.getElementById('workOcrText').textContent = currentWorkText;
+                document.getElementById('workOcrBox').style.display = 'block';
                 hideLoading(); showToast('✅ Texto extraído', 'success');
             } catch (e) { hideLoading(); showToast('Error OCR', 'error'); }
-            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 800);
+            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 500);
         }
+
         function sendToField() {
             const field = document.getElementById('targetField').value;
             if (!field) return showToast('Elige campo destino', 'error');
-            if (!currentExtractedText) return showToast('Sin texto', 'error');
-            let t = currentExtractedText.replace(/\n/g, ' ').replace(/\s+/g, ' ');
-            if (field === 'monto') { const m = t.match(/[\d.,]+[\d]/g); if (m) t = m.reduce((a, b) => a.length > b.length ? a : b); }
+            if (!currentWorkText) return showToast('Sin texto', 'error');
+            let t = currentWorkText.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+            if (field === 'monto') { const m = t.match(/[\d.,]+/g); if (m) t = m.reduce((a, b) => a.length >= b.length ? a : b); }
             if (field === 'numContrato') { const m = t.match(/\d+\/\d+/); if (m) t = m[0]; }
             if (field === 'codigoId') { const m = t.match(/ANPE\/[\w\-\/]+/i); if (m) t = m[0].toUpperCase(); }
             document.getElementById('field_' + field).value = t;
-            showToast('✅ Enviado al formulario', 'success');
-            const el = document.getElementById('field_' + field);
-            el.style.borderColor = '#10b981';
-            setTimeout(() => el.style.borderColor = '#2d2d5b', 1500);
-        }
-        function copyExtractedText() { copyClip(currentExtractedText, 'Copiado'); }
-        function autoDetectFields() {
-            if (!currentExtractedText) return showToast('Sin texto', 'error');
-            const t = currentExtractedText;
-            const n = t.match(/(\d{2,4}\/\d{2})/); if (n) document.getElementById('field_numContrato').value = n[1];
-            const c = t.match(/(ANPE\/[\w\-\/]+)/i); if (c) document.getElementById('field_codigoId').value = c[1].toUpperCase();
-            const m = t.match(/BS\.?\s*([\d.,]+)/i); if (m) document.getElementById('field_monto').value = m[1];
-            const p = t.match(/((?:CONST|RECONST)\.?\s+[^.]+(?:D-\d))/i); if (p) document.getElementById('field_proyecto').value = p[1].trim().toUpperCase();
-            showToast('🤖 Auto-detectado', 'info');
+            showToast('Enviado al campo', 'success');
         }
 
-        // ==================== CRUD FIREBASE ====================
+        function autoDetectFields(text) {
+            if (!text) return showToast('No hay texto', 'error');
+            const t = text.toUpperCase();
+            const n = t.match(/(\d{2,4}\/\d{2})/);
+            if (n) document.getElementById('field_numContrato').value = n[1];
+            const c = t.match(/(ANPE\/[A-Z0-9\-\/]+)/);
+            if (c) document.getElementById('field_codigoId').value = c[1];
+            const m = t.match(/BS\.?\s*([\d.,]+)/);
+            if (m) document.getElementById('field_monto').value = m[1];
+            else {
+                const m2 = t.match(/([\d]{1,3}(?:\.\d{3})*,\d{2})/);
+                if (m2) document.getElementById('field_monto').value = m2[1];
+            }
+            const p = t.match(/((?:CONST|RECONST)\.?\s+[^\n]+)/);
+            if (p) document.getElementById('field_proyecto').value = p[1].trim().slice(0, 200);
+            // empresa: líneas con SRL / SA / REPRESENTANTE
+            const emp = t.match(/((?:[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑ\s\.\-&,]){5,80}(?:SRL|S\.R\.L|SA|S\.A)\.?)/);
+            if (emp) document.getElementById('field_empresa').value = emp[1].trim();
+            showToast('🤖 Campos detectados — revísalos', 'info');
+        }
+
+        // ---------- CONTRACTS CRUD ----------
         async function saveContract() {
             const data = {
-                numContrato: document.getElementById('field_numContrato').value.trim().toUpperCase(),
-                codigoId: document.getElementById('field_codigoId').value.trim().toUpperCase(),
-                proyecto: document.getElementById('field_proyecto').value.trim().toUpperCase(),
+                numContrato: val('field_numContrato'),
+                codigoId: val('field_codigoId'),
+                proyecto: val('field_proyecto'),
                 monto: document.getElementById('field_monto').value.trim(),
-                empresa: document.getElementById('field_empresa').value.trim().toUpperCase(),
+                empresa: val('field_empresa'),
                 fechaRegistro: new Date().toISOString()
             };
-            if (!data.numContrato || !data.proyecto) return showToast('Completa N° Contrato y Proyecto', 'error');
+            if (!data.numContrato || !data.proyecto) return showToast('Completa N° y Proyecto', 'error');
             try {
-                showLoading('Guardando en la nube...');
+                showLoading('Guardando...');
                 await contractsRef.add(data);
-                hideLoading();
-                clearForm();
-                showToast('✅ Guardado en la nube', 'success');
+                await markDraftUsed();
+                hideLoading(); clearForm();
+                showToast('✅ Contrato guardado en la nube', 'success');
             } catch (e) {
-                hideLoading();
-                console.error(e);
-                showToast('Error al guardar: ' + e.message, 'error');
+                hideLoading(); showToast('Error al guardar', 'error');
             }
         }
-
+        function val(id) { return document.getElementById(id).value.trim().toUpperCase(); }
         function clearForm() {
-            ['numContrato', 'codigoId', 'proyecto', 'monto', 'empresa'].forEach(f => {
-                document.getElementById('field_' + f).value = '';
-            });
+            ['field_numContrato','field_codigoId','field_proyecto','field_monto','field_empresa'].forEach(id => document.getElementById(id).value = '');
         }
-
         function editContract(id) {
-            const c = contracts.find(x => x.id === id);
-            if (!c) return;
+            const c = contracts.find(x => x.id === id); if (!c) return;
             editingId = id;
             document.getElementById('edit_numContrato').value = c.numContrato || '';
             document.getElementById('edit_codigoId').value = c.codigoId || '';
@@ -710,115 +913,116 @@
             document.getElementById('edit_empresa').value = c.empresa || '';
             document.getElementById('editModal').classList.add('show');
         }
-
+        function closeEdit() { document.getElementById('editModal').classList.remove('show'); editingId = null; }
         async function updateContract() {
             if (!editingId) return;
             try {
                 showLoading('Actualizando...');
                 await contractsRef.doc(editingId).update({
-                    numContrato: document.getElementById('edit_numContrato').value.trim().toUpperCase(),
-                    codigoId: document.getElementById('edit_codigoId').value.trim().toUpperCase(),
-                    proyecto: document.getElementById('edit_proyecto').value.trim().toUpperCase(),
+                    numContrato: val('edit_numContrato'),
+                    codigoId: val('edit_codigoId'),
+                    proyecto: val('edit_proyecto'),
                     monto: document.getElementById('edit_monto').value.trim(),
-                    empresa: document.getElementById('edit_empresa').value.trim().toUpperCase()
+                    empresa: val('edit_empresa')
                 });
-                hideLoading();
-                closeModal();
-                showToast('✅ Actualizado', 'success');
-            } catch (e) {
-                hideLoading();
-                showToast('Error al actualizar', 'error');
-            }
+                hideLoading(); closeEdit(); showToast('Actualizado', 'success');
+            } catch (e) { hideLoading(); showToast('Error', 'error'); }
         }
-
         async function deleteContract(id) {
-            if (!confirm('¿Eliminar este contrato?')) return;
-            try {
-                await contractsRef.doc(id).delete();
-                showToast('Eliminado', 'info');
-            } catch (e) {
-                showToast('Error al eliminar', 'error');
-            }
+            if (!confirm('¿Eliminar contrato?')) return;
+            try { await contractsRef.doc(id).delete(); showToast('Eliminado', 'info'); }
+            catch (e) { showToast('Error', 'error'); }
         }
-
-        async function clearAllRecords() {
-            if (!confirm('¿BORRAR TODOS los contratos de la nube?')) return;
-            if (!confirm('¿ESTÁS SEGURO? No se puede deshacer.')) return;
+        async function clearAllContracts() {
+            if (!confirm('¿Borrar TODOS los contratos?')) return;
+            if (!confirm('¿Seguro?')) return;
+            showLoading('Borrando...');
             try {
-                showLoading('Borrando todo...');
                 const snap = await contractsRef.get();
                 const batch = db.batch();
                 snap.docs.forEach(d => batch.delete(d.ref));
                 await batch.commit();
-                hideLoading();
-                showToast('Todos eliminados', 'info');
-            } catch (e) {
-                hideLoading();
-                showToast('Error al borrar', 'error');
-            }
+                hideLoading(); showToast('Listo', 'info');
+            } catch (e) { hideLoading(); showToast('Error', 'error'); }
         }
 
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('show');
-            editingId = null;
-        }
-
-        // ==================== RENDER ====================
         function renderRecords(list) {
-            const container = document.getElementById('recordsContainer');
+            const box = document.getElementById('recordsList');
             const data = list || contracts;
             if (!data.length) {
-                container.innerHTML = '<div style="text-align:center;color:#666;padding:40px;background:#1a1a35;border-radius:12px;">Sin registros en la nube.<br>¡Guarda el primero! 📷</div>';
+                box.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:40px;">Sin contratos guardados</div>';
                 return;
             }
-            // Ya vienen ordenados desc desde Firestore
-            container.innerHTML = data.map((c, i) => `
+            box.innerHTML = data.map((c, i) => `
                 <div class="record-card">
                     <span class="record-num">#${i + 1}</span>
-                    <div class="record-field"><div class="field-label">N° Contrato</div><div class="field-value"><strong>${c.numContrato || '-'}</strong></div></div>
-                    <div class="record-field"><div class="field-label">Código ID</div><div class="field-value"><span class="badge">${c.codigoId || '-'}</span></div></div>
-                    <div class="record-field"><div class="field-label">Proyecto</div><div class="field-value">${c.proyecto || '-'}</div></div>
-                    <div class="record-field"><div class="field-label">Monto (Bs.)</div><div class="field-value monto-value">${c.monto || '-'}</div></div>
-                    <div class="record-field"><div class="field-label">Empresa</div><div class="field-value">${c.empresa || '-'}</div></div>
-                    <div class="record-actions">
+                    <div class="rf"><div class="fl">N° Contrato</div><div class="fv"><strong>${esc(c.numContrato)}</strong></div></div>
+                    <div class="rf"><div class="fl">Código</div><div class="fv"><span class="badge">${esc(c.codigoId)}</span></div></div>
+                    <div class="rf"><div class="fl">Proyecto</div><div class="fv">${esc(c.proyecto)}</div></div>
+                    <div class="rf"><div class="fl">Monto</div><div class="fv monto">${esc(c.monto)}</div></div>
+                    <div class="rf"><div class="fl">Empresa</div><div class="fv">${esc(c.empresa)}</div></div>
+                    <div class="ra">
                         <button class="btn btn-success btn-small" onclick="copyRow('${c.id}')">📋 COPIAR</button>
-                        <button class="btn btn-info btn-small" onclick="editContract('${c.id}')">✏️ EDITAR</button>
+                        <button class="btn btn-info btn-small" onclick="editContract('${c.id}')">✏️</button>
                         <button class="btn btn-danger btn-small" onclick="deleteContract('${c.id}')">🗑️</button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
         }
-
         function filterRecords() {
             const q = document.getElementById('searchInput').value.toUpperCase();
             if (!q) return renderRecords();
             renderRecords(contracts.filter(c =>
-                (c.numContrato || '').includes(q) ||
-                (c.codigoId || '').includes(q) ||
-                (c.proyecto || '').includes(q) ||
-                (c.empresa || '').includes(q)
+                (c.numContrato || '').includes(q) || (c.codigoId || '').includes(q) ||
+                (c.proyecto || '').includes(q) || (c.empresa || '').includes(q)
             ));
         }
-
-        // ==================== COPY EXCEL ====================
-        function formatRow(c) {
-            return [c.numContrato || '', c.codigoId || '', c.proyecto || '', c.monto || '', c.empresa || '']
-                .map(f => String(f).replace(/\t|\n|\r/g, ' ')).join('\t');
+        function rowTSV(c) {
+            return [c.numContrato||'', c.codigoId||'', c.proyecto||'', c.monto||'', c.empresa||'']
+                .map(x => String(x).replace(/\t|\n|\r/g, ' ')).join('\t');
         }
         function copyRow(id) {
             const c = contracts.find(x => x.id === id);
-            if (c) copyClip(formatRow(c), '✅ Fila copiada — pégala en Excel');
+            if (c) copyClip(rowTSV(c), '✅ Fila copiada — pega en Excel');
         }
-        function copyAllToClipboard() {
+        function copyAll() {
             if (!contracts.length) return showToast('Sin datos', 'error');
-            copyClip(contracts.map(formatRow).join('\n'), `✅ ${contracts.length} filas copiadas`);
+            copyClip(contracts.map(rowTSV).join('\n'), `✅ ${contracts.length} filas copiadas`);
         }
+
+        // ---------- UTILS ----------
+        function rotateDataURL(src, deg) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const rad = deg * Math.PI / 180;
+                    const s = Math.abs(Math.sin(rad)), c = Math.abs(Math.cos(rad));
+                    canvas.width = img.width * c + img.height * s;
+                    canvas.height = img.width * s + img.height * c;
+                    ctx.translate(canvas.width/2, canvas.height/2);
+                    ctx.rotate(rad);
+                    ctx.drawImage(img, -img.width/2, -img.height/2);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.src = src;
+            });
+        }
+        function toUpper(el) {
+            const p = el.selectionStart;
+            el.value = el.value.toUpperCase();
+            if (el.setSelectionRange) el.setSelectionRange(p, p);
+        }
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
+        function esc(s) { return escapeHtml(s || '-'); }
         function copyClip(text, msg) {
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => showToast(msg, 'success')).catch(() => fallbackCopy(text, msg));
-            } else fallbackCopy(text, msg);
+                navigator.clipboard.writeText(text).then(() => showToast(msg, 'success')).catch(() => fbCopy(text, msg));
+            } else fbCopy(text, msg);
         }
-        function fallbackCopy(text, msg) {
+        function fbCopy(text, msg) {
             const t = document.createElement('textarea');
             t.value = text; t.style.cssText = 'position:fixed;top:-999px';
             document.body.appendChild(t); t.select();
@@ -826,28 +1030,18 @@
             catch (e) { showToast('No se pudo copiar', 'error'); }
             document.body.removeChild(t);
         }
-
-        // ==================== STATS / UI ====================
         function updateStats() {
             document.getElementById('totalContracts').textContent = contracts.length;
             const today = new Date().toDateString();
-            document.getElementById('todayContracts').textContent = contracts.filter(c =>
-                c.fechaRegistro && new Date(c.fechaRegistro).toDateString() === today
-            ).length;
-            let total = 0;
-            contracts.forEach(c => {
-                if (c.monto) {
-                    const n = parseFloat(String(c.monto).replace(/\./g, '').replace(',', '.'));
-                    if (!isNaN(n)) total += n;
-                }
-            });
-            document.getElementById('totalMonto').textContent = total.toLocaleString('es-BO', { maximumFractionDigits: 0 });
+            document.getElementById('todayContracts').textContent =
+                contracts.filter(c => c.fechaRegistro && new Date(c.fechaRegistro).toDateString() === today).length;
+            updateDraftBadge();
         }
-        function showLoading(msg) {
-            document.getElementById('loadingText').textContent = msg;
-            document.getElementById('loadingOverlay').classList.add('show');
+        function showLoading(m) {
+            document.getElementById('loadingText').textContent = m;
+            document.getElementById('loading').classList.add('show');
         }
-        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+        function hideLoading() { document.getElementById('loading').classList.remove('show'); }
         function showToast(msg, type) {
             const t = document.getElementById('toast');
             t.textContent = msg;
@@ -855,18 +1049,12 @@
             setTimeout(() => t.classList.remove('show'), 3500);
         }
 
-        // ==================== INIT ====================
-        window.onload = () => {
-            startRealtimeSync();
-            updateStats();
-        };
-        window.addEventListener('resize', () => {
-            if (currentImageIndex >= 0 && document.getElementById('tab-workspace').classList.contains('active')) {
-                setTimeout(setupCanvas, 100);
-            }
+        document.getElementById('loginPassword')?.addEventListener('keydown', e => {
+            if (e.key === 'Enter') doLogin();
         });
-        window.addEventListener('online', () => updateConnStatus(true));
-        window.addEventListener('offline', () => updateConnStatus(false));
+        window.addEventListener('resize', () => {
+            if (workSrc && tabActive('work')) setTimeout(setupWorkCanvas, 100);
+        });
     </script>
 </body>
 </html>
