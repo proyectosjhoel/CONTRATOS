@@ -3,50 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📋 Registro de Contratos jajaja</title>
+    <title>📋 Contratos jh</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f0f23;
-            color: #e0e0e0;
-            min-height: 100vh;
-            font-size: 15px;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; font-size: 15px; }
         input, textarea, select { font-size: 16px !important; }
 
         .header {
             background: linear-gradient(135deg, #1a1a3e, #2d2d6b);
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100; gap: 10px;
         }
-
         .header h1 { font-size: 1.1em; color: #7b9ff5; }
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+            border-radius: 20px; font-size: 11px; font-weight: 700;
+        }
+        .status-online { background: rgba(16,185,129,0.2); color: #34d399; }
+        .status-offline { background: rgba(239,68,68,0.2); color: #f87171; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
         .btn {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            min-height: 44px;
-            white-space: nowrap;
+            padding: 12px 18px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px;
+            font-weight: 600; display: inline-flex; align-items: center; justify-content: center;
+            gap: 6px; min-height: 44px; white-space: nowrap; transition: all 0.2s;
         }
-
         .btn:active { transform: scale(0.96); }
         .btn-primary { background: linear-gradient(135deg, #4a6cf7, #6366f1); color: white; }
         .btn-success { background: linear-gradient(135deg, #10b981, #059669); color: white; }
@@ -57,55 +38,35 @@
         .btn-small { padding: 10px 14px; font-size: 13px; min-height: 40px; }
 
         .tabs {
-            display: flex;
-            background: #1a1a35;
-            border-bottom: 2px solid #2d2d5b;
-            position: sticky;
-            top: 55px;
-            z-index: 90;
+            display: flex; background: #1a1a35; border-bottom: 2px solid #2d2d5b;
+            position: sticky; top: 55px; z-index: 90;
         }
-
         .tab {
-            padding: 14px 10px;
-            cursor: pointer;
-            color: #888;
-            font-weight: 600;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-            flex: 1;
-            text-align: center;
-            font-size: 13px;
+            padding: 14px 10px; cursor: pointer; color: #888; font-weight: 600;
+            border-bottom: 3px solid transparent; flex: 1; text-align: center; font-size: 13px;
         }
-
         .tab.active { color: #7b9ff5; border-bottom-color: #7b9ff5; background: #1e1e45; }
 
         .tab-content { display: none; padding: 15px; max-width: 1400px; margin: 0 auto; }
         .tab-content.active { display: block; }
 
         .capture-area, .form-card {
-            background: #1a1a35;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #2d2d5b;
+            background: #1a1a35; border-radius: 12px; padding: 15px;
+            margin-bottom: 15px; border: 1px solid #2d2d5b;
         }
-
         h3 { color: #7b9ff5; margin-bottom: 12px; font-size: 1em; text-transform: uppercase; }
 
         .file-input-wrapper { display: flex; gap: 10px; margin-bottom: 12px; }
         .file-input-wrapper input[type="file"] { display: none; }
         .file-label {
-            padding: 14px; background: linear-gradient(135deg, #4a6cf7, #6366f1);
-            color: white; border-radius: 10px; cursor: pointer; font-weight: 600;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            flex: 1; min-height: 48px; font-size: 14px;
+            padding: 14px; background: linear-gradient(135deg, #4a6cf7, #6366f1); color: white;
+            border-radius: 10px; cursor: pointer; font-weight: 600; display: flex;
+            align-items: center; justify-content: center; gap: 8px; flex: 1; min-height: 48px; font-size: 14px;
         }
 
-        /* LIVE CAMERA MODAL */
         .camera-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000; z-index: 2000; flex-direction: column;
-            justify-content: space-between; align-items: center;
+            background: #000; z-index: 2000; flex-direction: column; justify-content: space-between; align-items: center;
         }
         .camera-modal.show { display: flex; }
         .camera-video { width: 100%; height: 80%; object-fit: cover; }
@@ -114,24 +75,25 @@
             justify-content: space-around; align-items: center; padding: 10px 20px;
         }
         .btn-snap {
-            width: 75px; height: 75px; border-radius: 50%; background: #ef4444;
-            border: 4px solid white; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px;
+            width: 75px; height: 75px; border-radius: 50%; background: #ef4444; border: 4px solid white;
+            box-shadow: 0 0 15px rgba(239,68,68,0.5); cursor: pointer; font-size: 24px;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .image-container {
-            position: relative; display: none; margin-top: 12px;
-            background: #12122a; border-radius: 10px; overflow: hidden; border: 2px solid #2d2d5b;
+            position: relative; display: none; margin-top: 12px; background: #12122a;
+            border-radius: 10px; overflow: hidden; border: 2px solid #2d2d5b;
         }
         .image-wrapper { position: relative; width: 100%; overflow: auto; }
         .image-wrapper img { max-width: 100%; display: block; margin: 0 auto; }
-        .image-wrapper canvas { position: absolute; top: 0; left: 50%; transform: translateX(-50%); cursor: crosshair; touch-action: none; }
-        
+        .image-wrapper canvas {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            cursor: crosshair; touch-action: none;
+        }
         .rotation-controls {
             display: flex; gap: 6px; padding: 10px; justify-content: center;
             background: #22224a; flex-wrap: wrap;
         }
-
         .selection-info {
             background: #22224a; padding: 12px; border-radius: 8px; margin-top: 10px;
             color: #10b981; font-size: 13px; display: none; text-align: center; font-weight: bold;
@@ -139,8 +101,8 @@
 
         .ocr-controls { display: flex; gap: 10px; margin-top: 12px; flex-direction: column; }
         .field-selector {
-            padding: 14px; background: #22224a; color: #e0e0e0;
-            border: 1px solid #3d3d7b; border-radius: 10px; font-size: 16px; width: 100%;
+            padding: 14px; background: #22224a; color: #e0e0e0; border: 1px solid #3d3d7b;
+            border-radius: 10px; font-size: 16px; width: 100%;
         }
         .ocr-buttons { display: flex; gap: 8px; }
         .ocr-buttons .btn { flex: 1; }
@@ -151,8 +113,8 @@
         }
         .extracted-text pre {
             color: #10b981; white-space: pre-wrap; word-wrap: break-word;
-            font-family: 'Courier New', monospace; font-size: 14px;
-            max-height: 150px; overflow-y: auto; padding: 8px; background: #0a0a1a; border-radius: 6px;
+            font-family: 'Courier New', monospace; font-size: 14px; max-height: 150px;
+            overflow-y: auto; padding: 8px; background: #0a0a1a; border-radius: 6px;
         }
         .extracted-actions { margin-top: 10px; display: flex; gap: 6px; }
         .extracted-actions .btn { flex: 1; }
@@ -168,19 +130,18 @@
         .form-actions { display: flex; gap: 10px; margin-top: 15px; }
         .form-actions .btn { flex: 1; }
 
-        /* GRID LAYOUT (Workspace Split) */
         .workspace { display: flex; flex-direction: column; gap: 15px; }
-        
         @media (min-width: 900px) {
             .workspace { flex-direction: row; align-items: flex-start; }
             .workspace-left { flex: 1.2; min-width: 0; }
             .workspace-right { flex: 1; min-width: 0; position: sticky; top: 120px; }
-            body { font-size: 14px; }
-            .stat-card .stat-value { font-size: 1.8em; }
         }
 
         .records-container { display: flex; flex-direction: column; gap: 12px; }
-        .record-card { background: #1a1a35; border-radius: 12px; padding: 15px; border: 1px solid #2d2d5b; position: relative; }
+        .record-card {
+            background: #1a1a35; border-radius: 12px; padding: 15px;
+            border: 1px solid #2d2d5b; position: relative;
+        }
         .record-card .record-num {
             position: absolute; top: 10px; right: 12px; background: #4a6cf7; color: white;
             padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
@@ -194,140 +155,163 @@
         .record-actions .btn { flex: 1; }
 
         .stats-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; width: 100%; }
-        .stat-card { background: #1a1a35; border-radius: 10px; padding: 12px 8px; border: 1px solid #2d2d5b; text-align: center; }
+        .stat-card {
+            background: #1a1a35; border-radius: 10px; padding: 12px 8px;
+            border: 1px solid #2d2d5b; text-align: center;
+        }
         .stat-card .stat-value { font-size: 1.4em; font-weight: 700; color: #7b9ff5; }
         .stat-card .stat-label { color: #888; font-size: 10px; margin-top: 4px; text-transform: uppercase; }
 
         .thumbnails { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-        .thumbnail { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 2px solid #2d2d5b; position: relative; }
+        .thumbnail {
+            width: 60px; height: 60px; border-radius: 8px; object-fit: cover;
+            cursor: pointer; border: 2px solid #2d2d5b;
+        }
         .thumbnail.active { border-color: #7b9ff5; }
 
         .progress-bar { width: 100%; height: 6px; background: #2d2d5b; border-radius: 3px; margin-top: 10px; display: none; }
-        .progress-bar .progress { height: 100%; background: linear-gradient(90deg, #4a6cf7, #10b981); border-radius: 3px; transition: width 0.3s; width: 0%; }
-        
+        .progress-bar .progress {
+            height: 100%; background: linear-gradient(90deg, #4a6cf7, #10b981);
+            border-radius: 3px; transition: width 0.3s; width: 0%;
+        }
+
         .search-bar { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .search-bar input { flex: 1; min-width: 100%; padding: 12px 14px; background: #12122a; border: 1px solid #2d2d5b; border-radius: 10px; color: #e0e0e0; }
+        .search-bar input {
+            flex: 1; min-width: 100%; padding: 12px 14px; background: #12122a;
+            border: 1px solid #2d2d5b; border-radius: 10px; color: #e0e0e0;
+        }
         .search-bar-buttons { display: flex; gap: 8px; width: 100%; }
         .search-bar-buttons .btn { flex: 1; }
 
-        /* LOADING & TOAST */
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; justify-content: center; align-items: center; flex-direction: column; }
+        .loading-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 3000; justify-content: center;
+            align-items: center; flex-direction: column;
+        }
         .loading-overlay.show { display: flex; }
-        .spinner { width: 50px; height: 50px; border: 4px solid #2d2d5b; border-top-color: #7b9ff5; border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid #2d2d5b; border-top-color: #7b9ff5;
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: #7b9ff5; margin-top: 15px; font-weight: 600; }
-        
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%); padding: 14px 24px; border-radius: 10px; color: white; font-weight: 600; z-index: 4000; transition: transform 0.4s ease; max-width: 90%; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%);
+            padding: 14px 24px; border-radius: 10px; color: white; font-weight: 600;
+            z-index: 4000; transition: transform 0.4s ease; max-width: 90%; text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
         .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .toast-info { background: linear-gradient(135deg, #06b6d4, #0891b2); }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2500; justify-content: center; align-items: flex-start; padding: 15px; overflow-y: auto; }
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2500; justify-content: center;
+            align-items: flex-start; padding: 15px; overflow-y: auto;
+        }
         .modal-overlay.show { display: flex; }
-        .modal { background: #1a1a35; border-radius: 15px; padding: 20px; max-width: 600px; width: 100%; margin: 20px auto; border: 1px solid #2d2d5b; }
-        
-        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(79, 70, 229, 0.2); color: #818cf8; }
+        .modal {
+            background: #1a1a35; border-radius: 15px; padding: 20px; max-width: 600px;
+            width: 100%; margin: 20px auto; border: 1px solid #2d2d5b;
+        }
+        .badge {
+            display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 600; background: rgba(79,70,229,0.2); color: #818cf8;
+        }
 
         @media (min-width: 900px) {
             .search-bar input { min-width: 250px; }
             .search-bar-buttons { width: auto; }
+            .stat-card .stat-value { font-size: 1.8em; }
         }
     </style>
 </head>
 <body>
-    <!-- LOADING -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <div class="loading-text" id="loadingText">Procesando OCR...</div>
+        <div class="loading-text" id="loadingText">Procesando...</div>
     </div>
-
-    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
-    <!-- CÁMARA EN VIVO -->
     <div class="camera-modal" id="cameraModal">
         <video id="videoFeed" class="camera-video" autoplay playsinline></video>
         <div class="camera-controls">
             <button class="btn btn-danger" onclick="stopCamera()">❌ CERRAR</button>
-            <button class="btn-snap" onclick="snapPhoto()" title="Tomar Foto">📸</button>
-            <button class="btn btn-purple" onclick="switchCamera()">🔄 ROTAR</button>
+            <button class="btn-snap" onclick="snapPhoto()">📸</button>
+            <button class="btn btn-purple" onclick="switchCamera()">🔄</button>
         </div>
     </div>
 
-    <!-- HEADER -->
     <div class="header">
         <h1>📋 CONTRATOS GAMEA</h1>
-        <button class="btn btn-info btn-small" onclick="exportToJSON()">💾 BACKUP</button>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <span class="status-badge status-offline" id="connStatus">
+                <span class="status-dot"></span>
+                <span id="connText">CONECTANDO...</span>
+            </span>
+        </div>
     </div>
 
-    <!-- TABS -->
     <div class="tabs">
         <div class="tab active" onclick="switchTab(event, 'workspace')">📷 ÁREA DE TRABAJO</div>
         <div class="tab" onclick="switchTab(event, 'records')">📋 REGISTROS</div>
     </div>
 
-    <!-- WORKSPACE TAB (SPLIT SCREEN ON DESKTOP) -->
+    <!-- WORKSPACE -->
     <div class="tab-content active" id="tab-workspace">
-        
-        <!-- STATS FULL WIDTH -->
         <div class="stats-bar">
-            <div class="stat-card"><div class="stat-value" id="totalContracts">0</div><div class="stat-label">Total Guardados</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalContracts">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-value" id="todayContracts">0</div><div class="stat-label">Hoy</div></div>
             <div class="stat-card"><div class="stat-value" id="totalMonto">0</div><div class="stat-label">Total Bs.</div></div>
         </div>
 
         <div class="workspace">
-            <!-- IZQUIERDA: CAPTURA Y OCR -->
             <div class="workspace-left">
                 <div class="capture-area">
-                    <h3>📸 1. CAPTURA DE IMAGEN</h3>
+                    <h3>📸 1. CAPTURA</h3>
                     <div class="file-input-wrapper">
-                        <button class="file-label" onclick="startCamera()">📷 ABRIR CÁMARA</button>
-                        <label class="file-label" for="fileInput" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">📁 GALERÍA</label>
+                        <button class="file-label" onclick="startCamera()">📷 CÁMARA</button>
+                        <label class="file-label" for="fileInput" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁 GALERÍA</label>
                         <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)" multiple>
                     </div>
-
                     <div class="thumbnails" id="thumbnails"></div>
-
                     <div class="image-container" id="imageContainer">
                         <div class="rotation-controls">
                             <button class="btn btn-purple btn-small" onclick="rotateImage(-90)">↺ IZQ</button>
                             <button class="btn btn-purple btn-small" onclick="rotateImage(90)">↻ DER</button>
                             <button class="btn btn-purple btn-small" onclick="rotateImage(180)">🔄 180°</button>
-                            <button class="btn btn-danger btn-small" onclick="deleteCurrentImage()">🗑️ QUITAR FOTO</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteCurrentImage()">🗑️ QUITAR</button>
                         </div>
-                        <div class="image-wrapper" id="imageWrapper">
+                        <div class="image-wrapper">
                             <img id="previewImage" src="" alt="Preview">
                             <canvas id="selectionCanvas"></canvas>
                         </div>
                     </div>
-
-                    <div class="selection-info" id="selectionInfo">✅ ÁREA SELECCIONADA - LISTO PARA EXTRAER</div>
+                    <div class="selection-info" id="selectionInfo">✅ ÁREA SELECCIONADA</div>
                 </div>
 
                 <div class="capture-area">
-                    <h3>🔍 2. EXTRAER TEXTO (OCR)</h3>
+                    <h3>🔍 2. EXTRAER TEXTO</h3>
                     <div class="ocr-controls">
                         <select class="field-selector" id="targetField">
-                            <option value="">-- SELECCIONA CAMPO DESTINO --</option>
+                            <option value="">-- CAMPO DESTINO --</option>
                             <option value="numContrato">N° DE CONTRATO</option>
                             <option value="codigoId">CÓDIGO DE IDENTIFICACIÓN</option>
                             <option value="proyecto">PROYECTO</option>
                             <option value="monto">MONTO (BS.)</option>
                             <option value="empresa">EMPRESA</option>
                         </select>
-                        
                         <div class="ocr-buttons">
-                            <button class="btn btn-warning" onclick="extractFromSelection()">✂️ EXTRAER SELECCIÓN</button>
+                            <button class="btn btn-warning" onclick="extractFromSelection()">✂️ EXTRAER</button>
                             <button class="btn btn-primary" onclick="extractFullImage()">📄 OCR COMPLETO</button>
                         </div>
                     </div>
-                    
                     <div class="progress-bar" id="ocrProgress"><div class="progress" id="ocrProgressFill"></div></div>
-
                     <div class="extracted-text" id="extractedTextBox">
-                        <h4>📝 TEXTO EXTRAÍDO:</h4>
+                        <h4 style="color:#f59e0b;margin-bottom:8px;">📝 TEXTO:</h4>
                         <pre id="extractedText"></pre>
                         <div class="extracted-actions">
                             <button class="btn btn-success btn-small" onclick="sendToField()">➡️ AL CAMPO</button>
@@ -338,52 +322,45 @@
                 </div>
             </div>
 
-            <!-- DERECHA: FORMULARIO -->
             <div class="workspace-right">
                 <div class="form-card">
                     <h3>📝 DATOS DEL CONTRATO</h3>
-                    
                     <div class="form-group">
                         <label>N° DE CONTRATO *</label>
                         <input type="text" id="field_numContrato" placeholder="EJ: 202/26" oninput="toUpperCase(this)">
                     </div>
-                    
                     <div class="form-group">
                         <label>CÓDIGO DE IDENTIFICACIÓN *</label>
                         <input type="text" id="field_codigoId" placeholder="EJ: ANPE/SADM-5/O/018/26" oninput="toUpperCase(this)">
                     </div>
-
                     <div class="form-group">
                         <label>PROYECTO *</label>
-                        <textarea id="field_proyecto" placeholder="EJ: CONST. PAVIMENTO FLEXIBLE..." oninput="toUpperCase(this)"></textarea>
+                        <textarea id="field_proyecto" placeholder="EJ: CONST. PAVIMENTO..." oninput="toUpperCase(this)"></textarea>
                     </div>
-
                     <div class="form-group">
                         <label>MONTO (BS.) *</label>
                         <input type="text" id="field_monto" placeholder="EJ: 314.772,67">
                     </div>
-
                     <div class="form-group">
                         <label>EMPRESA *</label>
-                        <textarea id="field_empresa" placeholder="EJ: JUAN CARLOS VILLANUEVA..." oninput="toUpperCase(this)"></textarea>
+                        <textarea id="field_empresa" placeholder="EJ: EMPRESA / REPRESENTANTE..." oninput="toUpperCase(this)"></textarea>
                     </div>
-
                     <div class="form-actions">
                         <button class="btn btn-danger" onclick="clearForm()">🗑️ LIMPIAR</button>
-                        <button class="btn btn-success" onclick="saveContract()">💾 GUARDAR CONTRATO</button>
+                        <button class="btn btn-success" onclick="saveContract()">💾 GUARDAR</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- RECORDS TAB -->
+    <!-- RECORDS -->
     <div class="tab-content" id="tab-records">
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 BUSCAR CONTRATO, PROYECTO..." oninput="filterRecords()">
+            <input type="text" id="searchInput" placeholder="🔍 BUSCAR..." oninput="filterRecords()">
             <div class="search-bar-buttons">
                 <button class="btn btn-success btn-small" onclick="copyAllToClipboard()">📋 COPIAR TODO</button>
-                <button class="btn btn-danger btn-small" onclick="clearAllRecords()">🗑️ BORRAR</button>
+                <button class="btn btn-danger btn-small" onclick="clearAllRecords()">🗑️ BORRAR TODO</button>
             </div>
         </div>
         <div class="records-container" id="recordsContainer"></div>
@@ -392,11 +369,11 @@
     <!-- EDIT MODAL -->
     <div class="modal-overlay" id="editModal">
         <div class="modal">
-            <h3>✏️ EDITAR CONTRATO</h3>
-            <div class="form-group"><label>N° DE CONTRATO</label><input type="text" id="edit_numContrato" oninput="toUpperCase(this)"></div>
-            <div class="form-group"><label>CÓDIGO DE IDENTIFICACIÓN</label><input type="text" id="edit_codigoId" oninput="toUpperCase(this)"></div>
+            <h3 style="color:#7b9ff5;margin-bottom:15px;">✏️ EDITAR</h3>
+            <div class="form-group"><label>N° CONTRATO</label><input type="text" id="edit_numContrato" oninput="toUpperCase(this)"></div>
+            <div class="form-group"><label>CÓDIGO ID</label><input type="text" id="edit_codigoId" oninput="toUpperCase(this)"></div>
             <div class="form-group"><label>PROYECTO</label><textarea id="edit_proyecto" oninput="toUpperCase(this)"></textarea></div>
-            <div class="form-group"><label>MONTO (BS.)</label><input type="text" id="edit_monto"></div>
+            <div class="form-group"><label>MONTO</label><input type="text" id="edit_monto"></div>
             <div class="form-group"><label>EMPRESA</label><textarea id="edit_empresa" oninput="toUpperCase(this)"></textarea></div>
             <div class="form-actions">
                 <button class="btn btn-danger" onclick="closeModal()">❌ CANCELAR</button>
@@ -405,288 +382,283 @@
         </div>
     </div>
 
+    <!-- Firebase + Tesseract -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
     <script>
-        // STATE
-        let contracts = JSON.parse(localStorage.getItem('contracts') || '[]');
-        let currentImages = [];
-        let rotatedImages = []; // Parallel array for rotated states
-        let currentImageIndex = -1;
-        let selectionStart = null;
-        let selectionEnd = null;
-        let isSelecting = false;
-        let currentExtractedText = '';
-        let editingIndex = -1;
-        let currentRotation = 0;
-        
-        let currentStream = null;
-        let facingMode = "environment"; 
+        // ==================== FIREBASE ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnVDOK8f7qLZXIWYUN9IJNKuxlBVXTy2I",
+            authDomain: "contratos-3e093.firebaseapp.com",
+            projectId: "contratos-3e093",
+            storageBucket: "contratos-3e093.firebasestorage.app",
+            messagingSenderId: "417073831372",
+            appId: "1:417073831372:web:69fecb8e0e020513e71169"
+        };
 
-        // CAMERA
-        async function startCamera() {
-            try {
-                const constraints = { video: { facingMode: facingMode } };
-                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-                const video = document.getElementById('videoFeed');
-                video.srcObject = currentStream;
-                document.getElementById('cameraModal').classList.add('show');
-            } catch (err) {
-                console.error(err);
-                showToast('No se pudo acceder a la cámara directa. Usa GALERÍA.', 'error');
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const contractsRef = db.collection('contratos');
+
+        // ==================== STATE ====================
+        let contracts = []; // { id: firestoreId, ...data }
+        let currentImages = [];
+        let rotatedImages = [];
+        let currentImageIndex = -1;
+        let selectionStart = null, selectionEnd = null, isSelecting = false;
+        let currentExtractedText = '';
+        let editingId = null;
+        let currentRotation = 0;
+        let currentStream = null;
+        let facingMode = 'environment';
+        let isOnline = false;
+
+        // ==================== REALTIME LISTENER ====================
+        function startRealtimeSync() {
+            contractsRef.orderBy('fechaRegistro', 'desc').onSnapshot(
+                (snapshot) => {
+                    contracts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    isOnline = true;
+                    updateConnStatus(true);
+                    updateStats();
+                    if (document.getElementById('tab-records').classList.contains('active')) {
+                        renderRecords();
+                    }
+                },
+                (error) => {
+                    console.error('Firestore error:', error);
+                    isOnline = false;
+                    updateConnStatus(false);
+                    showToast('Error de conexión a la nube', 'error');
+                }
+            );
+        }
+
+        function updateConnStatus(online) {
+            const badge = document.getElementById('connStatus');
+            const text = document.getElementById('connText');
+            if (online) {
+                badge.className = 'status-badge status-online';
+                text.textContent = 'EN LÍNEA';
+            } else {
+                badge.className = 'status-badge status-offline';
+                text.textContent = 'SIN CONEXIÓN';
             }
         }
 
+        // ==================== CAMERA ====================
+        async function startCamera() {
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
+                document.getElementById('videoFeed').srcObject = currentStream;
+                document.getElementById('cameraModal').classList.add('show');
+            } catch (e) {
+                showToast('No se pudo abrir la cámara. Usa GALERÍA.', 'error');
+            }
+        }
         function stopCamera() {
-            if (currentStream) { currentStream.getTracks().forEach(track => track.stop()); currentStream = null; }
+            if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+            currentStream = null;
             document.getElementById('cameraModal').classList.remove('show');
         }
-
         function snapPhoto() {
             const video = document.getElementById('videoFeed');
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            const photoData = canvas.toDataURL('image/png');
-            currentImages.push(photoData);
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            currentImages.push(canvas.toDataURL('image/png'));
             rotatedImages.push(null);
             renderThumbnails();
             selectImage(currentImages.length - 1);
             stopCamera();
             showToast('📸 Foto capturada', 'success');
         }
-
         function switchCamera() {
-            facingMode = (facingMode === "environment") ? "user" : "environment";
+            facingMode = facingMode === 'environment' ? 'user' : 'environment';
             stopCamera(); startCamera();
         }
 
-        // HELPERS
-        function toUpperCase(input) {
-            const pos = input.selectionStart;
-            input.value = input.value.toUpperCase();
-            if (input.setSelectionRange) input.setSelectionRange(pos, pos);
+        // ==================== HELPERS ====================
+        function toUpperCase(el) {
+            const p = el.selectionStart;
+            el.value = el.value.toUpperCase();
+            if (el.setSelectionRange) el.setSelectionRange(p, p);
         }
-
-        function switchTab(evt, tabName) {
+        function switchTab(evt, name) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             evt.currentTarget.classList.add('active');
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            if (tabName === 'records') renderRecords();
+            document.getElementById('tab-' + name).classList.add('active');
+            if (name === 'records') renderRecords();
             updateStats();
             window.scrollTo(0, 0);
             if (currentImageIndex >= 0) setTimeout(setupCanvas, 100);
         }
 
-        // IMAGES
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            if (!files.length) return;
-            for (let file of files) {
+        // ==================== IMAGES ====================
+        function handleImageUpload(e) {
+            for (const file of e.target.files) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentImages.push(e.target.result);
+                reader.onload = (ev) => {
+                    currentImages.push(ev.target.result);
                     rotatedImages.push(null);
                     renderThumbnails();
-                    if (currentImages.length === 1 || currentImageIndex < 0) selectImage(currentImages.length - 1);
+                    if (currentImageIndex < 0) selectImage(currentImages.length - 1);
                 };
                 reader.readAsDataURL(file);
             }
-            event.target.value = '';
+            e.target.value = '';
         }
-
         function renderThumbnails() {
-            const container = document.getElementById('thumbnails');
-            container.innerHTML = '';
-            currentImages.forEach((img, idx) => {
-                const thumb = document.createElement('img');
-                thumb.src = rotatedImages[idx] || img;
-                thumb.className = `thumbnail ${idx === currentImageIndex ? 'active' : ''}`;
-                thumb.onclick = () => selectImage(idx);
-                container.appendChild(thumb);
+            const c = document.getElementById('thumbnails');
+            c.innerHTML = '';
+            currentImages.forEach((img, i) => {
+                const t = document.createElement('img');
+                t.src = rotatedImages[i] || img;
+                t.className = 'thumbnail' + (i === currentImageIndex ? ' active' : '');
+                t.onclick = () => selectImage(i);
+                c.appendChild(t);
             });
         }
-
-        function selectImage(index) {
-            currentImageIndex = index;
+        function selectImage(i) {
+            currentImageIndex = i;
             currentRotation = 0;
-            const imgEl = document.getElementById('previewImage');
-            imgEl.src = rotatedImages[index] || currentImages[index];
-            
+            const img = document.getElementById('previewImage');
+            img.src = rotatedImages[i] || currentImages[i];
             document.getElementById('imageContainer').style.display = 'block';
-            imgEl.onload = () => setupCanvas();
+            img.onload = () => setupCanvas();
             renderThumbnails();
         }
-
-        // DELETE IMAGE
         function deleteCurrentImage() {
             if (currentImageIndex < 0) return;
             if (!confirm('¿Quitar esta imagen?')) return;
-            
             currentImages.splice(currentImageIndex, 1);
             rotatedImages.splice(currentImageIndex, 1);
-            
-            if (currentImages.length > 0) {
-                selectImage(Math.max(0, currentImageIndex - 1));
-            } else {
+            if (currentImages.length) selectImage(Math.max(0, currentImageIndex - 1));
+            else {
                 currentImageIndex = -1;
                 document.getElementById('imageContainer').style.display = 'none';
                 renderThumbnails();
             }
             showToast('🗑️ Imagen quitada', 'info');
         }
-
-        // ROTATION
-        function rotateImage(degrees) {
+        function rotateImage(deg) {
             if (currentImageIndex < 0) return showToast('Sube imagen primero', 'error');
-            currentRotation = (currentRotation + degrees + 360) % 360;
+            currentRotation = (currentRotation + deg + 360) % 360;
             applyRotation();
         }
-
-        function resetRotation() {
-            if (currentImageIndex < 0) return;
-            currentRotation = 0;
-            rotatedImages[currentImageIndex] = null;
-            selectImage(currentImageIndex);
-        }
-
         function applyRotation() {
             const img = new Image();
-            img.onload = function() {
+            img.onload = function () {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 const rad = currentRotation * Math.PI / 180;
-                const sin = Math.abs(Math.sin(rad));
-                const cos = Math.abs(Math.cos(rad));
-                
-                canvas.width = img.width * cos + img.height * sin;
-                canvas.height = img.width * sin + img.height * cos;
+                const s = Math.abs(Math.sin(rad)), c = Math.abs(Math.cos(rad));
+                canvas.width = img.width * c + img.height * s;
+                canvas.height = img.width * s + img.height * c;
                 ctx.translate(canvas.width / 2, canvas.height / 2);
                 ctx.rotate(rad);
                 ctx.drawImage(img, -img.width / 2, -img.height / 2);
-                
-                const rotatedDataUrl = canvas.toDataURL('image/png');
-                rotatedImages[currentImageIndex] = rotatedDataUrl;
+                rotatedImages[currentImageIndex] = canvas.toDataURL('image/png');
                 selectImage(currentImageIndex);
             };
             img.src = currentImages[currentImageIndex];
         }
 
-        // CANVAS
+        // ==================== CANVAS ====================
         function setupCanvas() {
             const img = document.getElementById('previewImage');
             const canvas = document.getElementById('selectionCanvas');
-            if(!img.clientWidth) return;
-
+            if (!img.clientWidth) return;
             canvas.width = img.clientWidth; canvas.height = img.clientHeight;
             canvas.style.width = img.clientWidth + 'px'; canvas.style.height = img.clientHeight + 'px';
-
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            canvas.onmousedown = startSelection; canvas.onmousemove = updateSelection; canvas.onmouseup = endSelection;
-            canvas.ontouchstart = (e) => { e.preventDefault(); startSelection(getTouchPos(e)); };
-            canvas.ontouchmove = (e) => { e.preventDefault(); updateSelection(getTouchPos(e)); };
-            canvas.ontouchend = (e) => { e.preventDefault(); endSelection(getTouchPos(e)); };
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            canvas.onmousedown = startSel; canvas.onmousemove = moveSel; canvas.onmouseup = endSel;
+            canvas.ontouchstart = e => { e.preventDefault(); startSel(touchPos(e)); };
+            canvas.ontouchmove = e => { e.preventDefault(); moveSel(touchPos(e)); };
+            canvas.ontouchend = e => { e.preventDefault(); endSel(touchPos(e)); };
         }
-
-        function getTouchPos(e) {
-            const rect = document.getElementById('selectionCanvas').getBoundingClientRect();
-            const touch = e.touches[0] || e.changedTouches[0];
-            return { offsetX: touch.clientX - rect.left, offsetY: touch.clientY - rect.top };
+        function touchPos(e) {
+            const r = document.getElementById('selectionCanvas').getBoundingClientRect();
+            const t = e.touches[0] || e.changedTouches[0];
+            return { offsetX: t.clientX - r.left, offsetY: t.clientY - r.top };
         }
-
-        function startSelection(e) {
+        function startSel(e) {
             isSelecting = true; selectionStart = { x: e.offsetX, y: e.offsetY }; selectionEnd = null;
             document.getElementById('selectionInfo').style.display = 'none';
         }
-
-        function updateSelection(e) { if (!isSelecting) return; selectionEnd = { x: e.offsetX, y: e.offsetY }; drawSelection(); }
-
-        function endSelection(e) {
+        function moveSel(e) { if (!isSelecting) return; selectionEnd = { x: e.offsetX, y: e.offsetY }; drawSel(); }
+        function endSel() {
             if (!isSelecting) return; isSelecting = false;
             if (selectionEnd) document.getElementById('selectionInfo').style.display = 'block';
         }
-
-        function drawSelection() {
+        function drawSel() {
             const canvas = document.getElementById('selectionCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             if (!selectionStart || !selectionEnd) return;
-            const x = Math.min(selectionStart.x, selectionEnd.x); const y = Math.min(selectionStart.y, selectionEnd.y);
-            const w = Math.abs(selectionEnd.x - selectionStart.x); const h = Math.abs(selectionEnd.y - selectionStart.y);
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.clearRect(x, y, w, h);
+            const x = Math.min(selectionStart.x, selectionEnd.x), y = Math.min(selectionStart.y, selectionEnd.y);
+            const w = Math.abs(selectionEnd.x - selectionStart.x), h = Math.abs(selectionEnd.y - selectionStart.y);
+            ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(x, y, w, h);
             ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 3; ctx.setLineDash([6, 4]); ctx.strokeRect(x, y, w, h);
         }
 
-        // OCR
-        function getCroppedImage() {
+        // ==================== OCR ====================
+        function getCropped() {
             if (!selectionStart || !selectionEnd) return null;
             const img = document.getElementById('previewImage');
-            const scaleX = img.naturalWidth / img.clientWidth; const scaleY = img.naturalHeight / img.clientHeight;
-            const x = Math.min(selectionStart.x, selectionEnd.x) * scaleX; const y = Math.min(selectionStart.y, selectionEnd.y) * scaleY;
-            const w = Math.abs(selectionEnd.x - selectionStart.x) * scaleX; const h = Math.abs(selectionEnd.y - selectionStart.y) * scaleY;
-
-            const tempCanvas = document.createElement('canvas'); tempCanvas.width = w; tempCanvas.height = h;
-            tempCanvas.getContext('2d').drawImage(img, x, y, w, h, 0, 0, w, h);
-            return tempCanvas.toDataURL('image/png');
+            const sx = img.naturalWidth / img.clientWidth, sy = img.naturalHeight / img.clientHeight;
+            const x = Math.min(selectionStart.x, selectionEnd.x) * sx;
+            const y = Math.min(selectionStart.y, selectionEnd.y) * sy;
+            const w = Math.abs(selectionEnd.x - selectionStart.x) * sx;
+            const h = Math.abs(selectionEnd.y - selectionStart.y) * sy;
+            const c = document.createElement('canvas'); c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, x, y, w, h, 0, 0, w, h);
+            return c.toDataURL('image/png');
         }
-
         async function extractFromSelection() {
-            if (!selectionStart || !selectionEnd) return showToast('Selecciona un área primero', 'error');
-            const cropped = getCroppedImage();
-            if (!cropped) return showToast('Error al recortar', 'error');
-            await performOCR(cropped);
+            if (!selectionStart || !selectionEnd) return showToast('Selecciona un área', 'error');
+            const crop = getCropped(); if (!crop) return;
+            await runOCR(crop);
         }
-
         async function extractFullImage() {
             if (currentImageIndex < 0) return showToast('Sube imagen primero', 'error');
-            await performOCR(rotatedImages[currentImageIndex] || currentImages[currentImageIndex]);
+            await runOCR(rotatedImages[currentImageIndex] || currentImages[currentImageIndex]);
         }
-
-        async function performOCR(imageSource) {
+        async function runOCR(src) {
             showLoading('Procesando OCR...');
-            const pBar = document.getElementById('ocrProgress'); const pFill = document.getElementById('ocrProgressFill');
-            pBar.style.display = 'block';
-
+            const bar = document.getElementById('ocrProgress');
+            const fill = document.getElementById('ocrProgressFill');
+            bar.style.display = 'block';
             try {
-                const result = await Tesseract.recognize(imageSource, 'spa', {
-                    logger: m => { if (m.status === 'recognizing text') { pFill.style.width = Math.round(m.progress * 100) + '%'; } }
+                const result = await Tesseract.recognize(src, 'spa', {
+                    logger: m => { if (m.status === 'recognizing text') fill.style.width = Math.round(m.progress * 100) + '%'; }
                 });
                 currentExtractedText = result.data.text.trim().toUpperCase();
                 document.getElementById('extractedText').textContent = currentExtractedText;
                 document.getElementById('extractedTextBox').style.display = 'block';
-                hideLoading(); showToast('✅ Extraído', 'success');
-            } catch (error) { hideLoading(); showToast('Error OCR', 'error'); }
-
-            setTimeout(() => { pBar.style.display = 'none'; pFill.style.width = '0%'; }, 1000);
+                hideLoading(); showToast('✅ Texto extraído', 'success');
+            } catch (e) { hideLoading(); showToast('Error OCR', 'error'); }
+            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 800);
         }
-
         function sendToField() {
             const field = document.getElementById('targetField').value;
-            if (!field) return showToast('Selecciona campo destino', 'error');
-            if (!currentExtractedText) return showToast('Sin texto extraído', 'error');
-
-            let cleaned = currentExtractedText.replace(/\n/g, ' ').replace(/\s+/g, ' ');
-            if(field==='monto') { const m=cleaned.match(/[\d.,]+[\d]/g); if(m) cleaned=m.reduce((a,b)=>a.length>b.length?a:b); }
-            if(field==='numContrato') { const m=cleaned.match(/\d+\/\d+/); if(m) cleaned=m[0]; }
-            if(field==='codigoId') { const m=cleaned.match(/ANPE\/[\w\-\/]+/i); if(m) cleaned=m[0].toUpperCase(); }
-            
-            document.getElementById(`field_${field}`).value = cleaned;
-            showToast(`✅ Enviado a formulario`, 'success');
-            
-            // Highlight field gently
-            const el = document.getElementById(`field_${field}`);
+            if (!field) return showToast('Elige campo destino', 'error');
+            if (!currentExtractedText) return showToast('Sin texto', 'error');
+            let t = currentExtractedText.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+            if (field === 'monto') { const m = t.match(/[\d.,]+[\d]/g); if (m) t = m.reduce((a, b) => a.length > b.length ? a : b); }
+            if (field === 'numContrato') { const m = t.match(/\d+\/\d+/); if (m) t = m[0]; }
+            if (field === 'codigoId') { const m = t.match(/ANPE\/[\w\-\/]+/i); if (m) t = m[0].toUpperCase(); }
+            document.getElementById('field_' + field).value = t;
+            showToast('✅ Enviado al formulario', 'success');
+            const el = document.getElementById('field_' + field);
             el.style.borderColor = '#10b981';
             setTimeout(() => el.style.borderColor = '#2d2d5b', 1500);
         }
-
-        function copyExtractedText() { copyToClipboard(currentExtractedText, 'Copiado'); }
-
+        function copyExtractedText() { copyClip(currentExtractedText, 'Copiado'); }
         function autoDetectFields() {
             if (!currentExtractedText) return showToast('Sin texto', 'error');
             const t = currentExtractedText;
@@ -697,132 +669,204 @@
             showToast('🤖 Auto-detectado', 'info');
         }
 
-        // CRUD
-        function saveContract() {
-            const contract = {
+        // ==================== CRUD FIREBASE ====================
+        async function saveContract() {
+            const data = {
                 numContrato: document.getElementById('field_numContrato').value.trim().toUpperCase(),
                 codigoId: document.getElementById('field_codigoId').value.trim().toUpperCase(),
                 proyecto: document.getElementById('field_proyecto').value.trim().toUpperCase(),
                 monto: document.getElementById('field_monto').value.trim(),
                 empresa: document.getElementById('field_empresa').value.trim().toUpperCase(),
-                fechaRegistro: new Date().toISOString(),
-                id: Date.now()
+                fechaRegistro: new Date().toISOString()
             };
-            if (!contract.numContrato || !contract.proyecto) return showToast('Completa los campos principales', 'error');
-            contracts.push(contract);
-            saveToStorage(); clearForm(); updateStats(); showToast('✅ Guardado', 'success');
+            if (!data.numContrato || !data.proyecto) return showToast('Completa N° Contrato y Proyecto', 'error');
+            try {
+                showLoading('Guardando en la nube...');
+                await contractsRef.add(data);
+                hideLoading();
+                clearForm();
+                showToast('✅ Guardado en la nube', 'success');
+            } catch (e) {
+                hideLoading();
+                console.error(e);
+                showToast('Error al guardar: ' + e.message, 'error');
+            }
         }
 
-        function clearForm() { ['numContrato','codigoId','proyecto','monto','empresa'].forEach(f=>document.getElementById(`field_${f}`).value=''); }
+        function clearForm() {
+            ['numContrato', 'codigoId', 'proyecto', 'monto', 'empresa'].forEach(f => {
+                document.getElementById('field_' + f).value = '';
+            });
+        }
 
-        function editContract(index) {
-            editingIndex = index; const c = contracts[index];
-            document.getElementById('edit_numContrato').value=c.numContrato||'';
-            document.getElementById('edit_codigoId').value=c.codigoId||'';
-            document.getElementById('edit_proyecto').value=c.proyecto||'';
-            document.getElementById('edit_monto').value=c.monto||'';
-            document.getElementById('edit_empresa').value=c.empresa||'';
+        function editContract(id) {
+            const c = contracts.find(x => x.id === id);
+            if (!c) return;
+            editingId = id;
+            document.getElementById('edit_numContrato').value = c.numContrato || '';
+            document.getElementById('edit_codigoId').value = c.codigoId || '';
+            document.getElementById('edit_proyecto').value = c.proyecto || '';
+            document.getElementById('edit_monto').value = c.monto || '';
+            document.getElementById('edit_empresa').value = c.empresa || '';
             document.getElementById('editModal').classList.add('show');
         }
 
-        function updateContract() {
-            if (editingIndex < 0) return;
-            contracts[editingIndex] = {
-                ...contracts[editingIndex],
-                numContrato: document.getElementById('edit_numContrato').value.trim().toUpperCase(),
-                codigoId: document.getElementById('edit_codigoId').value.trim().toUpperCase(),
-                proyecto: document.getElementById('edit_proyecto').value.trim().toUpperCase(),
-                monto: document.getElementById('edit_monto').value.trim(),
-                empresa: document.getElementById('edit_empresa').value.trim().toUpperCase()
-            };
-            saveToStorage(); closeModal(); renderRecords(); updateStats(); showToast('✅ Actualizado', 'success');
+        async function updateContract() {
+            if (!editingId) return;
+            try {
+                showLoading('Actualizando...');
+                await contractsRef.doc(editingId).update({
+                    numContrato: document.getElementById('edit_numContrato').value.trim().toUpperCase(),
+                    codigoId: document.getElementById('edit_codigoId').value.trim().toUpperCase(),
+                    proyecto: document.getElementById('edit_proyecto').value.trim().toUpperCase(),
+                    monto: document.getElementById('edit_monto').value.trim(),
+                    empresa: document.getElementById('edit_empresa').value.trim().toUpperCase()
+                });
+                hideLoading();
+                closeModal();
+                showToast('✅ Actualizado', 'success');
+            } catch (e) {
+                hideLoading();
+                showToast('Error al actualizar', 'error');
+            }
         }
 
-        function deleteContract(index) {
-            if (!confirm('¿Eliminar?')) return;
-            contracts.splice(index, 1); saveToStorage(); renderRecords(); updateStats(); showToast('Eliminado', 'info');
+        async function deleteContract(id) {
+            if (!confirm('¿Eliminar este contrato?')) return;
+            try {
+                await contractsRef.doc(id).delete();
+                showToast('Eliminado', 'info');
+            } catch (e) {
+                showToast('Error al eliminar', 'error');
+            }
         }
 
-        function clearAllRecords() {
-            if (!confirm('¿BORRAR TODOS?')) return; if (!confirm('¿SEGURO?')) return;
-            contracts = []; saveToStorage(); renderRecords(); updateStats();
+        async function clearAllRecords() {
+            if (!confirm('¿BORRAR TODOS los contratos de la nube?')) return;
+            if (!confirm('¿ESTÁS SEGURO? No se puede deshacer.')) return;
+            try {
+                showLoading('Borrando todo...');
+                const snap = await contractsRef.get();
+                const batch = db.batch();
+                snap.docs.forEach(d => batch.delete(d.ref));
+                await batch.commit();
+                hideLoading();
+                showToast('Todos eliminados', 'info');
+            } catch (e) {
+                hideLoading();
+                showToast('Error al borrar', 'error');
+            }
         }
 
-        function closeModal() { document.getElementById('editModal').classList.remove('show'); editingIndex = -1; }
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingId = null;
+        }
 
-        // RECORDS (REVERSED)
-        function renderRecords(data = null) {
+        // ==================== RENDER ====================
+        function renderRecords(list) {
             const container = document.getElementById('recordsContainer');
-            const list = data || contracts;
-            if (list.length === 0) {
-                container.innerHTML = `<div style="text-align:center;color:#666;padding:40px;background:#1a1a35;border-radius:12px;">Sin registros.</div>`;
+            const data = list || contracts;
+            if (!data.length) {
+                container.innerHTML = '<div style="text-align:center;color:#666;padding:40px;background:#1a1a35;border-radius:12px;">Sin registros en la nube.<br>¡Guarda el primero! 📷</div>';
                 return;
             }
-            
-            // INVERTIR ORDEN (MÁS RECIENTES PRIMERO)
-            const listToRender = [...list].reverse();
-            
-            container.innerHTML = listToRender.map((c) => {
-                const actualIdx = contracts.indexOf(c); // Índice real para editar/borrar
-                return `
+            // Ya vienen ordenados desc desde Firestore
+            container.innerHTML = data.map((c, i) => `
                 <div class="record-card">
-                    <span class="record-num">#${actualIdx + 1}</span>
+                    <span class="record-num">#${i + 1}</span>
                     <div class="record-field"><div class="field-label">N° Contrato</div><div class="field-value"><strong>${c.numContrato || '-'}</strong></div></div>
                     <div class="record-field"><div class="field-label">Código ID</div><div class="field-value"><span class="badge">${c.codigoId || '-'}</span></div></div>
                     <div class="record-field"><div class="field-label">Proyecto</div><div class="field-value">${c.proyecto || '-'}</div></div>
                     <div class="record-field"><div class="field-label">Monto (Bs.)</div><div class="field-value monto-value">${c.monto || '-'}</div></div>
                     <div class="record-field"><div class="field-label">Empresa</div><div class="field-value">${c.empresa || '-'}</div></div>
                     <div class="record-actions">
-                        <button class="btn btn-success btn-small" onclick="copyRowToClipboard(${actualIdx})">📋 COPIAR</button>
-                        <button class="btn btn-info btn-small" onclick="editContract(${actualIdx})">✏️ EDITAR</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteContract(${actualIdx})">🗑️</button>
+                        <button class="btn btn-success btn-small" onclick="copyRow('${c.id}')">📋 COPIAR</button>
+                        <button class="btn btn-info btn-small" onclick="editContract('${c.id}')">✏️ EDITAR</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteContract('${c.id}')">🗑️</button>
                     </div>
-                </div>`;
-            }).join('');
+                </div>
+            `).join('');
         }
 
         function filterRecords() {
             const q = document.getElementById('searchInput').value.toUpperCase();
             if (!q) return renderRecords();
-            renderRecords(contracts.filter(c => (c.numContrato||'').toUpperCase().includes(q) || (c.proyecto||'').toUpperCase().includes(q) || (c.empresa||'').toUpperCase().includes(q)));
+            renderRecords(contracts.filter(c =>
+                (c.numContrato || '').includes(q) ||
+                (c.codigoId || '').includes(q) ||
+                (c.proyecto || '').includes(q) ||
+                (c.empresa || '').includes(q)
+            ));
         }
 
-        // COPY
-        function formatRowForExcel(contract) {
-            return [contract.numContrato||'', contract.codigoId||'', contract.proyecto||'', contract.monto||'', contract.empresa||'']
+        // ==================== COPY EXCEL ====================
+        function formatRow(c) {
+            return [c.numContrato || '', c.codigoId || '', c.proyecto || '', c.monto || '', c.empresa || '']
                 .map(f => String(f).replace(/\t|\n|\r/g, ' ')).join('\t');
         }
-        function copyRowToClipboard(index) { copyToClipboard(formatRowForExcel(contracts[index]), `✅ Fila copiada`); }
-        function copyAllToClipboard() {
-            if(!contracts.length) return showToast('Sin datos','error');
-            copyToClipboard(contracts.map(c=>formatRowForExcel(c)).join('\n'), `✅ ${contracts.length} copiados`);
+        function copyRow(id) {
+            const c = contracts.find(x => x.id === id);
+            if (c) copyClip(formatRow(c), '✅ Fila copiada — pégala en Excel');
         }
-        function copyToClipboard(text, msg) {
-            if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(()=>showToast(msg,'success')).catch(()=>fallbackCopy(text,msg)); } 
-            else { fallbackCopy(text,msg); }
+        function copyAllToClipboard() {
+            if (!contracts.length) return showToast('Sin datos', 'error');
+            copyClip(contracts.map(formatRow).join('\n'), `✅ ${contracts.length} filas copiadas`);
+        }
+        function copyClip(text, msg) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => showToast(msg, 'success')).catch(() => fallbackCopy(text, msg));
+            } else fallbackCopy(text, msg);
         }
         function fallbackCopy(text, msg) {
-            const t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.top='-999px'; document.body.appendChild(t); t.focus(); t.select();
-            try { document.execCommand('copy'); showToast(msg,'success'); } catch(e) { showToast('Error al copiar','error'); } document.body.removeChild(t);
+            const t = document.createElement('textarea');
+            t.value = text; t.style.cssText = 'position:fixed;top:-999px';
+            document.body.appendChild(t); t.select();
+            try { document.execCommand('copy'); showToast(msg, 'success'); }
+            catch (e) { showToast('No se pudo copiar', 'error'); }
+            document.body.removeChild(t);
         }
 
-        // BACKUP & UTILS
-        function exportToJSON() {
-            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(contracts,null,2)],{type:'application/json'}));
-            a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); showToast('💾 Backup guardado','success');
-        }
-        function saveToStorage() { localStorage.setItem('contracts', JSON.stringify(contracts)); }
+        // ==================== STATS / UI ====================
         function updateStats() {
             document.getElementById('totalContracts').textContent = contracts.length;
-            document.getElementById('todayContracts').textContent = contracts.filter(c => c.fechaRegistro && new Date(c.fechaRegistro).toDateString()===new Date().toDateString()).length;
-            document.getElementById('totalMonto').textContent = contracts.reduce((acc,c)=>{ const n=parseFloat((c.monto||'').replace(/\./g,'').replace(',','.')); return acc+(!isNaN(n)?n:0); },0).toLocaleString('es-BO',{maximumFractionDigits:0});
+            const today = new Date().toDateString();
+            document.getElementById('todayContracts').textContent = contracts.filter(c =>
+                c.fechaRegistro && new Date(c.fechaRegistro).toDateString() === today
+            ).length;
+            let total = 0;
+            contracts.forEach(c => {
+                if (c.monto) {
+                    const n = parseFloat(String(c.monto).replace(/\./g, '').replace(',', '.'));
+                    if (!isNaN(n)) total += n;
+                }
+            });
+            document.getElementById('totalMonto').textContent = total.toLocaleString('es-BO', { maximumFractionDigits: 0 });
         }
-        function showLoading(msg) { document.getElementById('loadingText').textContent=msg; document.getElementById('loadingOverlay').classList.add('show'); }
+        function showLoading(msg) {
+            document.getElementById('loadingText').textContent = msg;
+            document.getElementById('loadingOverlay').classList.add('show');
+        }
         function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
-        function showToast(msg, type='info') { const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast toast-${type} show`; setTimeout(()=>t.classList.remove('show'),3500); }
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast toast-' + (type || 'info') + ' show';
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
 
-        window.onload = () => { updateStats(); renderRecords(); };
-        window.addEventListener('resize', () => { if (currentImageIndex>=0 && document.getElementById('tab-workspace').classList.contains('active')) setTimeout(setupCanvas, 100); });
+        // ==================== INIT ====================
+        window.onload = () => {
+            startRealtimeSync();
+            updateStats();
+        };
+        window.addEventListener('resize', () => {
+            if (currentImageIndex >= 0 && document.getElementById('tab-workspace').classList.contains('active')) {
+                setTimeout(setupCanvas, 100);
+            }
+        });
+        window.addEventListener('online', () => updateConnStatus(true));
+        window.addEventListener('offline', () => updateConnStatus(false));
     </script>
 </body>
 </html>
