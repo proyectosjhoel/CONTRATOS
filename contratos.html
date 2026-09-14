@@ -1,1369 +1,1019 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📋 Registro de Contratos GAMEA</title>
+    <title>📋 Contratos RAPIDOS
+    </title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f0f23;
-            color: #e0e0e0;
-            min-height: 100vh;
-            font-size: 15px;
-        }
-
-        input,
-        textarea,
-        select {
-            font-size: 16px !important;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f0f23; color: #e0e0e0; min-height: 100vh; font-size: 15px; }
+        input, textarea, select { font-size: 16px !important; }
 
         .header {
             background: linear-gradient(135deg, #1a1a3e, #2d2d6b);
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 12px 15px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; gap: 8px; flex-wrap: wrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,.3);
         }
+        .header h1 { font-size: 1.05em; color: #7b9ff5; }
+        .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-        .header h1 {
-            font-size: 1.1em;
-            color: #7b9ff5;
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+            border-radius: 20px; font-size: 11px; font-weight: 700;
         }
+        .status-online { background: rgba(16,185,129,.2); color: #34d399; }
+        .status-offline { background: rgba(239,68,68,.2); color: #f87171; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
         .btn {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            min-height: 44px;
-            white-space: nowrap;
+            padding: 12px 16px; border: none; border-radius: 10px; cursor: pointer;
+            font-size: 14px; font-weight: 600; display: inline-flex; align-items: center;
+            justify-content: center; gap: 6px; min-height: 44px; transition: .15s;
         }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4a6cf7, #6366f1);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .btn-info {
-            background: linear-gradient(135deg, #06b6d4, #0891b2);
-            color: white;
-        }
-
-        .btn-purple {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-        }
-
-        .btn-small {
-            padding: 10px 14px;
-            font-size: 13px;
-            min-height: 40px;
-        }
+        .btn:active { transform: scale(.97); }
+        .btn-primary { background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff; }
+        .btn-success { background: linear-gradient(135deg,#10b981,#059669); color: #fff; }
+        .btn-danger { background: linear-gradient(135deg,#ef4444,#dc2626); color: #fff; }
+        .btn-warning { background: linear-gradient(135deg,#f59e0b,#d97706); color: #fff; }
+        .btn-info { background: linear-gradient(135deg,#06b6d4,#0891b2); color: #fff; }
+        .btn-purple { background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: #fff; }
+        .btn-small { padding: 10px 12px; font-size: 13px; min-height: 40px; }
+        .btn-block { width: 100%; }
+        .btn-xl { padding: 18px; font-size: 16px; min-height: 56px; }
 
         .tabs {
-            display: flex;
-            background: #1a1a35;
-            border-bottom: 2px solid #2d2d5b;
-            position: sticky;
-            top: 55px;
-            z-index: 90;
+            display: flex; background: #1a1a35; border-bottom: 2px solid #2d2d5b;
+            position: sticky; top: 52px; z-index: 90; overflow-x: auto;
         }
-
         .tab {
-            padding: 14px 10px;
-            cursor: pointer;
-            color: #888;
-            font-weight: 600;
-            transition: all 0.2s;
-            border-bottom: 3px solid transparent;
-            flex: 1;
-            text-align: center;
-            font-size: 13px;
+            padding: 13px 10px; cursor: pointer; color: #888; font-weight: 600;
+            border-bottom: 3px solid transparent; flex: 1; text-align: center;
+            font-size: 12px; white-space: nowrap; min-width: 90px;
+        }
+        .tab.active { color: #7b9ff5; border-bottom-color: #7b9ff5; background: #1e1e45; }
+        .tab .badge-count {
+            background: #ef4444; color: #fff; border-radius: 10px; padding: 1px 7px;
+            font-size: 11px; margin-left: 4px;
         }
 
-        .tab.active {
-            color: #7b9ff5;
-            border-bottom-color: #7b9ff5;
-            background: #1e1e45;
-        }
+        .tab-content { display: none; padding: 15px; max-width: 1400px; margin: 0 auto; }
+        .tab-content.active { display: block; }
 
-        .tab-content {
-            display: none;
-            padding: 15px;
+        .card {
+            background: #1a1a35; border-radius: 12px; padding: 15px;
+            margin-bottom: 15px; border: 1px solid #2d2d5b;
         }
+        h3 { color: #7b9ff5; margin-bottom: 12px; font-size: .95em; text-transform: uppercase; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        .camera-section,
-        .contract-form {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .capture-area {
-            background: #1a1a35;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #2d2d5b;
-        }
-
-        .capture-area h3 {
-            color: #7b9ff5;
-            margin-bottom: 12px;
-            font-size: 1em;
-        }
-
-        .file-input-wrapper {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .file-input-wrapper input[type="file"] {
-            display: none;
-        }
-
+        .file-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .file-row input[type=file] { display: none; }
         .file-label {
-            padding: 14px;
-            background: linear-gradient(135deg, #4a6cf7, #6366f1);
-            color: white;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex: 1;
-            min-height: 48px;
-            font-size: 14px;
+            flex: 1; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px;
+            background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff;
         }
 
-        /* LIVE CAMERA MODAL */
         .camera-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            z-index: 2000;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            display: none; position: fixed; inset: 0; background: #000; z-index: 2000;
+            flex-direction: column; justify-content: space-between;
         }
-
-        .camera-modal.show {
-            display: flex;
-        }
-
-        .camera-video {
-            width: 100%;
-            height: 80%;
-            object-fit: cover;
-        }
-
+        .camera-modal.show { display: flex; }
+        .camera-video { width: 100%; height: 80%; object-fit: cover; }
         .camera-controls {
-            width: 100%;
-            height: 20%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 20px;
+            height: 20%; background: rgba(0,0,0,.85); display: flex;
+            justify-content: space-around; align-items: center; padding: 10px;
         }
-
         .btn-snap {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            background: #ef4444;
-            border: 4px solid white;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+            width: 74px; height: 74px; border-radius: 50%; background: #ef4444;
+            border: 4px solid #fff; font-size: 24px; cursor: pointer;
         }
 
-        .btn-snap:active {
-            transform: scale(0.9);
+        .image-box {
+            display: none; margin-top: 10px; background: #12122a; border-radius: 10px;
+            overflow: hidden; border: 2px solid #2d2d5b;
+        }
+        .rot-bar {
+            display: flex; gap: 6px; padding: 10px; justify-content: center;
+            background: #22224a; flex-wrap: wrap;
+        }
+        .img-wrap { position: relative; width: 100%; }
+        .img-wrap img { max-width: 100%; display: block; margin: 0 auto; }
+        .img-wrap canvas {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            cursor: crosshair; touch-action: none;
         }
 
-        .image-container {
-            position: relative;
-            display: none;
-            margin-top: 12px;
-            background: #12122a;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid #2d2d5b;
-        }
-
-        .image-wrapper {
-            position: relative;
-            width: 100%;
-            overflow: auto;
-        }
-
-        .image-wrapper img {
-            max-width: 100%;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .image-wrapper canvas {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            cursor: crosshair;
-            touch-action: none;
-        }
-
-        .rotation-controls {
-            display: flex;
-            gap: 6px;
-            padding: 10px;
-            justify-content: center;
-            background: #22224a;
-            flex-wrap: wrap;
-        }
-
-        .selection-info {
-            background: #22224a;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            color: #10b981;
-            font-size: 13px;
-            display: none;
-            text-align: center;
-        }
-
-        .ocr-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-direction: column;
-        }
-
-        .field-selector {
-            padding: 14px;
-            background: #22224a;
-            color: #e0e0e0;
-            border: 1px solid #3d3d7b;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .ocr-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .ocr-buttons .btn {
-            flex: 1;
-        }
-
-        .extracted-text {
-            background: #12122a;
-            border: 1px solid #2d2d5b;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 12px;
-            display: none;
-        }
-
-        .extracted-text h4 {
-            color: #f59e0b;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .extracted-text pre {
-            color: #10b981;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 8px;
-            background: #0a0a1a;
-            border-radius: 6px;
-        }
-
-        .extracted-actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 6px;
-        }
-
-        .extracted-actions .btn {
-            flex: 1;
-        }
-
-        .form-card {
-            background: #1a1a35;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #2d2d5b;
-        }
-
-        .form-card h3 {
-            color: #7b9ff5;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #2d2d5b;
-            font-size: 1em;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
+        .form-group { margin-bottom: 14px; position: relative; }
         .form-group label {
-            display: block;
-            color: #9ca3af;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
+            display: block; color: #9ca3af; margin-bottom: 6px;
+            font-size: 12px; font-weight: 600; text-transform: uppercase;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 14px; background: #12122a; border: 1px solid #2d2d5b;
+            border-radius: 10px; color: #e0e0e0; text-transform: uppercase;
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: #7b9ff5; outline: none; }
+        .form-group textarea { resize: vertical; min-height: 70px; }
+
+        /* AUTOCOMPLETE DROPDOWN */
+        .autocomplete-list {
+            position: absolute; top: 100%; left: 0; right: 0; z-index: 200;
+            background: #1a1a35; border: 1px solid #4a6cf7; border-radius: 10px;
+            margin-top: 4px; max-height: 220px; overflow-y: auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,.5); display: none;
+        }
+        .autocomplete-list.show { display: block; }
+        .autocomplete-item {
+            padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #2d2d5b;
+            font-size: 13px; color: #e0e0e0; transition: .1s;
+        }
+        .autocomplete-item:last-child { border-bottom: none; }
+        .autocomplete-item:hover, .autocomplete-item.selected {
+            background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff;
+        }
+        .autocomplete-item .count {
+            float: right; background: rgba(255,255,255,.15); padding: 2px 8px;
+            border-radius: 10px; font-size: 11px; font-weight: 700;
+        }
+        .autocomplete-item .match { color: #34d399; font-weight: 700; }
+        .autocomplete-item:hover .match, .autocomplete-item.selected .match { color: #fef08a; }
+
+        /* SUGGESTION CHIPS */
+        .suggestion-chips {
+            display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
+        }
+        .suggestion-chip {
+            padding: 5px 12px; background: rgba(74,108,247,.2); border: 1px solid #4a6cf7;
+            border-radius: 15px; font-size: 12px; color: #a5b4fc; cursor: pointer;
+            transition: .15s;
+        }
+        .suggestion-chip:hover, .suggestion-chip:active {
+            background: linear-gradient(135deg,#4a6cf7,#6366f1); color: #fff;
         }
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            background: #12122a;
-            border: 1px solid #2d2d5b;
-            border-radius: 10px;
-            color: #e0e0e0;
-            font-size: 16px;
-            text-transform: uppercase;
+        .workspace { display: flex; flex-direction: column; gap: 15px; }
+        @media (min-width: 900px) {
+            .workspace { flex-direction: row; align-items: flex-start; }
+            .workspace-left { flex: 1.1; min-width: 0; }
+            .workspace-right { flex: 1; min-width: 0; position: sticky; top: 110px; }
+            .scanner-hint { display: none; }
+        }
+        @media (max-width: 899px) {
+            .desktop-only-hint { display: none; }
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 70px;
+        .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .stat {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 10px;
+            padding: 12px 8px; text-align: center;
         }
+        .stat .v { font-size: 1.35em; font-weight: 700; color: #7b9ff5; }
+        .stat .l { font-size: 10px; color: #888; margin-top: 4px; text-transform: uppercase; }
 
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .draft-card {
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 12px;
+            padding: 14px; margin-bottom: 12px; border-left: 4px solid #f59e0b;
         }
-
-        .form-actions .btn {
-            flex: 1;
+        .draft-card.used { border-left-color: #6b7280; opacity: .75; }
+        .draft-meta { color: #9ca3af; font-size: 12px; margin-bottom: 8px; }
+        .draft-preview {
+            background: #12122a; border-radius: 8px; padding: 10px; font-size: 12px;
+            color: #10b981; max-height: 100px; overflow: hidden; white-space: pre-wrap;
+            font-family: ui-monospace, monospace; margin-bottom: 10px;
         }
-
-        .records-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .draft-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .draft-actions .btn { flex: 1; min-width: 110px; }
 
         .record-card {
-            background: #1a1a35;
-            border-radius: 12px;
-            padding: 15px;
-            border: 1px solid #2d2d5b;
-            position: relative;
+            background: #1a1a35; border: 1px solid #2d2d5b; border-radius: 12px;
+            padding: 15px; margin-bottom: 12px; position: relative;
+        }
+        .record-num {
+            position: absolute; top: 10px; right: 12px; background: #4a6cf7; color: #fff;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        }
+        .rf { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #2d2d5b; }
+        .rf:last-of-type { border-bottom: 0; }
+        .fl { color: #9ca3af; font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+        .fv { font-size: 14px; word-break: break-word; }
+        .monto { color: #10b981; font-weight: 700; }
+        .ra { display: flex; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #2d2d5b; }
+        .ra .btn { flex: 1; }
+
+        .search-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        .search-bar input {
+            flex: 1; min-width: 100%; padding: 12px; background: #12122a;
+            border: 1px solid #2d2d5b; border-radius: 10px; color: #e0e0e0;
+        }
+        .search-btns { display: flex; gap: 8px; width: 100%; }
+        .search-btns .btn { flex: 1; }
+        @media (min-width: 900px) {
+            .search-bar input { min-width: 240px; }
+            .search-btns { width: auto; }
         }
 
-        .record-card .record-num {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            background: #4a6cf7;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
+        .ocr-box {
+            display: none; margin-top: 12px; background: #12122a; border: 1px solid #2d2d5b;
+            border-radius: 10px; padding: 12px;
+        }
+        .ocr-box pre {
+            color: #10b981; white-space: pre-wrap; font-size: 13px; max-height: 180px;
+            overflow-y: auto; font-family: ui-monospace, monospace;
         }
 
-        .record-card .record-field {
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed #2d2d5b;
+        .progress { width: 100%; height: 6px; background: #2d2d5b; border-radius: 3px; margin-top: 10px; display: none; }
+        .progress > div {
+            height: 100%; width: 0; background: linear-gradient(90deg,#4a6cf7,#10b981);
+            border-radius: 3px; transition: width .3s;
         }
 
-        .record-card .record-field:last-of-type {
-            border-bottom: none;
+        .loading {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+            z-index: 3000; justify-content: center; align-items: center; flex-direction: column;
         }
-
-        .record-card .field-label {
-            color: #9ca3af;
-            font-size: 11px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .record-card .field-value {
-            color: #e0e0e0;
-            font-size: 14px;
-            word-wrap: break-word;
-        }
-
-        .record-card .monto-value {
-            color: #10b981;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .record-actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #2d2d5b;
-        }
-
-        .record-actions .btn {
-            flex: 1;
-        }
-
-        .stats-bar {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .stat-card {
-            background: #1a1a35;
-            border-radius: 10px;
-            padding: 12px 8px;
-            border: 1px solid #2d2d5b;
-            text-align: center;
-        }
-
-        .stat-card .stat-value {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: #7b9ff5;
-        }
-
-        .stat-card .stat-label {
-            color: #888;
-            font-size: 10px;
-            margin-top: 4px;
-            text-transform: uppercase;
-        }
-
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .loading-overlay.show {
-            display: flex;
-        }
-
+        .loading.show { display: flex; }
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #2d2d5b;
-            border-top-color: #7b9ff5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            width: 50px; height: 50px; border: 4px solid #2d2d5b; border-top-color: #7b9ff5;
+            border-radius: 50%; animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            color: #7b9ff5;
-            margin-top: 15px;
-            font-weight: 600;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: #7b9ff5; margin-top: 14px; font-weight: 600; }
 
         .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(150%);
-            padding: 14px 24px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            z-index: 4000;
-            transition: transform 0.4s ease;
-            max-width: 90%;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%);
+            padding: 14px 22px; border-radius: 10px; color: #fff; font-weight: 600;
+            z-index: 4000; transition: transform .35s; max-width: 92%; text-align: center;
         }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast-success { background: linear-gradient(135deg,#10b981,#059669); }
+        .toast-error { background: linear-gradient(135deg,#ef4444,#dc2626); }
+        .toast-info { background: linear-gradient(135deg,#06b6d4,#0891b2); }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+        .modal-bg {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8);
+            z-index: 2500; padding: 15px; overflow-y: auto;
         }
-
-        .toast-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-
-        .toast-error {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-
-        .toast-info {
-            background: linear-gradient(135deg, #06b6d4, #0891b2);
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2500;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
+        .modal-bg.show { display: block; }
         .modal {
-            background: #1a1a35;
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 600px;
-            width: 100%;
-            margin: 20px auto;
-            border: 1px solid #2d2d5b;
+            background: #1a1a35; border-radius: 15px; padding: 20px; max-width: 600px;
+            margin: 20px auto; border: 1px solid #2d2d5b;
         }
-
-        .modal h3 {
-            color: #7b9ff5;
-            margin-bottom: 15px;
-        }
-
-        .thumbnails {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .thumbnail {
-            width: 70px;
-            height: 70px;
-            border-radius: 8px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid #2d2d5b;
-        }
-
-        .thumbnail.active {
-            border-color: #7b9ff5;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #2d2d5b;
-            border-radius: 3px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .progress-bar .progress {
-            height: 100%;
-            background: linear-gradient(90deg, #4a6cf7, #10b981);
-            border-radius: 3px;
-            transition: width 0.3s;
-            width: 0%;
-        }
-
-        .search-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .search-bar input {
-            flex: 1;
-            min-width: 100%;
-            padding: 12px 14px;
-            background: #12122a;
-            border: 1px solid #2d2d5b;
-            border-radius: 10px;
-            color: #e0e0e0;
-        }
-
-        .search-bar-buttons {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .search-bar-buttons .btn {
-            flex: 1;
-        }
-
-        .crop-instructions {
-            background: linear-gradient(135deg, #1e1e45, #2a2a5a);
-            border: 1px solid #4a6cf7;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 10px 0;
-        }
-
-        .crop-instructions .step {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 6px 0;
-            color: #e0e0e0;
-            font-size: 13px;
-        }
-
-        .crop-instructions .step-num {
-            background: #4a6cf7;
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
         .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            background: rgba(79, 70, 229, 0.2);
-            color: #818cf8;
+            display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 600; background: rgba(79,70,229,.2); color: #818cf8;
+        }
+        .hint {
+            background: linear-gradient(135deg,#1e1e45,#2a2a5a); border: 1px solid #4a6cf7;
+            border-radius: 10px; padding: 12px; margin-bottom: 12px; color: #c4b5fd; font-size: 13px; line-height: 1.5;
+        }
+        .field-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .field-row select {
+            flex: 1; min-width: 160px; padding: 12px; background: #22224a; color: #e0e0e0;
+            border: 1px solid #3d3d7b; border-radius: 10px;
         }
     </style>
 </head>
-
 <body>
-    <!-- LOADING -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loadingText">Procesando OCR...</div>
-    </div>
-
-    <!-- TOAST -->
+    <div class="loading" id="loading"><div class="spinner"></div><div class="loading-text" id="loadingText">...</div></div>
     <div class="toast" id="toast"></div>
 
-    <!-- CÁMARA EN VIVO EN PANTALLA COMPLETA -->
     <div class="camera-modal" id="cameraModal">
         <video id="videoFeed" class="camera-video" autoplay playsinline></video>
         <div class="camera-controls">
-            <button class="btn btn-danger" onclick="stopCamera()">❌ CERRAR</button>
-            <button class="btn-snap" onclick="snapPhoto()" title="Tomar Foto">📸</button>
-            <button class="btn btn-purple" onclick="switchCamera()">🔄 ROTAR</button>
+            <button class="btn btn-danger" onclick="stopCamera()">❌</button>
+            <button class="btn-snap" onclick="snapPhoto()">📸</button>
+            <button class="btn btn-purple" onclick="switchCamera()">🔄</button>
         </div>
     </div>
 
-    <!-- HEADER -->
     <div class="header">
         <h1>📋 CONTRATOS GAMEA</h1>
-        <button class="btn btn-info btn-small" onclick="exportToJSON()">💾 BACKUP</button>
+        <div class="header-right">
+            <span class="status-badge status-offline" id="connStatus">
+                <span class="status-dot"></span><span id="connText">CONECTANDO...</span>
+            </span>
+        </div>
     </div>
 
-    <!-- TABS -->
     <div class="tabs">
-        <div class="tab active" onclick="switchTab(event, 'capture')">📷 CAPTURAR</div>
-        <div class="tab" onclick="switchTab(event, 'form')">📝 FORMULARIO</div>
-        <div class="tab" onclick="switchTab(event, 'records')">📋 REGISTROS</div>
+        <div class="tab active" onclick="switchTab(event,'scan')">📱 ESCANEAR</div>
+        <div class="tab" onclick="switchTab(event,'work')">💻 TRABAJO</div>
+        <div class="tab" onclick="switchTab(event,'drafts')">📥 BORRADORES <span class="badge-count" id="draftCount" style="display:none">0</span></div>
+        <div class="tab" onclick="switchTab(event,'records')">📋 REGISTROS</div>
     </div>
 
-    <!-- CAPTURE TAB -->
-    <div class="tab-content active" id="tab-capture">
-        <div class="camera-section">
-            <div class="stats-bar">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalContracts">0</div>
-                    <div class="stat-label">Total</div>
+    <!-- ===== ESCANEAR (CELULAR) ===== -->
+    <div class="tab-content active" id="tab-scan">
+        <div class="hint scanner-hint">
+            <strong>Modo celular:</strong> saca foto → extrae texto → envía a la laptop.
+        </div>
+
+        <div class="card">
+            <h3>1. Foto del contrato</h3>
+            <div class="file-row">
+                <button class="file-label" onclick="startCamera('scan')">📷 CÁMARA</button>
+                <label class="file-label" for="scanFile" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁 GALERÍA</label>
+                <input type="file" id="scanFile" accept="image/*" capture="environment" onchange="handleScanFile(event)">
+            </div>
+
+            <div class="image-box" id="scanImageBox">
+                <div class="rot-bar">
+                    <button class="btn btn-purple btn-small" onclick="rotateScan(-90)">↺</button>
+                    <button class="btn btn-purple btn-small" onclick="rotateScan(90)">↻</button>
+                    <button class="btn btn-purple btn-small" onclick="rotateScan(180)">180°</button>
+                    <button class="btn btn-danger btn-small" onclick="clearScanImage()">🗑️</button>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todayContracts">0</div>
-                    <div class="stat-label">Hoy</div>
+                <div class="img-wrap">
+                    <img id="scanPreview" alt="scan">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalMonto" style="font-size:1em;">0</div>
-                    <div class="stat-label">Total Bs.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>2. Extraer y enviar</h3>
+            <button class="btn btn-warning btn-block btn-xl" onclick="scanFullOCR()">🔍 EXTRAER TEXTO (ALTA CALIDAD)</button>
+            <div class="progress" id="scanProgress"><div id="scanProgressFill"></div></div>
+            <div class="ocr-box" id="scanOcrBox">
+                <div style="color:#f59e0b;font-size:12px;font-weight:700;margin-bottom:8px;">TEXTO EXTRAÍDO</div>
+                <pre id="scanOcrText"></pre>
+                <button class="btn btn-success btn-block btn-xl" style="margin-top:12px" onclick="sendDraftToLaptop()">
+                    🚀 ENVIAR A LAPTOP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TRABAJO (LAPTOP) ===== -->
+    <div class="tab-content" id="tab-work">
+        <div class="stats">
+            <div class="stat"><div class="v" id="totalContracts">0</div><div class="l">Guardados</div></div>
+            <div class="stat"><div class="v" id="todayContracts">0</div><div class="l">Hoy</div></div>
+            <div class="stat"><div class="v" id="pendingDraftsStat">0</div><div class="l">Borradores</div></div>
+        </div>
+
+        <div class="workspace">
+            <div class="workspace-left">
+                <div class="card">
+                    <h3>Carga Manual (opcional)</h3>
+                    <div class="file-row">
+                        <button class="file-label" onclick="startCamera('work')">📷 CÁMARA</button>
+                        <label class="file-label" for="workFile" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📁 GALERÍA</label>
+                        <input type="file" id="workFile" accept="image/*" onchange="handleWorkFile(event)">
+                    </div>
+                    <div class="image-box" id="workImageBox">
+                        <div class="rot-bar">
+                            <button class="btn btn-purple btn-small" onclick="rotateWork(-90)">↺</button>
+                            <button class="btn btn-purple btn-small" onclick="rotateWork(90)">↻</button>
+                            <button class="btn btn-danger btn-small" onclick="clearWorkImage()">🗑️</button>
+                        </div>
+                        <div class="img-wrap">
+                            <img id="workPreview" alt="work">
+                            <canvas id="workCanvas"></canvas>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <select id="targetField">
+                            <option value="">Campo destino</option>
+                            <option value="numContrato">N° CONTRATO</option>
+                            <option value="codigoId">CÓDIGO ID</option>
+                            <option value="proyecto">PROYECTO</option>
+                            <option value="monto">MONTO</option>
+                            <option value="empresa">EMPRESA</option>
+                        </select>
+                        <button class="btn btn-warning btn-small" onclick="extractSelection()">✂️ ÁREA</button>
+                        <button class="btn btn-primary btn-small" onclick="extractWorkFull()">📄 TODO</button>
+                    </div>
+                    <div class="ocr-box" id="workOcrBox">
+                        <pre id="workOcrText"></pre>
+                        <div class="field-row">
+                            <button class="btn btn-success btn-small" onclick="sendToField()">➡️ AL CAMPO</button>
+                            <button class="btn btn-primary btn-small" onclick="autoDetectFields(currentWorkText)">🤖 AUTO</button>
+                        </div>
+                    </div>
+                    <div class="progress" id="workProgress"><div id="workProgressFill"></div></div>
+                </div>
+
+                <div class="card" id="draftTextCard" style="display:none; border-color:#f59e0b;">
+                    <h3 style="color:#f59e0b">📄 TEXTO DEL BORRADOR</h3>
+                    <pre id="activeDraftText" style="color:#10b981;white-space:pre-wrap;font-size:13px;max-height:220px;overflow:auto;background:#12122a;padding:10px;border-radius:8px;"></pre>
+                    <button class="btn btn-primary btn-block" style="margin-top:10px" onclick="autoDetectFields(activeDraftTexto)">🤖 AUTO-DETECTAR CAMPOS</button>
                 </div>
             </div>
 
-            <div class="capture-area">
-                <h3>📸 PASO 1: FOTO DEL CONTRATO</h3>
-                <div class="file-input-wrapper">
-                    <!-- BOTÓN DE CÁMARA EN VIVO -->
-                    <button class="file-label" onclick="startCamera()">
-                        📷 ABRIR CÁMARA
-                    </button>
-
-                    <label class="file-label" for="fileInput"
-                        style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
-                        📁 GALERÍA
-                    </label>
-                    <input type="file" id="fileInput" accept="image/*" onchange="handleImageUpload(event)" multiple>
-                </div>
-
-                <div class="thumbnails" id="thumbnails"></div>
-
-                <div class="image-container" id="imageContainer">
-                    <div class="rotation-controls">
-                        <button class="btn btn-purple btn-small" onclick="rotateImage(-90)">↺ IZQ</button>
-                        <button class="btn btn-purple btn-small" onclick="rotateImage(90)">↻ DER</button>
-                        <button class="btn btn-purple btn-small" onclick="rotateImage(180)">🔄 180°</button>
-                        <button class="btn btn-danger btn-small" onclick="resetRotation()">✖ RESET</button>
+            <div class="workspace-right">
+                <div class="card">
+                    <h3>📝 Formulario</h3>
+                    <div class="form-group">
+                        <label>N° de contrato *</label>
+                        <input type="text" id="field_numContrato" oninput="toUpper(this)" autocomplete="off">
                     </div>
-                    <div class="image-wrapper" id="imageWrapper">
-                        <img id="previewImage" src="" alt="Preview">
-                        <canvas id="selectionCanvas"></canvas>
+                    <div class="form-group">
+                        <label>Código de identificación * <span style="color:#818cf8;font-size:10px;">(escribe para ver sugerencias)</span></label>
+                        <input type="text" id="field_codigoId" oninput="toUpper(this); showCodigoSuggestions()" onfocus="showCodigoSuggestions()" onblur="hideAutocompleteDelayed('codigoAuto')" autocomplete="off">
+                        <div class="autocomplete-list" id="codigoAuto"></div>
+                        <div class="suggestion-chips" id="codigoChips"></div>
                     </div>
-                </div>
-
-                <div class="selection-info" id="selectionInfo">
-                    ✅ ÁREA SELECCIONADA - LISTO PARA EXTRAER
-                </div>
-
-                <div class="crop-instructions" id="cropInstructions" style="display:none;">
-                    <div class="step"><span class="step-num">1</span> Rota la imagen si está torcida</div>
-                    <div class="step"><span class="step-num">2</span> Elige el campo destino abajo</div>
-                    <div class="step"><span class="step-num">3</span> Arrastra sobre el texto que quieres sacar</div>
-                    <div class="step"><span class="step-num">4</span> Presiona "Extraer Selección"</div>
-                </div>
-            </div>
-
-            <div class="capture-area">
-                <h3>🔍 PASO 2: EXTRAER TEXTO</h3>
-                <div class="ocr-controls">
-                    <select class="field-selector" id="targetField">
-                        <option value="">-- SELECCIONA CAMPO DESTINO --</option>
-                        <option value="numContrato">N° DE CONTRATO</option>
-                        <option value="codigoId">CÓDIGO DE IDENTIFICACIÓN</option>
-                        <option value="proyecto">PROYECTO</option>
-                        <option value="monto">MONTO (BS.)</option>
-                        <option value="empresa">EMPRESA</option>
-                    </select>
-
-                    <div class="ocr-buttons">
-                        <button class="btn btn-warning" onclick="extractFromSelection()">
-                            ✂️ EXTRAER SELECCIÓN
-                        </button>
-                        <button class="btn btn-primary" onclick="extractFullImage()">
-                            📄 OCR COMPLETO
-                        </button>
+                    <div class="form-group">
+                        <label>Proyecto *</label>
+                        <textarea id="field_proyecto" oninput="toUpper(this)"></textarea>
                     </div>
-                </div>
-
-                <div class="progress-bar" id="ocrProgress">
-                    <div class="progress" id="ocrProgressFill"></div>
-                </div>
-
-                <div class="extracted-text" id="extractedTextBox">
-                    <h4>📝 TEXTO EXTRAÍDO:</h4>
-                    <pre id="extractedText"></pre>
-                    <div class="extracted-actions">
-                        <button class="btn btn-success btn-small" onclick="sendToField()">➡️ AL CAMPO</button>
-                        <button class="btn btn-info btn-small" onclick="copyExtractedText()">📋 COPIAR</button>
-                        <button class="btn btn-primary btn-small" onclick="autoDetectFields()">🤖 AUTO</button>
+                    <div class="form-group">
+                        <label>Monto (Bs.) *</label>
+                        <input type="text" id="field_monto" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Empresa * <span style="color:#818cf8;font-size:10px;">(escribe para ver empresas anteriores)</span></label>
+                        <textarea id="field_empresa" oninput="toUpper(this); showEmpresaSuggestions()" onfocus="showEmpresaSuggestions()" onblur="hideAutocompleteDelayed('empresaAuto')" autocomplete="off"></textarea>
+                        <div class="autocomplete-list" id="empresaAuto"></div>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-danger" style="flex:1" onclick="clearForm()">🗑️ LIMPIAR</button>
+                        <button class="btn btn-success" style="flex:2" onclick="saveContract()">💾 GUARDAR</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FORM TAB -->
-    <div class="tab-content" id="tab-form">
-        <div class="contract-form">
-            <div class="form-card">
-                <h3>📝 DATOS DEL CONTRATO</h3>
-
-                <div class="form-group">
-                    <label>N° DE CONTRATO *</label>
-                    <input type="text" id="field_numContrato" placeholder="EJ: 202/26" oninput="toUpperCase(this)">
-                </div>
-
-                <div class="form-group">
-                    <label>CÓDIGO DE IDENTIFICACIÓN *</label>
-                    <input type="text" id="field_codigoId" placeholder="EJ: ANPE/SADM-5/O/018/26"
-                        oninput="toUpperCase(this)">
-                </div>
-
-                <div class="form-group">
-                    <label>PROYECTO *</label>
-                    <textarea id="field_proyecto" placeholder="EJ: CONST. PAVIMENTO FLEXIBLE..."
-                        oninput="toUpperCase(this)"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>MONTO (BS.) *</label>
-                    <input type="text" id="field_monto" placeholder="EJ: 314.772,67">
-                </div>
-
-                <div class="form-group">
-                    <label>EMPRESA *</label>
-                    <textarea id="field_empresa" placeholder="EJ: JUAN CARLOS VILLANUEVA VASQUEZ - CORPORACIÓN..."
-                        oninput="toUpperCase(this)"></textarea>
-                </div>
-
-                <div class="form-actions">
-                    <button class="btn btn-danger" onclick="clearForm()">🗑️ LIMPIAR</button>
-                    <button class="btn btn-success" onclick="saveContract()">💾 GUARDAR</button>
-                </div>
-            </div>
+    <!-- ===== BORRADORES ===== -->
+    <div class="tab-content" id="tab-drafts">
+        <div class="hint">
+            Aquí llegan los textos enviados desde el <strong>celular</strong>.
+            Pulsa <strong>USAR EN FORMULARIO</strong> para trabajarlos.
         </div>
+        <div id="draftsList"></div>
     </div>
 
-    <!-- RECORDS TAB -->
+    <!-- ===== REGISTROS ===== -->
     <div class="tab-content" id="tab-records">
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 BUSCAR CONTRATO, PROYECTO, EMPRESA..."
-                oninput="filterRecords()">
-            <div class="search-bar-buttons">
-                <button class="btn btn-success btn-small" onclick="copyAllToClipboard()">📋 COPIAR TODO</button>
-                <button class="btn btn-danger btn-small" onclick="clearAllRecords()">🗑️ BORRAR</button>
+            <input type="text" id="searchInput" placeholder="🔍 Buscar..." oninput="filterRecords()">
+            <div class="search-btns">
+                <button class="btn btn-success btn-small" onclick="copyAll()">📋 COPIAR TODO</button>
+                <button class="btn btn-danger btn-small" onclick="clearAllContracts()">🗑️ BORRAR</button>
             </div>
         </div>
-
-        <div class="records-container" id="recordsContainer"></div>
+        <div id="recordsList"></div>
     </div>
 
-    <!-- EDIT MODAL -->
-    <div class="modal-overlay" id="editModal">
+    <div class="modal-bg" id="editModal">
         <div class="modal">
-            <h3>✏️ EDITAR CONTRATO</h3>
-            <div class="form-group">
-                <label>N° DE CONTRATO</label>
-                <input type="text" id="edit_numContrato" oninput="toUpperCase(this)">
-            </div>
-            <div class="form-group">
-                <label>CÓDIGO DE IDENTIFICACIÓN</label>
-                <input type="text" id="edit_codigoId" oninput="toUpperCase(this)">
-            </div>
-            <div class="form-group">
-                <label>PROYECTO</label>
-                <textarea id="edit_proyecto" oninput="toUpperCase(this)"></textarea>
-            </div>
-            <div class="form-group">
-                <label>MONTO (BS.)</label>
-                <input type="text" id="edit_monto">
-            </div>
-            <div class="form-group">
-                <label>EMPRESA</label>
-                <textarea id="edit_empresa" oninput="toUpperCase(this)"></textarea>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-danger" onclick="closeModal()">❌ CANCELAR</button>
-                <button class="btn btn-success" onclick="updateContract()">💾 ACTUALIZAR</button>
+            <h3 style="color:#7b9ff5;margin-bottom:12px;">✏️ Editar</h3>
+            <div class="form-group"><label>N° Contrato</label><input id="edit_numContrato" oninput="toUpper(this)"></div>
+            <div class="form-group"><label>Código</label><input id="edit_codigoId" oninput="toUpper(this)"></div>
+            <div class="form-group"><label>Proyecto</label><textarea id="edit_proyecto" oninput="toUpper(this)"></textarea></div>
+            <div class="form-group"><label>Monto</label><input id="edit_monto"></div>
+            <div class="form-group"><label>Empresa</label><textarea id="edit_empresa" oninput="toUpper(this)"></textarea></div>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-danger" style="flex:1" onclick="closeEdit()">Cancelar</button>
+                <button class="btn btn-success" style="flex:1" onclick="updateContract()">Guardar</button>
             </div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
+    
     <script>
-        // ==================== STATE ====================
-        let contracts = JSON.parse(localStorage.getItem('contracts') || '[]');
-        let currentImages = [];
-        let currentImageIndex = -1;
-        let selectionStart = null;
-        let selectionEnd = null;
-        let isSelecting = false;
-        let currentExtractedText = '';
-        let editingIndex = -1;
-        let currentRotation = 0;
-        let rotatedImages = {};
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnVDOK8f7qLZXIWYUN9IJNKuxlBVXTy2I",
+            authDomain: "contratos-3e093.firebaseapp.com",
+            projectId: "contratos-3e093",
+            storageBucket: "contratos-3e093.firebasestorage.app",
+            messagingSenderId: "417073831372",
+            appId: "1:417073831372:web:69fecb8e0e020513e71169"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const contractsRef = db.collection('contratos');
+        const draftsRef = db.collection('borradores');
 
-        // Live camera state
-        let currentStream = null;
-        let facingMode = "environment"; // Rear camera default
+        let contracts = [], drafts = [];
+        let scanSrc = null, scanRot = 0, scanTexto = '';
+        let workSrc = null, workRot = 0, workRotSrc = null;
+        let currentWorkText = '', activeDraftTexto = '', activeDraftId = null;
+        let editingId = null;
+        let selA = null, selB = null, selecting = false;
+        let stream = null, facing = 'environment', cameraTarget = 'scan';
 
-        // ==================== LIVE CAMERA ====================
-        async function startCamera() {
-            try {
-                const constraints = {
-                    video: { facingMode: facingMode }
-                };
-                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-                const video = document.getElementById('videoFeed');
-                video.srcObject = currentStream;
-                document.getElementById('cameraModal').classList.add('show');
-            } catch (err) {
-                console.error(err);
-                showToast('No se pudo acceder a la cámara directa. Usa el botón GALERÍA.', 'error');
-            }
+        // Cache de sugerencias (empresas y códigos anteriores)
+        let empresasHistorial = new Map(); // texto -> cantidad usos
+        let codigosPrefijos = new Map();   // prefijo (CD/UACM, ANPE/SADM-5) -> cantidad
+
+        // Formatos base para código
+        const FORMATOS_CODIGO = [
+            'CD/SADM-', 'CD/UACM/', 'CM/UACM/', 'ANPE/SADM-', 'ANPE/UACM/', 'CD/'
+        ];
+
+        window.onload = () => {
+            contractsRef.orderBy('fechaRegistro', 'desc').onSnapshot(snap => {
+                contracts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                setOnline(true); updateStats();
+                buildHistorial();
+                if (tabActive('records')) renderRecords();
+            }, e => { console.error(e); setOnline(false); });
+
+            draftsRef.orderBy('fecha', 'desc').onSnapshot(snap => {
+                drafts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                setOnline(true); updateStats(); updateDraftBadge();
+                if (tabActive('drafts')) renderDrafts();
+            }, e => { console.error(e); setOnline(false); });
+        };
+
+        function setOnline(ok) {
+            const b = document.getElementById('connStatus');
+            const t = document.getElementById('connText');
+            if (!b) return;
+            b.className = 'status-badge ' + (ok ? 'status-online' : 'status-offline');
+            t.textContent = ok ? 'EN LÍNEA' : 'SIN CONEXIÓN';
         }
+        function tabActive(name) { return document.getElementById('tab-' + name)?.classList.contains('active'); }
 
-        function stopCamera() {
-            if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-                currentStream = null;
-            }
-            document.getElementById('cameraModal').classList.remove('show');
-        }
-
-        function snapPhoto() {
-            const video = document.getElementById('videoFeed');
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            const photoData = canvas.toDataURL('image/png');
-            currentImages.push(photoData);
-            renderThumbnails();
-            selectImage(currentImages.length - 1);
-            stopCamera();
-            showToast('📸 Foto capturada', 'success');
-        }
-
-        function switchCamera() {
-            facingMode = (facingMode === "environment") ? "user" : "environment";
-            stopCamera();
-            startCamera();
-        }
-
-        // ==================== HELPERS ====================
-        function toUpperCase(input) {
-            const pos = input.selectionStart;
-            input.value = input.value.toUpperCase();
-            if (input.setSelectionRange) input.setSelectionRange(pos, pos);
-        }
-
-        // ==================== TABS ====================
-        function switchTab(evt, tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            evt.currentTarget.classList.add('active');
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            if (tabName === 'records') renderRecords();
-            updateStats();
-            window.scrollTo(0, 0);
-        }
-
-        // ==================== IMAGE UPLOAD ====================
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            if (!files.length) return;
-
-            for (let file of files) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    currentImages.push(e.target.result);
-                    renderThumbnails();
-                    if (currentImages.length === 1 || currentImageIndex < 0) {
-                        selectImage(currentImages.length - 1);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-            event.target.value = '';
-        }
-
-        function renderThumbnails() {
-            const container = document.getElementById('thumbnails');
-            container.innerHTML = '';
-            currentImages.forEach((img, idx) => {
-                const thumb = document.createElement('img');
-                thumb.src = img;
-                thumb.className = `thumbnail ${idx === currentImageIndex ? 'active' : ''}`;
-                thumb.onclick = () => selectImage(idx);
-                container.appendChild(thumb);
+        // ==================== HISTORIAL / AUTOCOMPLETE ====================
+        function buildHistorial() {
+            empresasHistorial.clear();
+            codigosPrefijos.clear();
+            contracts.forEach(c => {
+                if (c.empresa) {
+                    const e = c.empresa.trim();
+                    if (e) empresasHistorial.set(e, (empresasHistorial.get(e) || 0) + 1);
+                }
+                if (c.codigoId) {
+                    // Extraer prefijo (ej: "CD/UACM/026/26" -> "CD/UACM/")
+                    const prefijo = extraerPrefijoCodigo(c.codigoId);
+                    if (prefijo) codigosPrefijos.set(prefijo, (codigosPrefijos.get(prefijo) || 0) + 1);
+                }
             });
         }
 
-        function selectImage(index) {
-            currentImageIndex = index;
-            currentRotation = 0;
-            const imgEl = document.getElementById('previewImage');
-            imgEl.src = currentImages[index];
-
-            document.getElementById('imageContainer').style.display = 'block';
-            document.getElementById('cropInstructions').style.display = 'block';
-
-            imgEl.onload = () => setupCanvas();
-            renderThumbnails();
+        function extraerPrefijoCodigo(codigo) {
+            // Trata de capturar todo antes del último bloque numérico "/026/26" o similar
+            const m = codigo.match(/^(.*?[A-Z\-])(\/?\d+\/\d+)$/i);
+            if (m) return m[1];
+            // Alternativa: hasta antes del último "/"
+            const parts = codigo.split('/');
+            if (parts.length > 2) return parts.slice(0, -2).join('/') + '/';
+            return codigo;
         }
 
-        // ==================== ROTATION ====================
-        function rotateImage(degrees) {
-            if (currentImageIndex < 0) {
-                showToast('Primero captura una imagen', 'error');
-                return;
+        function showEmpresaSuggestions() {
+            const input = document.getElementById('field_empresa');
+            const list = document.getElementById('empresaAuto');
+            const query = (input.value || '').trim().toUpperCase();
+
+            // Ordenar por más usadas
+            const all = Array.from(empresasHistorial.entries())
+                .sort((a, b) => b[1] - a[1]);
+
+            let matches;
+            if (query.length < 2) {
+                matches = all.slice(0, 8); // top 8 si no hay búsqueda
+            } else {
+                matches = all.filter(([nombre]) => nombre.toUpperCase().includes(query)).slice(0, 10);
             }
-            currentRotation = (currentRotation + degrees + 360) % 360;
-            applyRotation();
+
+            if (!matches.length) { list.classList.remove('show'); return; }
+
+            list.innerHTML = matches.map(([nombre, count]) => {
+                const highlighted = query.length >= 2 ? resaltarMatch(nombre, query) : nombre;
+                return `<div class="autocomplete-item" onclick="pickEmpresa('${escapeAttr(nombre)}')">
+                    ${highlighted}<span class="count">${count}×</span>
+                </div>`;
+            }).join('');
+            list.classList.add('show');
         }
 
-        function resetRotation() {
-            currentRotation = 0;
-            applyRotation();
+        function pickEmpresa(nombre) {
+            document.getElementById('field_empresa').value = nombre;
+            document.getElementById('empresaAuto').classList.remove('show');
+            showToast('✅ Empresa seleccionada', 'success');
         }
 
-        function applyRotation() {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+        function showCodigoSuggestions() {
+            const input = document.getElementById('field_codigoId');
+            const list = document.getElementById('codigoAuto');
+            const chips = document.getElementById('codigoChips');
+            const query = (input.value || '').trim().toUpperCase();
 
-                const rad = currentRotation * Math.PI / 180;
-                const sin = Math.abs(Math.sin(rad));
-                const cos = Math.abs(Math.cos(rad));
+            // Sugerencias de códigos completos (top usados)
+            const codigosCompletos = new Map();
+            contracts.forEach(c => {
+                if (c.codigoId) codigosCompletos.set(c.codigoId, (codigosCompletos.get(c.codigoId) || 0) + 1);
+            });
 
-                canvas.width = img.width * cos + img.height * sin;
-                canvas.height = img.width * sin + img.height * cos;
+            const all = Array.from(codigosCompletos.entries()).sort((a, b) => b[1] - a[1]);
+            let matches;
+            if (query.length < 2) {
+                matches = all.slice(0, 6);
+            } else {
+                matches = all.filter(([c]) => c.toUpperCase().includes(query)).slice(0, 8);
+            }
 
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate(rad);
-                ctx.drawImage(img, -img.width / 2, -img.height / 2);
+            if (matches.length) {
+                list.innerHTML = matches.map(([codigo, count]) => {
+                    const highlighted = query.length >= 2 ? resaltarMatch(codigo, query) : codigo;
+                    return `<div class="autocomplete-item" onclick="pickCodigo('${escapeAttr(codigo)}')">
+                        ${highlighted}<span class="count">${count}×</span>
+                    </div>`;
+                }).join('');
+                list.classList.add('show');
+            } else {
+                list.classList.remove('show');
+            }
 
-                const rotatedDataUrl = canvas.toDataURL('image/png');
-                const imgEl = document.getElementById('previewImage');
-                imgEl.src = rotatedDataUrl;
-                rotatedImages[currentImageIndex] = rotatedDataUrl;
-
-                imgEl.onload = () => {
-                    setupCanvas();
-                    selectionStart = null;
-                    selectionEnd = null;
-                    document.getElementById('selectionInfo').style.display = 'none';
-                };
-            };
-            img.src = currentImages[currentImageIndex];
-        }
-
-        function getCurrentImageSource() {
-            return rotatedImages[currentImageIndex] || currentImages[currentImageIndex];
-        }
-
-        // ==================== CANVAS SELECTION ====================
-        function setupCanvas() {
-            const img = document.getElementById('previewImage');
-            const canvas = document.getElementById('selectionCanvas');
-
-            canvas.width = img.clientWidth;
-            canvas.height = img.clientHeight;
-            canvas.style.width = img.clientWidth + 'px';
-            canvas.style.height = img.clientHeight + 'px';
-
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            canvas.onmousedown = startSelection;
-            canvas.onmousemove = updateSelection;
-            canvas.onmouseup = endSelection;
-
-            canvas.ontouchstart = (e) => { e.preventDefault(); startSelection(getTouchPos(e)); };
-            canvas.ontouchmove = (e) => { e.preventDefault(); updateSelection(getTouchPos(e)); };
-            canvas.ontouchend = (e) => { e.preventDefault(); endSelection(getTouchPos(e)); };
-        }
-
-        function getTouchPos(e) {
-            const canvas = document.getElementById('selectionCanvas');
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0] || e.changedTouches[0];
-            return {
-                offsetX: touch.clientX - rect.left,
-                offsetY: touch.clientY - rect.top
-            };
-        }
-
-        function startSelection(e) {
-            isSelecting = true;
-            selectionStart = { x: e.offsetX, y: e.offsetY };
-            selectionEnd = null;
-            document.getElementById('selectionInfo').style.display = 'none';
-        }
-
-        function updateSelection(e) {
-            if (!isSelecting) return;
-            selectionEnd = { x: e.offsetX, y: e.offsetY };
-            drawSelection();
-        }
-
-        function endSelection(e) {
-            if (!isSelecting) return;
-            isSelecting = false;
-            if (selectionEnd) {
-                document.getElementById('selectionInfo').style.display = 'block';
+            // Chips de formatos rápidos (siempre visibles cuando el campo está vacío)
+            if (query.length < 2) {
+                const formatos = new Set(FORMATOS_CODIGO);
+                codigosPrefijos.forEach((_, prefijo) => formatos.add(prefijo));
+                chips.innerHTML = Array.from(formatos).slice(0, 8).map(f =>
+                    `<span class="suggestion-chip" onclick="applyFormat('${escapeAttr(f)}')">${f}</span>`
+                ).join('');
+            } else {
+                chips.innerHTML = '';
             }
         }
 
-        function drawSelection() {
-            const canvas = document.getElementById('selectionCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            if (!selectionStart || !selectionEnd) return;
-
-            const x = Math.min(selectionStart.x, selectionEnd.x);
-            const y = Math.min(selectionStart.y, selectionEnd.y);
-            const w = Math.abs(selectionEnd.x - selectionStart.x);
-            const h = Math.abs(selectionEnd.y - selectionStart.y);
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.clearRect(x, y, w, h);
-
-            ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([6, 4]);
-            ctx.strokeRect(x, y, w, h);
-
-            ctx.setLineDash([]);
-            ctx.fillStyle = '#f59e0b';
-            const hs = 10;
-            ctx.fillRect(x - hs / 2, y - hs / 2, hs, hs);
-            ctx.fillRect(x + w - hs / 2, y - hs / 2, hs, hs);
-            ctx.fillRect(x - hs / 2, y + h - hs / 2, hs, hs);
-            ctx.fillRect(x + w - hs / 2, y + h - hs / 2, hs, hs);
+        function pickCodigo(codigo) {
+            document.getElementById('field_codigoId').value = codigo;
+            document.getElementById('codigoAuto').classList.remove('show');
+            document.getElementById('codigoChips').innerHTML = '';
+            showToast('✅ Código copiado', 'success');
         }
 
-        // ==================== OCR ====================
-        function getCroppedImage() {
-            if (!selectionStart || !selectionEnd) return null;
-
-            const img = document.getElementById('previewImage');
-            const scaleX = img.naturalWidth / img.clientWidth;
-            const scaleY = img.naturalHeight / img.clientHeight;
-
-            const x = Math.min(selectionStart.x, selectionEnd.x) * scaleX;
-            const y = Math.min(selectionStart.y, selectionEnd.y) * scaleY;
-            const w = Math.abs(selectionEnd.x - selectionStart.x) * scaleX;
-            const h = Math.abs(selectionEnd.y - selectionStart.y) * scaleY;
-
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = w;
-            tempCanvas.height = h;
-            const ctx = tempCanvas.getContext('2d');
-            ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
-
-            return tempCanvas.toDataURL('image/png');
+        function applyFormat(formato) {
+            const input = document.getElementById('field_codigoId');
+            input.value = formato;
+            input.focus();
+            // Posicionar cursor al final
+            input.setSelectionRange(formato.length, formato.length);
+            document.getElementById('codigoChips').innerHTML = '';
         }
 
-        async function extractFromSelection() {
-            if (!selectionStart || !selectionEnd) {
-                showToast('Selecciona un área primero', 'error');
-                return;
-            }
-            const cropped = getCroppedImage();
-            if (!cropped) return showToast('Error al recortar', 'error');
-            await performOCR(cropped);
+        function resaltarMatch(texto, query) {
+            const idx = texto.toUpperCase().indexOf(query.toUpperCase());
+            if (idx < 0) return escapeHtml(texto);
+            return escapeHtml(texto.slice(0, idx)) +
+                '<span class="match">' + escapeHtml(texto.slice(idx, idx + query.length)) + '</span>' +
+                escapeHtml(texto.slice(idx + query.length));
         }
 
-        async function extractFullImage() {
-            if (currentImageIndex < 0) {
-                showToast('Captura una imagen primero', 'error');
-                return;
-            }
-            await performOCR(getCurrentImageSource());
-        }
-
-        async function performOCR(imageSource) {
-            showLoading('Procesando OCR...');
-            const progressBar = document.getElementById('ocrProgress');
-            const progressFill = document.getElementById('ocrProgressFill');
-            progressBar.style.display = 'block';
-
-            try {
-                const result = await Tesseract.recognize(
-                    imageSource,
-                    'spa',
-                    {
-                        logger: m => {
-                            if (m.status === 'recognizing text') {
-                                const pct = Math.round(m.progress * 100);
-                                progressFill.style.width = pct + '%';
-                                document.getElementById('loadingText').textContent = `Reconociendo... ${pct}%`;
-                            }
-                        }
-                    }
-                );
-
-                currentExtractedText = result.data.text.trim().toUpperCase();
-                document.getElementById('extractedText').textContent = currentExtractedText;
-                document.getElementById('extractedTextBox').style.display = 'block';
-
-                hideLoading();
-                showToast('✅ Texto extraído', 'success');
-
-                setTimeout(() => {
-                    document.getElementById('extractedTextBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            } catch (error) {
-                hideLoading();
-                showToast('Error OCR: ' + error.message, 'error');
-            }
-
+        function hideAutocompleteDelayed(id) {
             setTimeout(() => {
-                progressBar.style.display = 'none';
-                progressFill.style.width = '0%';
-            }, 1000);
+                document.getElementById(id)?.classList.remove('show');
+            }, 200); // Delay para permitir clic
         }
 
+        // TABS
+        function switchTab(evt, name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            evt.currentTarget.classList.add('active');
+            document.getElementById('tab-' + name).classList.add('active');
+            if (name === 'drafts') renderDrafts();
+            if (name === 'records') renderRecords();
+            updateStats();
+            window.scrollTo(0, 0);
+            if (name === 'work' && workSrc) setTimeout(setupWorkCanvas, 100);
+        }
+
+        // CÁMARA
+        async function startCamera(target = 'scan') {
+            cameraTarget = target;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing } });
+                document.getElementById('videoFeed').srcObject = stream;
+                document.getElementById('cameraModal').classList.add('show');
+            } catch (e) { showToast('No se abrió la cámara. Usa Galería.', 'error'); }
+        }
+        function stopCamera() {
+            if (stream) stream.getTracks().forEach(t => t.stop());
+            stream = null; document.getElementById('cameraModal').classList.remove('show');
+        }
+        function switchCamera() {
+            facing = facing === 'environment' ? 'user' : 'environment';
+            stopCamera(); startCamera(cameraTarget);
+        }
+        function snapPhoto() {
+            const v = document.getElementById('videoFeed');
+            const c = document.createElement('canvas');
+            c.width = v.videoWidth; c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            const data = c.toDataURL('image/png');
+            stopCamera();
+            if (cameraTarget === 'work') setWorkImage(data); else setScanImage(data);
+            showToast('📸 Foto lista', 'success');
+        }
+
+        // ==================== MEJORA DE OCR ====================
+        // Preprocesa la imagen: aumenta contraste, escala si es pequeña, escala a gris
+        async function mejorarImagenParaOCR(src) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => {
+                    let w = img.naturalWidth, h = img.naturalHeight;
+                    // Escalar si es pequeña (min 1500 de ancho)
+                    const minW = 1600;
+                    if (w < minW) {
+                        const factor = minW / w;
+                        w = Math.round(w * factor);
+                        h = Math.round(h * factor);
+                    }
+                    // Limitar tamaño máx para no colapsar celular
+                    const maxW = 2400;
+                    if (w > maxW) {
+                        const factor = maxW / w;
+                        w = Math.round(w * factor);
+                        h = Math.round(h * factor);
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, 0, 0, w, h);
+
+                    // Convertir a escala de grises + aumentar contraste
+                    try {
+                        const imgData = ctx.getImageData(0, 0, w, h);
+                        const d = imgData.data;
+                        for (let i = 0; i < d.length; i += 4) {
+                            const gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+                            // Contraste (curva simple)
+                            let v = (gray - 128) * 1.4 + 128;
+                            v = Math.max(0, Math.min(255, v));
+                            d[i] = d[i+1] = d[i+2] = v;
+                        }
+                        ctx.putImageData(imgData, 0, 0);
+                    } catch (e) { /* ignora si CORS */ }
+
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.src = src;
+            });
+        }
+
+        // ESCANEAR (MÓVIL)
+        function handleScanFile(e) {
+            const f = e.target.files?.[0]; if (!f) return;
+            const r = new FileReader(); r.onload = ev => setScanImage(ev.target.result);
+            r.readAsDataURL(f); e.target.value = '';
+        }
+        function setScanImage(src) {
+            scanSrc = src; scanRot = 0; scanTexto = '';
+            document.getElementById('scanPreview').src = src;
+            document.getElementById('scanImageBox').style.display = 'block';
+            document.getElementById('scanOcrBox').style.display = 'none';
+        }
+        function clearScanImage() {
+            scanSrc = null; scanTexto = '';
+            document.getElementById('scanImageBox').style.display = 'none';
+            document.getElementById('scanOcrBox').style.display = 'none';
+        }
+        function rotateScan(deg) {
+            if (!scanSrc) return; scanRot = (scanRot + deg + 360) % 360;
+            rotateDataURL(scanSrc, scanRot).then(url => { document.getElementById('scanPreview').src = url; });
+        }
+        async function scanFullOCR() {
+            if (!scanSrc) return showToast('Sube una foto primero', 'error');
+            showLoading('Mejorando imagen...');
+            const bar = document.getElementById('scanProgress'), fill = document.getElementById('scanProgressFill');
+            bar.style.display = 'block';
+            try {
+                const src = document.getElementById('scanPreview').src;
+                const mejorada = await mejorarImagenParaOCR(src);
+                document.getElementById('loadingText').textContent = 'Reconociendo texto...';
+                const result = await Tesseract.recognize(mejorada, 'spa', {
+                    tessedit_pageseg_mode: 6,
+                    logger: m => { if (m.status === 'recognizing text') fill.style.width = Math.round(m.progress * 100) + '%'; }
+                });
+                scanTexto = (result.data.text || '').trim().toUpperCase();
+                document.getElementById('scanOcrText').textContent = scanTexto || '(sin texto)';
+                document.getElementById('scanOcrBox').style.display = 'block';
+                hideLoading(); showToast('✅ Texto extraído', 'success');
+                document.getElementById('scanOcrBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (e) { hideLoading(); console.error(e); showToast('Error en OCR', 'error'); }
+            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 600);
+        }
+        async function sendDraftToLaptop() {
+            if (!scanTexto) return showToast('Extrae el texto primero', 'error');
+            try {
+                showLoading('Enviando...');
+                await draftsRef.add({ texto: scanTexto, fecha: new Date().toISOString(), estado: 'pendiente', preview: scanTexto.slice(0, 200) });
+                hideLoading(); showToast('🚀 Enviado a la laptop', 'success');
+                clearScanImage();
+            } catch (e) { hideLoading(); showToast('Error al enviar', 'error'); }
+        }
+
+        // BORRADORES
+        function updateDraftBadge() {
+            const pending = drafts.filter(d => d.estado !== 'usado').length;
+            const el = document.getElementById('draftCount'), st = document.getElementById('pendingDraftsStat');
+            if (st) st.textContent = pending;
+            if (!el) return;
+            if (pending > 0) { el.style.display = 'inline'; el.textContent = pending; }
+            else el.style.display = 'none';
+        }
+        function renderDrafts() {
+            const box = document.getElementById('draftsList');
+            if (!drafts.length) { box.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:40px;">No hay borradores.<br>Envía uno desde el celular 📱</div>'; return; }
+            box.innerHTML = drafts.map(d => {
+                const fecha = d.fecha ? new Date(d.fecha).toLocaleString('es-BO') : '';
+                const used = d.estado === 'usado';
+                return `
+                <div class="draft-card ${used ? 'used' : ''}">
+                    <div class="draft-meta">${fecha} ${used ? '· USADO' : '· PENDIENTE'}</div>
+                    <div class="draft-preview">${escapeHtml(d.preview || d.texto || '')}</div>
+                    <div class="draft-actions">
+                        <button class="btn btn-success btn-small" onclick="useDraft('${d.id}')">📝 USAR EN FORMULARIO</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteDraft('${d.id}')">🗑️ BORRAR</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        function useDraft(id) {
+            const d = drafts.find(x => x.id === id); if (!d) return;
+            activeDraftId = id; activeDraftTexto = (d.texto || '').toUpperCase();
+            document.getElementById('activeDraftText').textContent = activeDraftTexto;
+            document.getElementById('draftTextCard').style.display = 'block';
+            autoDetectFields(activeDraftTexto);
+            document.querySelectorAll('.tab')[1].click();
+            showToast('Borrador cargado', 'success');
+        }
+        async function deleteDraft(id) {
+            if (!confirm('¿Eliminar borrador?')) return;
+            try { await draftsRef.doc(id).delete(); showToast('Eliminado', 'info'); } catch (e) { showToast('Error', 'error'); }
+        }
+        async function markDraftUsed() {
+            if (!activeDraftId) return;
+            try { await draftsRef.doc(activeDraftId).update({ estado: 'usado' }); } catch (e) {}
+            activeDraftId = null; document.getElementById('draftTextCard').style.display = 'none';
+        }
+
+        // TRABAJO
+        function handleWorkFile(e) {
+            const f = e.target.files?.[0]; if (!f) return;
+            const r = new FileReader(); r.onload = ev => setWorkImage(ev.target.result);
+            r.readAsDataURL(f); e.target.value = '';
+        }
+        function setWorkImage(src) {
+            workSrc = src; workRot = 0; workRotSrc = null;
+            document.getElementById('workPreview').src = src;
+            document.getElementById('workImageBox').style.display = 'block';
+            document.getElementById('workPreview').onload = () => setupWorkCanvas();
+        }
+        function clearWorkImage() {
+            workSrc = null; workRotSrc = null; document.getElementById('workImageBox').style.display = 'none';
+        }
+        function rotateWork(deg) {
+            if (!workSrc) return; workRot = (workRot + deg + 360) % 360;
+            rotateDataURL(workSrc, workRot).then(url => {
+                workRotSrc = url; document.getElementById('workPreview').src = url;
+                document.getElementById('workPreview').onload = () => setupWorkCanvas();
+            });
+        }
+        function setupWorkCanvas() {
+            const img = document.getElementById('workPreview'), canvas = document.getElementById('workCanvas');
+            if (!img.clientWidth) return;
+            canvas.width = img.clientWidth; canvas.height = img.clientHeight;
+            canvas.style.width = img.clientWidth + 'px'; canvas.style.height = img.clientHeight + 'px';
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            canvas.onmousedown = e => { selecting = true; selA = { x: e.offsetX, y: e.offsetY }; selB = null; };
+            canvas.onmousemove = e => {
+                if (!selecting) return; selB = { x: e.offsetX, y: e.offsetY };
+                const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const x = Math.min(selA.x, selB.x), y = Math.min(selA.y, selB.y);
+                const w = Math.abs(selB.x - selA.x), h = Math.abs(selB.y - selA.y);
+                ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.clearRect(x, y, w, h); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.strokeRect(x, y, w, h);
+            };
+            canvas.onmouseup = () => { selecting = false; };
+            canvas.ontouchstart = e => { e.preventDefault(); const r=canvas.getBoundingClientRect(), t=e.touches[0]; selecting=true; selA={x:t.clientX-r.left,y:t.clientY-r.top}; selB=null; };
+            canvas.ontouchmove = e => { e.preventDefault(); if(!selecting) return; const r=canvas.getBoundingClientRect(), t=e.touches[0]; selB={x:t.clientX-r.left,y:t.clientY-r.top}; canvas.onmousemove({offsetX:selB.x,offsetY:selB.y}); };
+            canvas.ontouchend = e => { e.preventDefault(); selecting = false; };
+        }
+        function cropWork() {
+            if (!selA || !selB) return null;
+            const img = document.getElementById('workPreview');
+            const sx = img.naturalWidth / img.clientWidth, sy = img.naturalHeight / img.clientHeight;
+            const x = Math.min(selA.x, selB.x) * sx, y = Math.min(selA.y, selB.y) * sy;
+            const w = Math.abs(selB.x - selA.x) * sx, h = Math.abs(selB.y - selA.y) * sy;
+            const c = document.createElement('canvas'); c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, x, y, w, h, 0, 0, w, h); return c.toDataURL('image/png');
+        }
+        async function extractSelection() {
+            const crop = cropWork(); if (!crop) return showToast('Selecciona un área', 'error');
+            await runWorkOCR(crop);
+        }
+        async function extractWorkFull() {
+            if (!workSrc) return showToast('Sube imagen', 'error');
+            await runWorkOCR(workRotSrc || workSrc);
+        }
+        async function runWorkOCR(src) {
+            showLoading('Mejorando imagen...');
+            const bar = document.getElementById('workProgress'), fill = document.getElementById('workProgressFill');
+            bar.style.display = 'block';
+            try {
+                const mejorada = await mejorarImagenParaOCR(src);
+                document.getElementById('loadingText').textContent = 'Reconociendo...';
+                const result = await Tesseract.recognize(mejorada, 'spa', {
+                    logger: m => { if (m.status === 'recognizing text') fill.style.width = Math.round(m.progress * 100) + '%'; }
+                });
+                currentWorkText = (result.data.text || '').trim().toUpperCase();
+                document.getElementById('workOcrText').textContent = currentWorkText;
+                document.getElementById('workOcrBox').style.display = 'block';
+                hideLoading(); showToast('✅ Texto extraído', 'success');
+            } catch (e) { hideLoading(); showToast('Error OCR', 'error'); }
+            setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 500);
+        }
         function sendToField() {
             const field = document.getElementById('targetField').value;
-            if (!field) return showToast('Selecciona un campo destino', 'error');
-            if (!currentExtractedText) return showToast('No hay texto extraído', 'error');
-
-            const cleaned = cleanTextForField(field, currentExtractedText);
-            document.getElementById(`field_${field}`).value = cleaned;
-            showToast(`✅ Enviado al campo`, 'success');
-            document.querySelectorAll('.tab')[1].click();
+            if (!field) return showToast('Elige campo destino', 'error');
+            if (!currentWorkText) return showToast('Sin texto', 'error');
+            let t = currentWorkText.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+            if (field === 'monto') { const m = t.match(/[\d.,]+/g); if (m) t = m.reduce((a, b) => a.length >= b.length ? a : b); }
+            if (field === 'numContrato') { const m = t.match(/\d+\/\d+/); if (m) t = m[0]; }
+            if (field === 'codigoId') { const m = detectarCodigo(t); if (m) t = m; }
+            document.getElementById('field_' + field).value = t; showToast('Enviado al campo', 'success');
         }
 
-        function cleanTextForField(field, text) {
-            let cleaned = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim().toUpperCase();
-
-            switch (field) {
-                case 'monto':
-                    const montoMatch = cleaned.match(/[\d.,]+[\d]/g);
-                    if (montoMatch) cleaned = montoMatch.reduce((a, b) => a.length > b.length ? a : b);
-                    break;
-                case 'numContrato':
-                    const numMatch = cleaned.match(/\d+\/\d+/);
-                    if (numMatch) cleaned = numMatch[0];
-                    break;
-                case 'codigoId':
-                    const codeMatch = cleaned.match(/ANPE\/[\w\-\/]+/i);
-                    if (codeMatch) cleaned = codeMatch[0].toUpperCase();
-                    break;
+        // Detección mejorada de código (soporta CD/, ANPE/, CM/, con SADM, UACM, etc.)
+        function detectarCodigo(texto) {
+            const patrones = [
+                /((?:CD|CM|ANPE)\/(?:SADM|UACM)[\-\/][A-Z0-9\-\/]+\/\d{2,4})/i,
+                /((?:CD|CM|ANPE)\/[A-Z0-9\-\/]+\/\d{2,4})/i,
+                /(ANPE\/[A-Z0-9\-\/]+)/i,
+                /(CD\/[A-Z0-9\-\/]+)/i,
+                /(CM\/[A-Z0-9\-\/]+)/i
+            ];
+            for (const p of patrones) {
+                const m = texto.match(p);
+                if (m) return m[1].toUpperCase().replace(/\s+/g, '');
             }
-            return cleaned;
+            return null;
         }
 
-        function copyExtractedText() {
-            copyToClipboard(currentExtractedText, 'Texto copiado');
+        function autoDetectFields(text) {
+            if (!text) return showToast('No hay texto', 'error');
+            const t = text.toUpperCase();
+            
+            // N° contrato
+            const n = t.match(/(\d{2,4}\/\d{2})/); 
+            if (n) document.getElementById('field_numContrato').value = n[1];
+            
+            // Código ID (formato mejorado)
+            const codigo = detectarCodigo(t);
+            if (codigo) document.getElementById('field_codigoId').value = codigo;
+            
+            // Monto
+            const m = t.match(/BS\.?\s*([\d.,]+)/); 
+            if (m) document.getElementById('field_monto').value = m[1];
+            else { 
+                const m2 = t.match(/([\d]{1,3}(?:\.\d{3})*,\d{2})/); 
+                if (m2) document.getElementById('field_monto').value = m2[1]; 
+            }
+            
+            // Proyecto
+            const p = t.match(/((?:CONST|RECONST)\.?\s+[^\n]+)/); 
+            if (p) document.getElementById('field_proyecto').value = p[1].trim().slice(0, 200);
+            
+            // Empresa - primero buscar coincidencia con empresas del historial
+            let empresaEncontrada = null;
+            empresasHistorial.forEach((_, nombre) => {
+                if (t.includes(nombre.slice(0, Math.min(20, nombre.length)))) {
+                    empresaEncontrada = nombre;
+                }
+            });
+            
+            if (empresaEncontrada) {
+                document.getElementById('field_empresa').value = empresaEncontrada;
+                showToast('🎯 Empresa detectada del historial: ' + empresaEncontrada.slice(0, 30) + '...', 'success');
+            } else {
+                const emp = t.match(/((?:[A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑ\s\.\-&,]){5,80}(?:SRL|S\.R\.L|SA|S\.A)\.?)/);
+                if (emp) document.getElementById('field_empresa').value = emp[1].trim();
+                showToast('🤖 Detectado — revisa los campos', 'info');
+            }
         }
 
-        function autoDetectFields() {
-            if (!currentExtractedText) return showToast('No hay texto extraído', 'error');
-            const text = currentExtractedText;
-
-            const numMatch = text.match(/(\d{2,4}\/\d{2})/);
-            if (numMatch) document.getElementById('field_numContrato').value = numMatch[1];
-
-            const codeMatch = text.match(/(ANPE\/[\w\-\/]+)/i);
-            if (codeMatch) document.getElementById('field_codigoId').value = codeMatch[1].toUpperCase();
-
-            const montoMatch = text.match(/BS\.?\s*([\d.,]+)/i);
-            if (montoMatch) document.getElementById('field_monto').value = montoMatch[1];
-
-            const proyMatch = text.match(/((?:CONST|RECONST)\.?\s+[^.]+(?:D-\d))/i);
-            if (proyMatch) document.getElementById('field_proyecto').value = proyMatch[1].trim().toUpperCase();
-
-            showToast('🤖 Auto-detectado', 'info');
-            document.querySelectorAll('.tab')[1].click();
-        }
-
-        // ==================== CRUD ====================
-        function saveContract() {
-            const contract = {
-                numContrato: document.getElementById('field_numContrato').value.trim().toUpperCase(),
-                codigoId: document.getElementById('field_codigoId').value.trim().toUpperCase(),
-                proyecto: document.getElementById('field_proyecto').value.trim().toUpperCase(),
-                monto: document.getElementById('field_monto').value.trim(),
-                empresa: document.getElementById('field_empresa').value.trim().toUpperCase(),
-                fechaRegistro: new Date().toISOString(),
-                id: Date.now()
+        // CONTRATOS CRUD
+        async function saveContract() {
+            const data = {
+                numContrato: val('field_numContrato'), codigoId: val('field_codigoId'),
+                proyecto: val('field_proyecto'), monto: document.getElementById('field_monto').value.trim(),
+                empresa: val('field_empresa'), fechaRegistro: new Date().toISOString()
             };
-
-            if (!contract.numContrato || !contract.proyecto || !contract.monto) {
-                return showToast('Completa: N° Contrato, Proyecto y Monto', 'error');
-            }
-
-            contracts.push(contract);
-            saveToStorage();
-            clearForm();
-            updateStats();
-            showToast('✅ Contrato guardado', 'success');
+            if (!data.numContrato || !data.proyecto) return showToast('Falta N° o Proyecto', 'error');
+            try {
+                showLoading('Guardando...'); await contractsRef.add(data); await markDraftUsed();
+                hideLoading(); clearForm(); showToast('✅ Contrato guardado', 'success');
+            } catch (e) { hideLoading(); showToast('Error al guardar', 'error'); }
         }
-
-        function clearForm() {
-            ['numContrato', 'codigoId', 'proyecto', 'monto', 'empresa'].forEach(f =>
-                document.getElementById(`field_${f}`).value = ''
-            );
-        }
-
-        function editContract(index) {
-            editingIndex = index;
-            const c = contracts[index];
+        function val(id) { return document.getElementById(id).value.trim().toUpperCase(); }
+        function clearForm() { ['field_numContrato','field_codigoId','field_proyecto','field_monto','field_empresa'].forEach(id => document.getElementById(id).value = ''); }
+        function editContract(id) {
+            const c = contracts.find(x => x.id === id); if (!c) return; editingId = id;
             document.getElementById('edit_numContrato').value = c.numContrato || '';
             document.getElementById('edit_codigoId').value = c.codigoId || '';
             document.getElementById('edit_proyecto').value = c.proyecto || '';
@@ -1371,233 +1021,104 @@
             document.getElementById('edit_empresa').value = c.empresa || '';
             document.getElementById('editModal').classList.add('show');
         }
-
-        function updateContract() {
-            if (editingIndex < 0) return;
-            contracts[editingIndex] = {
-                ...contracts[editingIndex],
-                numContrato: document.getElementById('edit_numContrato').value.trim().toUpperCase(),
-                codigoId: document.getElementById('edit_codigoId').value.trim().toUpperCase(),
-                proyecto: document.getElementById('edit_proyecto').value.trim().toUpperCase(),
-                monto: document.getElementById('edit_monto').value.trim(),
-                empresa: document.getElementById('edit_empresa').value.trim().toUpperCase()
-            };
-            saveToStorage();
-            closeModal();
-            renderRecords();
-            updateStats();
-            showToast('✅ Actualizado', 'success');
-        }
-
-        function deleteContract(index) {
-            if (!confirm('¿Eliminar este contrato?')) return;
-            contracts.splice(index, 1);
-            saveToStorage();
-            renderRecords();
-            updateStats();
-            showToast('Eliminado', 'info');
-        }
-
-        function clearAllRecords() {
-            if (!confirm('¿BORRAR TODOS los registros?')) return;
-            if (!confirm('¿Estás SEGURO?')) return;
-            contracts = [];
-            saveToStorage();
-            renderRecords();
-            updateStats();
-            showToast('Todos eliminados', 'info');
-        }
-
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('show');
-            editingIndex = -1;
-        }
-
-        // ==================== RECORDS RENDER ====================
-        function renderRecords(data = null) {
-            const container = document.getElementById('recordsContainer');
-            const list = data || contracts;
-
-            if (list.length === 0) {
-                container.innerHTML = `<div style="text-align:center; color:#666; padding:40px; background:#1a1a35; border-radius:12px;">
-                    No hay contratos registrados.<br>¡Empieza capturando una foto! 📷
-                </div>`;
-                return;
-            }
-
-            container.innerHTML = list.map((c) => {
-                const actualIdx = contracts.indexOf(c);
-                return `
-                <div class="record-card">
-                    <span class="record-num">#${actualIdx + 1}</span>
-                    
-                    <div class="record-field">
-                        <div class="field-label">N° Contrato</div>
-                        <div class="field-value"><strong>${c.numContrato || '-'}</strong></div>
-                    </div>
-                    
-                    <div class="record-field">
-                        <div class="field-label">Código ID</div>
-                        <div class="field-value"><span class="badge">${c.codigoId || '-'}</span></div>
-                    </div>
-                    
-                    <div class="record-field">
-                        <div class="field-label">Proyecto</div>
-                        <div class="field-value">${c.proyecto || '-'}</div>
-                    </div>
-                    
-                    <div class="record-field">
-                        <div class="field-label">Monto (Bs.)</div>
-                        <div class="field-value monto-value">${c.monto || '-'}</div>
-                    </div>
-                    
-                    <div class="record-field">
-                        <div class="field-label">Empresa</div>
-                        <div class="field-value">${c.empresa || '-'}</div>
-                    </div>
-                    
-                    <div class="record-actions">
-                        <button class="btn btn-success btn-small" onclick="copyRowToClipboard(${actualIdx})">
-                            📋 COPIAR
-                        </button>
-                        <button class="btn btn-info btn-small" onclick="editContract(${actualIdx})">
-                            ✏️ EDITAR
-                        </button>
-                        <button class="btn btn-danger btn-small" onclick="deleteContract(${actualIdx})">
-                            🗑️
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function filterRecords() {
-            const query = document.getElementById('searchInput').value.toUpperCase();
-            if (!query) return renderRecords();
-            const filtered = contracts.filter(c =>
-                (c.numContrato || '').toUpperCase().includes(query) ||
-                (c.codigoId || '').toUpperCase().includes(query) ||
-                (c.proyecto || '').toUpperCase().includes(query) ||
-                (c.empresa || '').toUpperCase().includes(query)
-            );
-            renderRecords(filtered);
-        }
-
-        // ==================== COPY TO CLIPBOARD ====================
-        function formatRowForExcel(contract) {
-            const fields = [
-                contract.numContrato || '',
-                contract.codigoId || '',
-                contract.proyecto || '',
-                contract.monto || '',
-                contract.empresa || ''
-            ];
-            return fields.map(f => String(f).replace(/\t/g, ' ').replace(/\n/g, ' ').replace(/\r/g, '')).join('\t');
-        }
-
-        function copyRowToClipboard(index) {
-            const contract = contracts[index];
-            const rowText = formatRowForExcel(contract);
-            copyToClipboard(rowText, `✅ Fila copiada - Pégala en Excel`);
-        }
-
-        function copyAllToClipboard() {
-            if (contracts.length === 0) return showToast('No hay contratos', 'error');
-            const allRows = contracts.map(c => formatRowForExcel(c)).join('\n');
-            copyToClipboard(allRows, `✅ ${contracts.length} filas copiadas`);
-        }
-
-        function copyToClipboard(text, successMsg) {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast(successMsg, 'success');
-                }).catch(() => fallbackCopy(text, successMsg));
-            } else {
-                fallbackCopy(text, successMsg);
-            }
-        }
-
-        function fallbackCopy(text, successMsg) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.top = '-9999px';
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
+        function closeEdit() { document.getElementById('editModal').classList.remove('show'); editingId = null; }
+        async function updateContract() {
+            if (!editingId) return;
             try {
-                document.execCommand('copy');
-                showToast(successMsg, 'success');
-            } catch (err) {
-                showToast('No se pudo copiar', 'error');
-            }
-            document.body.removeChild(textarea);
+                showLoading('Actualizando...');
+                await contractsRef.doc(editingId).update({
+                    numContrato: val('edit_numContrato'), codigoId: val('edit_codigoId'),
+                    proyecto: val('edit_proyecto'), monto: document.getElementById('edit_monto').value.trim(),
+                    empresa: val('edit_empresa')
+                });
+                hideLoading(); closeEdit(); showToast('Actualizado', 'success');
+            } catch (e) { hideLoading(); showToast('Error', 'error'); }
+        }
+        async function deleteContract(id) {
+            if (!confirm('¿Eliminar contrato?')) return;
+            try { await contractsRef.doc(id).delete(); showToast('Eliminado', 'info'); } catch (e) { showToast('Error', 'error'); }
+        }
+        async function clearAllContracts() {
+            if (!confirm('¿Borrar TODOS los contratos?')) return; if (!confirm('¿Seguro?')) return;
+            showLoading('Borrando...');
+            try {
+                const snap = await contractsRef.get(); const batch = db.batch();
+                snap.docs.forEach(d => batch.delete(d.ref)); await batch.commit();
+                hideLoading(); showToast('Listo', 'info');
+            } catch (e) { hideLoading(); showToast('Error', 'error'); }
         }
 
-        // ==================== BACKUP ====================
-        function exportToJSON() {
-            const dataStr = JSON.stringify(contracts, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('💾 Backup guardado', 'success');
+        function renderRecords(list) {
+            const box = document.getElementById('recordsList'); const data = list || contracts;
+            if (!data.length) { box.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:40px;">Sin contratos guardados</div>'; return; }
+            box.innerHTML = data.map((c, i) => `
+                <div class="record-card">
+                    <span class="record-num">#${i + 1}</span>
+                    <div class="rf"><div class="fl">N° Contrato</div><div class="fv"><strong>${esc(c.numContrato)}</strong></div></div>
+                    <div class="rf"><div class="fl">Código</div><div class="fv"><span class="badge">${esc(c.codigoId)}</span></div></div>
+                    <div class="rf"><div class="fl">Proyecto</div><div class="fv">${esc(c.proyecto)}</div></div>
+                    <div class="rf"><div class="fl">Monto</div><div class="fv monto">${esc(c.monto)}</div></div>
+                    <div class="rf"><div class="fl">Empresa</div><div class="fv">${esc(c.empresa)}</div></div>
+                    <div class="ra">
+                        <button class="btn btn-success btn-small" onclick="copyRow('${c.id}')">📋 COPIAR</button>
+                        <button class="btn btn-info btn-small" onclick="editContract('${c.id}')">✏️</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteContract('${c.id}')">🗑️</button>
+                    </div>
+                </div>`).join('');
+        }
+        function filterRecords() {
+            const q = document.getElementById('searchInput').value.toUpperCase();
+            if (!q) return renderRecords();
+            renderRecords(contracts.filter(c => (c.numContrato||'').includes(q) || (c.codigoId||'').includes(q) || (c.proyecto||'').includes(q) || (c.empresa||'').includes(q)));
+        }
+        function rowTSV(c) { return [c.numContrato||'', c.codigoId||'', c.proyecto||'', c.monto||'', c.empresa||''].map(x => String(x).replace(/\t|\n|\r/g, ' ')).join('\t'); }
+        function copyRow(id) { const c = contracts.find(x => x.id === id); if (c) copyClip(rowTSV(c), '✅ Fila copiada'); }
+        function copyAll() {
+            if (!contracts.length) return showToast('Sin datos', 'error');
+            copyClip(contracts.map(rowTSV).join('\n'), `✅ ${contracts.length} filas copiadas`);
         }
 
-        // ==================== HELPERS ====================
-        function saveToStorage() {
-            localStorage.setItem('contracts', JSON.stringify(contracts));
+        // UTILS
+        function rotateDataURL(src, deg) {
+            return new Promise(res => {
+                const img = new Image(); img.onload = () => {
+                    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+                    const rad = deg * Math.PI / 180, s = Math.abs(Math.sin(rad)), c = Math.abs(Math.cos(rad));
+                    canvas.width = img.width * c + img.height * s; canvas.height = img.width * s + img.height * c;
+                    ctx.translate(canvas.width/2, canvas.height/2); ctx.rotate(rad); ctx.drawImage(img, -img.width/2, -img.height/2);
+                    res(canvas.toDataURL('image/png'));
+                }; img.src = src;
+            });
         }
-
+        function toUpper(el) { const p = el.selectionStart; el.value = el.value.toUpperCase(); if (el.setSelectionRange) el.setSelectionRange(p, p); }
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+        function escapeAttr(s) { return String(s).replace(/'/g, "\\'").replace(/"/g, '\\"'); }
+        function esc(s) { return escapeHtml(s || '-'); }
+        function copyClip(text, msg) { if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(() => showToast(msg, 'success')).catch(() => fbCopy(text, msg)); else fbCopy(text, msg); }
+        function fbCopy(text, msg) {
+            const t = document.createElement('textarea'); t.value = text; t.style.cssText = 'position:fixed;top:-999px'; document.body.appendChild(t); t.select();
+            try { document.execCommand('copy'); showToast(msg, 'success'); } catch (e) { showToast('Error copiar', 'error'); } document.body.removeChild(t);
+        }
         function updateStats() {
             document.getElementById('totalContracts').textContent = contracts.length;
             const today = new Date().toDateString();
-            const todayCount = contracts.filter(c =>
-                c.fechaRegistro && new Date(c.fechaRegistro).toDateString() === today
-            ).length;
-            document.getElementById('todayContracts').textContent = todayCount;
-
-            let totalMonto = 0;
-            contracts.forEach(c => {
-                if (c.monto) {
-                    const num = parseFloat(c.monto.replace(/\./g, '').replace(',', '.'));
-                    if (!isNaN(num)) totalMonto += num;
-                }
-            });
-            document.getElementById('totalMonto').textContent = totalMonto.toLocaleString('es-BO', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            });
+            document.getElementById('todayContracts').textContent = contracts.filter(c => c.fechaRegistro && new Date(c.fechaRegistro).toDateString() === today).length;
+            updateDraftBadge();
         }
-
-        function showLoading(text) {
-            document.getElementById('loadingText').textContent = text;
-            document.getElementById('loadingOverlay').classList.add('show');
+        function showLoading(m) { document.getElementById('loadingText').textContent = m; document.getElementById('loading').classList.add('show'); }
+        function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+        function showToast(msg, type) {
+            const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast toast-' + (type || 'info') + ' show';
+            setTimeout(() => t.classList.remove('show'), 3500);
         }
-
-        function hideLoading() {
-            document.getElementById('loadingOverlay').classList.remove('show');
-        }
-
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast toast-${type} show`;
-            setTimeout(() => toast.classList.remove('show'), 3500);
-        }
-
-        window.onload = function () {
-            updateStats();
-            renderRecords();
-        };
-
-        window.addEventListener('resize', () => {
-            if (currentImageIndex >= 0) setTimeout(setupCanvas, 100);
+        window.addEventListener('resize', () => { if (workSrc && tabActive('work')) setTimeout(setupWorkCanvas, 100); });
+        
+        // Cerrar autocomplete al hacer clic fuera
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.form-group')) {
+                document.querySelectorAll('.autocomplete-list').forEach(l => l.classList.remove('show'));
+            }
         });
     </script>
 </body>
-
 </html>
