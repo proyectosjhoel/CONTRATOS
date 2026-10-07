@@ -1096,12 +1096,12 @@ function pickCodigo(code){
 
 function filterEmpresaAC(){
     const box=document.getElementById('empresaAC'),items=sugerenciasEmpresa(document.getElementById('field_empresa')?.value||'');
-    mostrarListaSugerencias(box,items,([name,count])=>`<div class="ac-item" onmousedown="event.preventDefault();pickEmpresa(decodeURIComponent(${JSON.stringify(__import__("urllib.parse",fromlist=["quote"]).quote(name,safe=""))}))"><div class="ac-item-main"><div><div class="ac-item-name">${esc(name)}</div><div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
+    mostrarListaSugerencias(box,items,([name,count])=>`<div class="ac-item" onmousedown="event.preventDefault();pickEmpresa(${JSON.stringify(name)})"><div class="ac-item-main"><div><div class="ac-item-name">${esc(name)}</div><div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
 }
 
 function filterCodigoAC(){
     const box=document.getElementById('codigoAC'),items=sugerenciasCodigo(document.getElementById('field_codigoId')?.value||'');
-    mostrarListaSugerencias(box,items,(x)=>`<div class="ac-item" onmousedown="event.preventDefault();pickCodigo(decodeURIComponent(encodeURIComponent(${JSON.stringify(x.code)})))"><div class="ac-item-main"><div><div class="ac-item-name">${esc(x.code)}</div><div class="ac-item-meta">${x.score?`Coincidencia ${x.score}% · `:''}${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
+    mostrarListaSugerencias(box,items,(x)=>`<div class="ac-item" onmousedown="event.preventDefault();pickCodigo(${JSON.stringify(x.code)})"><div class="ac-item-main"><div><div class="ac-item-name">${esc(x.code)}</div><div class="ac-item-meta">${x.score?`Coincidencia ${x.score}% · `:''}${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
 }
 
 /* La antigua sección de chips queda desactivada. */
