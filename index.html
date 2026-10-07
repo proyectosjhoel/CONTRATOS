@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Contrato Ágil</title>
+    <title>Contrato Ágil · Prueba Mejorada</title>
     <style>
         /* ==========================================================================
            VARIABLES DE DISEÑO (TEMA ROJO CORPORATIVO)
@@ -206,7 +206,132 @@
         .toast-success { background: var(--success); }
         .toast-error { background: var(--danger); }
         .toast-info { background: var(--info); }
-    </style>
+    
+/* ============================================================
+   MEJORA VISUAL V1 - AUTOCOMPLETADO / REGISTROS / MODALES
+   ============================================================ */
+.form-group.has-smart-ac { z-index: 50; }
+.smart-field-wrap { position: relative; }
+.smart-hint {
+    display:flex; align-items:center; gap:7px; margin-top:7px;
+    color:var(--text-muted); font-size:10px;
+}
+.smart-hint b { color:var(--primary); }
+
+.ac-list.smart {
+    top: calc(100% + 7px);
+    border:1px solid #454545;
+    border-radius:12px;
+    background:#181818;
+    box-shadow:0 18px 45px rgba(0,0,0,.55);
+    max-height:330px;
+    padding:6px;
+}
+.ac-list.smart .ac-item {
+    border:0;
+    border-radius:9px;
+    margin:2px 0;
+    padding:11px 12px;
+    transition:.15s ease;
+}
+.ac-list.smart .ac-item:hover,
+.ac-list.smart .ac-item.active {
+    background:#2b2020;
+    outline:1px solid rgba(220,38,38,.35);
+}
+.ac-item-main { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.ac-item-name { font-size:12px; line-height:1.35; color:#fff; word-break:break-word; }
+.ac-item-meta { font-size:9px; color:#999; margin-top:4px; }
+.ac-item-action {
+    flex:0 0 auto; padding:4px 7px; border-radius:6px;
+    border:1px solid #444; color:#bbb; font-size:9px; white-space:nowrap;
+}
+.ac-item:hover .ac-item-action,
+.ac-item.active .ac-item-action { color:#fff; border-color:#777; }
+
+.code-builder {
+    margin-top:8px; padding:10px; border:1px solid #343434;
+    border-radius:10px; background:#151515; display:none;
+}
+.code-builder.show { display:block; }
+.code-builder-title { font-size:10px; color:#aaa; text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+.code-segments { display:flex; flex-wrap:wrap; gap:6px; }
+.code-segment {
+    border:1px solid #3b3b3b; border-radius:7px; padding:5px 7px;
+    background:#202020; color:#ddd; font-family:monospace; font-size:11px;
+}
+.code-segment.number { color:#ffb4b4; border-color:#633333; }
+.code-builder-actions { display:flex; gap:6px; margin-top:9px; }
+.code-builder-actions button { flex:1; }
+
+.record-card.modern {
+    border-radius:14px; padding:18px; background:linear-gradient(145deg,#1d1d1d,#171717);
+    box-shadow:0 5px 20px rgba(0,0,0,.18);
+}
+.record-top {
+    display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    margin-bottom:13px;
+}
+.record-title { font-size:15px; font-weight:800; color:#fff; }
+.record-sub { font-size:10px; color:#888; margin-top:3px; }
+.record-badge {
+    font-size:9px; border:1px solid #3c3c3c; padding:5px 8px; border-radius:20px;
+    color:#aaa; white-space:nowrap;
+}
+.record-grid {
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;
+}
+.record-field {
+    background:#151515; border:1px solid #292929; border-radius:9px; padding:9px;
+}
+.record-field.full { grid-column:1/-1; }
+.record-field .fl { margin-bottom:4px; }
+.record-field .fv { line-height:1.4; }
+.record-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:13px; padding-top:13px; border-top:1px solid #292929; }
+
+.modal-overlay {
+    display:none; position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,.76);
+    align-items:center; justify-content:center; padding:18px;
+    backdrop-filter:blur(4px);
+}
+.modal-overlay.show { display:flex; }
+.app-modal {
+    width:min(720px,100%); max-height:92vh; overflow:auto; background:#1b1b1b;
+    border:1px solid #383838; border-radius:16px; box-shadow:0 25px 80px rgba(0,0,0,.6);
+}
+.modal-head {
+    display:flex; justify-content:space-between; gap:15px; align-items:center;
+    padding:16px 18px; border-bottom:1px solid #303030; position:sticky; top:0; background:#1b1b1b; z-index:2;
+}
+.modal-head h3 { margin:0; border:0; padding:0; }
+.modal-close {
+    width:34px; height:34px; border-radius:9px; border:1px solid #444;
+    background:#252525; color:#fff; cursor:pointer; font-size:18px;
+}
+.modal-body { padding:18px; }
+.modal-actions { display:flex; gap:8px; justify-content:flex-end; padding-top:15px; border-top:1px solid #303030; margin-top:16px; }
+
+.copy-highlight {
+    animation:copyPulse .7s ease;
+}
+@keyframes copyPulse {
+    0% { box-shadow:0 0 0 rgba(22,163,74,0); }
+    50% { box-shadow:0 0 0 4px rgba(22,163,74,.2); }
+    100% { box-shadow:0 0 0 rgba(22,163,74,0); }
+}
+
+.toast-record {
+    max-width:min(560px,90vw); text-align:center; line-height:1.4;
+}
+
+@media(max-width:650px) {
+    .record-grid { grid-template-columns:1fr; }
+    .record-field.full { grid-column:auto; }
+    .modal-overlay { padding:8px; }
+    .modal-body { padding:13px; }
+}
+
+</style>
 </head>
 <body>
     <!-- Pantalla de Carga Global -->
@@ -1008,5 +1133,50 @@
         }
         window.addEventListener('resize', () => { if (workSrc && tabActive('work')) setTimeout(setupWorkCanvas, 100); });
     </script>
+
+<!-- ============================================================
+     MODAL DE EDICIÓN DE REGISTRO
+     ============================================================ -->
+<div class="modal-overlay" id="editRecordModal" onclick="closeEditRecordOnBackdrop(event)">
+    <div class="app-modal">
+        <div class="modal-head">
+            <div>
+                <h3>Modificar registro</h3>
+                <div id="editRecordMeta" style="font-size:10px;color:#888;margin-top:4px;"></div>
+            </div>
+            <button class="modal-close" onclick="closeEditRecord()">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="edit_record_id">
+            <div class="form-group">
+                <label>N° de contrato</label>
+                <input type="text" id="edit_numContrato" oninput="toUpper(this)">
+            </div>
+            <div class="form-group">
+                <label>Código de identificación</label>
+                <input type="text" id="edit_codigoId" oninput="toUpper(this); editCodigoSuggestions()" autocomplete="off">
+                <div class="ac-list smart" id="editCodigoAC"></div>
+            </div>
+            <div class="form-group">
+                <label>Proyecto</label>
+                <textarea id="edit_proyecto" oninput="toUpper(this)"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Monto (Bs.)</label>
+                <input type="text" id="edit_monto">
+            </div>
+            <div class="form-group">
+                <label>Empresa contratista</label>
+                <textarea id="edit_empresa" oninput="toUpper(this); editEmpresaSuggestions()" autocomplete="off"></textarea>
+                <div class="ac-list smart" id="editEmpresaAC"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeEditRecord()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveEditedRecord()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
