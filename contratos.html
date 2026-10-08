@@ -237,6 +237,24 @@
 .record-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.record-field{background:#151515;border:1px solid #292929;border-radius:9px;padding:9px}.record-field.full{grid-column:1/-1}
 .record-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid #292929}
 @media(max-width:650px){.record-grid{grid-template-columns:1fr}.record-field.full{grid-column:auto}}
+
+.ac-use-button{
+    flex:0 0 auto;
+    border:1px solid #555;
+    background:#dc2626;
+    color:#fff;
+    border-radius:7px;
+    padding:7px 10px;
+    font-size:10px;
+    font-weight:800;
+    cursor:pointer;
+    min-width:52px;
+    z-index:20;
+    pointer-events:auto;
+}
+.ac-use-button:hover{background:#b91c1c;}
+.ac-use-button:active{transform:scale(.97);}
+.ac-item{cursor:default!important;}
 </style>
 </head>
 <body>
@@ -1076,124 +1094,166 @@ function sugerenciasCodigo(q){
     return arr.sort((a,b)=>(q?b.score-a.score:0)||b.count-a.count||a.code.localeCompare(b.code)).slice(0,10);
 }
 
-function mostrarListaSugerencias(box,items,render,onSelect){
-    if(!box) return;
-    box.innerHTML = '';
+const sugerenciasActivas = {
+    empresa: [],
+    codigo: [],
+    editEmpresa: [],
+    editCodigo: []
+};
 
-    if(!items || !items.length){
-        box.classList.remove('show');
-        return;
-    }
+function cerrarSugerencia(id){
+    const box=document.getElementById(id);
+    if(box) box.classList.remove('show');
+}
+
+function mostrarListaSugerencias(boxId, items, tipo, nombreRender){
+    const box=document.getElementById(boxId);
+    if(!box) return;
+
+    box.innerHTML='';
+    box.classList.remove('show');
+
+    if(!items || !items.length) return;
+
+    sugerenciasActivas[tipo]=items.slice();
 
     items.forEach((item,index)=>{
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = render(item,index).trim();
-        const el = wrapper.firstElementChild;
-        if(!el) return;
+        const row=document.createElement('div');
+        row.className='ac-item';
+        row.setAttribute('role','option');
+        row.dataset.index=String(index);
 
-        el.dataset.suggestionIndex = String(index);
-        el.addEventListener('mousedown', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            onSelect(item,index);
-        });
+        const info=document.createElement('div');
+        info.className='ac-item-main';
 
-        // También funciona con clic normal.
-        el.addEventListener('click', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            onSelect(item,index);
-        });
+        const textWrap=document.createElement('div');
+        const title=document.createElement('div');
+        title.className='ac-item-name';
+        title.textContent=nombreRender(item);
 
-        box.appendChild(el);
+        const meta=document.createElement('div');
+        meta.className='ac-item-meta';
+        if(tipo==='empresa' || tipo==='editEmpresa'){
+            const count=item[1]||0;
+            meta.textContent=`${count} uso${count===1?'':'s'} · Excel + contratos guardados`;
+        }else{
+            const count=item.count||0;
+            const score=item.score||0;
+            meta.textContent=`${score ? 'Coincidencia '+score+'% · ' : ''}${count} uso${count===1?'':'s'} · Excel + contratos guardados`;
+        }
+
+        textWrap.appendChild(title);
+        textWrap.appendChild(meta);
+
+        const use=document.createElement('button');
+        use.type='button';
+        use.className='ac-use-button';
+        use.textContent='USAR';
+        use.setAttribute('aria-label','Usar sugerencia');
+        use.dataset.suggestionIndex=String(index);
+        use.dataset.suggestionType=tipo;
+
+        info.appendChild(textWrap);
+        info.appendChild(use);
+        row.appendChild(info);
+        box.appendChild(row);
     });
 
     box.classList.add('smart','show');
 }
 
+function usarSugerencia(tipo,index){
+    const lista=sugerenciasActivas[tipo];
+    if(!lista || !lista[index]) return;
+
+    if(tipo==='empresa'){
+        const nombre=lista[index][0];
+        const input=document.getElementById('field_empresa');
+        if(!input) return;
+        input.value=normalizarSugerencia(nombre);
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+        cerrarSugerencia('empresaAC');
+        showToast('Empresa seleccionada','success');
+        return;
+    }
+
+    if(tipo==='codigo'){
+        const codigo=lista[index].code;
+        const input=document.getElementById('field_codigoId');
+        if(!input) return;
+        input.value=normalizarSugerencia(codigo);
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+        cerrarSugerencia('codigoAC');
+        showToast('Código seleccionado','success');
+        return;
+    }
+
+    if(tipo==='editEmpresa'){
+        const nombre=lista[index][0];
+        const input=document.getElementById('edit_empresa');
+        if(!input) return;
+        input.value=normalizarSugerencia(nombre);
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+        cerrarSugerencia('editEmpresaAC');
+        return;
+    }
+
+    if(tipo==='editCodigo'){
+        const codigo=lista[index].code;
+        const input=document.getElementById('edit_codigoId');
+        if(!input) return;
+        input.value=normalizarSugerencia(codigo);
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+        cerrarSugerencia('editCodigoAC');
+    }
+}
+
 function pickEmpresa(nombre){
-    const i = document.getElementById('field_empresa');
-    if(!i) return;
-
-    i.value = normalizarSugerencia(nombre);
-
-    const box = document.getElementById('empresaAC');
-    if(box) box.classList.remove('show');
-
-    i.dispatchEvent(new Event('input',{bubbles:true}));
-    i.focus();
-    i.setSelectionRange(i.value.length,i.value.length);
-
-    showToast('Empresa seleccionada','success');
+    const lista=Array.from(combinarSugerencias(EXCEL_EMPRESAS,empresasMap).entries());
+    const idx=lista.findIndex(x=>normalizarSugerencia(x[0])===normalizarSugerencia(nombre));
+    if(idx>=0){
+        const input=document.getElementById('field_empresa');
+        if(input){input.value=normalizarSugerencia(nombre);cerrarSugerencia('empresaAC');input.focus();}
+    }
 }
 
 function pickCodigo(code){
-    const i = document.getElementById('field_codigoId');
-    if(!i) return;
-
-    i.value = normalizarSugerencia(code);
-
-    const box = document.getElementById('codigoAC');
-    if(box) box.classList.remove('show');
-
-    i.dispatchEvent(new Event('input',{bubbles:true}));
-    i.focus();
-    i.setSelectionRange(i.value.length,i.value.length);
-
-    showToast('Código seleccionado','success');
+    const input=document.getElementById('field_codigoId');
+    if(!input) return;
+    input.value=normalizarSugerencia(code);
+    cerrarSugerencia('codigoAC');
+    input.focus();
+    input.setSelectionRange(input.value.length,input.value.length);
 }
 
 function filterEmpresaAC(){
-    const box = document.getElementById('empresaAC');
-    const input = document.getElementById('field_empresa');
-    if(!box || !input) return;
-
-    const items = sugerenciasEmpresa(input.value);
-
-    mostrarListaSugerencias(
-        box,
-        items,
-        ([name,count]) => `
-            <div class="ac-item" role="option" tabindex="0">
-                <div class="ac-item-main">
-                    <div>
-                        <div class="ac-item-name">${esc(name)}</div>
-                        <div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div>
-                    </div>
-                    <span class="ac-item-action">USAR</span>
-                </div>
-            </div>
-        `,
-        ([name]) => pickEmpresa(name)
-    );
+    const input=document.getElementById('field_empresa');
+    if(!input) return;
+    const items=sugerenciasEmpresa(input.value);
+    mostrarListaSugerencias('empresaAC',items,'empresa',item=>item[0]);
 }
 
 function filterCodigoAC(){
-    const box = document.getElementById('codigoAC');
-    const input = document.getElementById('field_codigoId');
-    if(!box || !input) return;
-
-    const items = sugerenciasCodigo(input.value);
-
-    mostrarListaSugerencias(
-        box,
-        items,
-        (x) => `
-            <div class="ac-item" role="option" tabindex="0">
-                <div class="ac-item-main">
-                    <div>
-                        <div class="ac-item-name">${esc(x.code)}</div>
-                        <div class="ac-item-meta">
-                            ${x.score ? `Coincidencia ${x.score}% · ` : ''}${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados
-                        </div>
-                    </div>
-                    <span class="ac-item-action">USAR</span>
-                </div>
-            </div>
-        `,
-        (x) => pickCodigo(x.code)
-    );
+    const input=document.getElementById('field_codigoId');
+    if(!input) return;
+    const items=sugerenciasCodigo(input.value);
+    mostrarListaSugerencias('codigoAC',items,'codigo',item=>item.code);
 }
+
+/* Delegación: el botón USAR es un botón real, y este único listener controla todas las sugerencias. */
+document.addEventListener('click',function(e){
+    const btn=e.target.closest('.ac-use-button');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    usarSugerencia(btn.dataset.suggestionType,Number(btn.dataset.suggestionIndex));
+},true);
 
 /* La antigua sección de chips queda desactivada. */
 function renderSuggestionChips(){}
@@ -1213,53 +1273,14 @@ function openEditRecord(id){
 function closeEditRecord(){document.getElementById('editRecordModal')?.classList.remove('show')}
 function closeEditRecordOnBackdrop(e){if(e.target.id==='editRecordModal')closeEditRecord()}
 function editEmpresaSuggestions(){
-    const input = document.getElementById('edit_empresa');
-    const box = document.getElementById('editEmpresaAC');
-    if(!input || !box) return;
-
-    const items = sugerenciasEmpresa(input.value);
-
-    mostrarListaSugerencias(
-        box,
-        items,
-        ([name,count]) => `
-            <div class="ac-item" role="option" tabindex="0">
-                <div class="ac-item-name">${esc(name)}</div>
-                <div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div>
-            </div>
-        `,
-        ([name]) => {
-            input.value = normalizarSugerencia(name);
-            box.classList.remove('show');
-            input.focus();
-            input.setSelectionRange(input.value.length,input.value.length);
-        }
-    );
+    const input=document.getElementById('edit_empresa');
+    if(!input) return;
+    mostrarListaSugerencias('editEmpresaAC',sugerenciasEmpresa(input.value),'editEmpresa',item=>item[0]);
 }
-
 function editCodigoSuggestions(){
-    const input = document.getElementById('edit_codigoId');
-    const box = document.getElementById('editCodigoAC');
-    if(!input || !box) return;
-
-    const items = sugerenciasCodigo(input.value);
-
-    mostrarListaSugerencias(
-        box,
-        items,
-        (x) => `
-            <div class="ac-item" role="option" tabindex="0">
-                <div class="ac-item-name">${esc(x.code)}</div>
-                <div class="ac-item-meta">${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div>
-            </div>
-        `,
-        (x) => {
-            input.value = normalizarSugerencia(x.code);
-            box.classList.remove('show');
-            input.focus();
-            input.setSelectionRange(input.value.length,input.value.length);
-        }
-    );
+    const input=document.getElementById('edit_codigoId');
+    if(!input) return;
+    mostrarListaSugerencias('editCodigoAC',sugerenciasCodigo(input.value),'editCodigo',item=>item.code);
 }
 async function saveEditedRecord(){
     const id=document.getElementById('edit_record_id').value;
