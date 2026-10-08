@@ -1076,32 +1076,123 @@ function sugerenciasCodigo(q){
     return arr.sort((a,b)=>(q?b.score-a.score:0)||b.count-a.count||a.code.localeCompare(b.code)).slice(0,10);
 }
 
-function mostrarListaSugerencias(box,items,render){
-    if(!box)return;
-    if(!items.length){box.classList.remove('show');box.innerHTML='';return}
-    box.innerHTML=items.map(render).join('');
+function mostrarListaSugerencias(box,items,render,onSelect){
+    if(!box) return;
+    box.innerHTML = '';
+
+    if(!items || !items.length){
+        box.classList.remove('show');
+        return;
+    }
+
+    items.forEach((item,index)=>{
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = render(item,index).trim();
+        const el = wrapper.firstElementChild;
+        if(!el) return;
+
+        el.dataset.suggestionIndex = String(index);
+        el.addEventListener('mousedown', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            onSelect(item,index);
+        });
+
+        // También funciona con clic normal.
+        el.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            onSelect(item,index);
+        });
+
+        box.appendChild(el);
+    });
+
     box.classList.add('smart','show');
 }
 
 function pickEmpresa(nombre){
-    const i=document.getElementById('field_empresa');if(!i)return;
-    i.value=normalizarSugerencia(nombre);document.getElementById('empresaAC')?.classList.remove('show');i.focus();
+    const i = document.getElementById('field_empresa');
+    if(!i) return;
+
+    i.value = normalizarSugerencia(nombre);
+
+    const box = document.getElementById('empresaAC');
+    if(box) box.classList.remove('show');
+
+    i.dispatchEvent(new Event('input',{bubbles:true}));
+    i.focus();
+    i.setSelectionRange(i.value.length,i.value.length);
+
     showToast('Empresa seleccionada','success');
 }
 
 function pickCodigo(code){
-    const i=document.getElementById('field_codigoId');if(!i)return;
-    i.value=normalizarSugerencia(code);document.getElementById('codigoAC')?.classList.remove('show');i.focus();
+    const i = document.getElementById('field_codigoId');
+    if(!i) return;
+
+    i.value = normalizarSugerencia(code);
+
+    const box = document.getElementById('codigoAC');
+    if(box) box.classList.remove('show');
+
+    i.dispatchEvent(new Event('input',{bubbles:true}));
+    i.focus();
+    i.setSelectionRange(i.value.length,i.value.length);
+
+    showToast('Código seleccionado','success');
 }
 
 function filterEmpresaAC(){
-    const box=document.getElementById('empresaAC'),items=sugerenciasEmpresa(document.getElementById('field_empresa')?.value||'');
-    mostrarListaSugerencias(box,items,([name,count])=>`<div class="ac-item" onmousedown="event.preventDefault();pickEmpresa(${JSON.stringify(name)})"><div class="ac-item-main"><div><div class="ac-item-name">${esc(name)}</div><div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
+    const box = document.getElementById('empresaAC');
+    const input = document.getElementById('field_empresa');
+    if(!box || !input) return;
+
+    const items = sugerenciasEmpresa(input.value);
+
+    mostrarListaSugerencias(
+        box,
+        items,
+        ([name,count]) => `
+            <div class="ac-item" role="option" tabindex="0">
+                <div class="ac-item-main">
+                    <div>
+                        <div class="ac-item-name">${esc(name)}</div>
+                        <div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div>
+                    </div>
+                    <span class="ac-item-action">USAR</span>
+                </div>
+            </div>
+        `,
+        ([name]) => pickEmpresa(name)
+    );
 }
 
 function filterCodigoAC(){
-    const box=document.getElementById('codigoAC'),items=sugerenciasCodigo(document.getElementById('field_codigoId')?.value||'');
-    mostrarListaSugerencias(box,items,(x)=>`<div class="ac-item" onmousedown="event.preventDefault();pickCodigo(${JSON.stringify(x.code)})"><div class="ac-item-main"><div><div class="ac-item-name">${esc(x.code)}</div><div class="ac-item-meta">${x.score?`Coincidencia ${x.score}% · `:''}${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div></div><span class="ac-item-action">USAR</span></div></div>`);
+    const box = document.getElementById('codigoAC');
+    const input = document.getElementById('field_codigoId');
+    if(!box || !input) return;
+
+    const items = sugerenciasCodigo(input.value);
+
+    mostrarListaSugerencias(
+        box,
+        items,
+        (x) => `
+            <div class="ac-item" role="option" tabindex="0">
+                <div class="ac-item-main">
+                    <div>
+                        <div class="ac-item-name">${esc(x.code)}</div>
+                        <div class="ac-item-meta">
+                            ${x.score ? `Coincidencia ${x.score}% · ` : ''}${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados
+                        </div>
+                    </div>
+                    <span class="ac-item-action">USAR</span>
+                </div>
+            </div>
+        `,
+        (x) => pickCodigo(x.code)
+    );
 }
 
 /* La antigua sección de chips queda desactivada. */
@@ -1122,14 +1213,53 @@ function openEditRecord(id){
 function closeEditRecord(){document.getElementById('editRecordModal')?.classList.remove('show')}
 function closeEditRecordOnBackdrop(e){if(e.target.id==='editRecordModal')closeEditRecord()}
 function editEmpresaSuggestions(){
-    const q=document.getElementById('edit_empresa')?.value||'',box=document.getElementById('editEmpresaAC');
-    const items=sugerenciasEmpresa(q);
-    mostrarListaSugerencias(box,items,([n,c])=>`<div class="ac-item" onmousedown="event.preventDefault();document.getElementById('edit_empresa').value=decodeURIComponent(encodeURIComponent(${JSON.stringify(n)}));document.getElementById('editEmpresaAC').classList.remove('show')"><div class="ac-item-name">${esc(n)}</div><div class="ac-item-meta">${c} uso${c===1?'':'s'}</div></div>`);
+    const input = document.getElementById('edit_empresa');
+    const box = document.getElementById('editEmpresaAC');
+    if(!input || !box) return;
+
+    const items = sugerenciasEmpresa(input.value);
+
+    mostrarListaSugerencias(
+        box,
+        items,
+        ([name,count]) => `
+            <div class="ac-item" role="option" tabindex="0">
+                <div class="ac-item-name">${esc(name)}</div>
+                <div class="ac-item-meta">${count} uso${count===1?'':'s'} · Excel + contratos guardados</div>
+            </div>
+        `,
+        ([name]) => {
+            input.value = normalizarSugerencia(name);
+            box.classList.remove('show');
+            input.focus();
+            input.setSelectionRange(input.value.length,input.value.length);
+        }
+    );
 }
+
 function editCodigoSuggestions(){
-    const q=document.getElementById('edit_codigoId')?.value||'',box=document.getElementById('editCodigoAC');
-    const items=sugerenciasCodigo(q);
-    mostrarListaSugerencias(box,items,(x)=>`<div class="ac-item" onmousedown="event.preventDefault();document.getElementById('edit_codigoId').value=decodeURIComponent(encodeURIComponent(${JSON.stringify(x.code)}));document.getElementById('editCodigoAC').classList.remove('show')"><div class="ac-item-name">${esc(x.code)}</div><div class="ac-item-meta">${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div></div>`);
+    const input = document.getElementById('edit_codigoId');
+    const box = document.getElementById('editCodigoAC');
+    if(!input || !box) return;
+
+    const items = sugerenciasCodigo(input.value);
+
+    mostrarListaSugerencias(
+        box,
+        items,
+        (x) => `
+            <div class="ac-item" role="option" tabindex="0">
+                <div class="ac-item-name">${esc(x.code)}</div>
+                <div class="ac-item-meta">${x.count} uso${x.count===1?'':'s'} · Excel + contratos guardados</div>
+            </div>
+        `,
+        (x) => {
+            input.value = normalizarSugerencia(x.code);
+            box.classList.remove('show');
+            input.focus();
+            input.setSelectionRange(input.value.length,input.value.length);
+        }
+    );
 }
 async function saveEditedRecord(){
     const id=document.getElementById('edit_record_id').value;
